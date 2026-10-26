@@ -23,7 +23,7 @@ def assemble(root=ROOT):
     build(root / 'build/texts', data, links if links.exists() else None)
     for p in [source, data, root / 'input', root / 'local']:
         disjoint(p.resolve(), target.resolve())
-    payload = {}
+    payload = {'.nojekyll': b''}
     for name in WEB_FILES:
         payload[name] = (source / name).read_bytes()
     release_path = root / 'local/release.json'

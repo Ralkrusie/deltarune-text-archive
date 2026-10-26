@@ -71,3 +71,9 @@ python -m tools.site.serve --port 8800
 `python -m tools.check` 不需要游戏材料，运行代码层的 Python/JavaScript 检查；`--full-site` 增加对已有完整数据的检查，不负责构建。自动检查不能代替实际页面、声音和游戏语义核对。
 
 `input/`、`local/`、`build/`、`dist/` 不提交。部署时使用构建后的 `dist/`；部署与源码推送分别安排。
+
+## 5. 发布到 GitHub Pages
+
+完整构建并检查通过后，提交源码并推送 `main`，再运行 `python -m tools.site.publish`。该命令核对构建清单和文件摘要，将网站成品发布到 `origin/gh-pages`，保留发布历史，不切换工作分支、不上传本地原料。要求工作区干净且本地 `main` 与远程一致；推送失败时不会强制覆盖远程。
+
+首次在仓库 Settings → Pages 选择 Deploy from a branch、`gh-pages`、`/(root)`。以后更新该分支会自动发布；在 Actions 查看发布状态。`main` 存源码，`gh-pages` 存网站成品，因此只推送 `main` 不会更新网站。
