@@ -19,11 +19,23 @@ function indexed(data,id){
  return idx.get(id);
 }
 self.onmessage=async event=>{
- const {id,state}=event.data;newest=id;
+ const {id,state,progress=false}=event.data;newest=id;
+ let phase='loading';
+ // Older cached pages expect only a terminal response, so progress is opt-in.
+ const notify=details=>{if(progress&&id===newest)self.postMessage({id,type:'phase',phase,...details});};
  try{
   const matcher=Q.compile(state),info=await manifest();
+  if(id!==newest)return;
   const selected=M.chaptersFor(state.ch).filter(ch=>info.chapters.some(c=>c.chapter===ch));
-  const datasets=await Promise.all(selected.map(chapter));if(id!==newest)return;
+  let completed=0;notify({completed,total:selected.length});
+  let failed=false;
+  const datasets=await Promise.all(selected.map(async ch=>{
+   const data=await chapter(ch);completed++;
+   if(!failed)notify({completed,total:selected.length});
+   return data;
+  })).catch(error=>{failed=true;throw error;});
+  if(id!==newest)return;
+  phase='searching';notify({});
   // Display choices never narrow search, including Chinese name variants.
   const fields=M.SEARCH_FIELDS,q=state.q.trim();
   const keyOnly=!state.regex&&(q.includes('_slash_')||q.includes('_gml_'));
@@ -46,5 +58,5 @@ self.onmessage=async event=>{
    return row;
   });
   if(id===newest)self.postMessage({id,type:'result',rows,total:found.length,page,pages,inventory:info.total_rows});
- }catch(e){if(id===newest)self.postMessage({id,type:'error',message:e.message});}
+ }catch(e){if(id===newest)self.postMessage({id,type:'error',phase,message:e.message});}
 };

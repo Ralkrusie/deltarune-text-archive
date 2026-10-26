@@ -19,7 +19,7 @@
   }
   return {x:clamp(x+delta.dx,0,maxX),y:clamp(y+delta.dy-scroll,0,maxY),scroll};
  }
- function mount({button,home,isEnabled,isKeyboardEnabled,onDirection=()=>{}}){
+ function mount({button,home,isEnabled,isKeyboardEnabled,isClickEnabled=()=>false,onDirection=()=>{}}){
   const desktop=matchMedia('(hover: hover) and (pointer: fine)');
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const keys=new Set();
@@ -116,7 +116,21 @@
   },true);
   home.addEventListener('click',()=>returnHome());
   button.addEventListener('contextmenu',event=>{if(!allowed())return;event.preventDefault();returnHome(true);});
+  function clickUnderSoul(){
+   const r=button.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+   if(x<0||y<0||x>=document.documentElement.clientWidth||y>=innerHeight)return;
+   // Hit-test in viewport coordinates through the soul, so Z activates the page below it.
+   const target=document.elementsFromPoint(x,y).find(node=>node!==button&&!button.contains(node));
+   if(!target||target.closest(':disabled,[aria-disabled="true"],[inert]'))return;
+   const focus=target.closest('input,textarea,select,button,a[href],summary,[tabindex],[contenteditable]');
+   focus?.focus({preventScroll:true});
+   target.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window,button:0,buttons:0,detail:1,clientX:x,clientY:y}));
+  }
   addEventListener('keydown',event=>{
+   if(event.code==='KeyZ'){
+    if(!isClickEnabled()||blocked()||flight||drag||event.repeat||event.isComposing||event.defaultPrevented||event.shiftKey||event.ctrlKey||event.altKey||event.metaKey||editing(event.target))return;
+    event.preventDefault();clickUnderSoul();return;
+   }
    // A modifier may arrive after an arrow is already held. Hand that combination
    // back to the browser without swallowing bare Shift's color-switch events.
    if(['Shift','Control','Alt','Meta'].includes(event.key)){if(keys.size)cancel();return;}
@@ -607,6 +621,7 @@
  let special;
  const motion=movement.mount({button,home,isEnabled:()=>enabled,
   isKeyboardEnabled:()=>enabled,
+  isClickEnabled:()=>enabled&&souls[index].id==='red',
   onDirection(dx,dy){if(isYellow()||souls[index].id==='orange'){angle=Math.atan2(dy,dx);button.style.setProperty('--soul-angle',angle+'rad');}special?.direction(dx,dy);}
  });
  special=variants.mount({button,home,motion,getColor:()=>enabled?souls[index].id:null,getAngle:()=>angle});
