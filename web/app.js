@@ -152,17 +152,16 @@ function bodyText(raw,ch,lang,highlights={}){
   }
  }else{
   const hits=state.highlight?(highlights.plain||[]):[];
-  p.classList.add('plain-flow');let wideMarker=false;
+  p.classList.add('plain-flow');
   for(const line of T.readingLines(view.plain)){
    if(line.start)p.append(document.createTextNode('\n'));
-   if(line.markerStart!==null)wideMarker=view.plain[line.markerStart]==='＊';
-   const row=el('span','reading-line'+(line.hanging?' hanging'+(wideMarker?' wide-marker':''):''));
+   const row=el('span','reading-line'+(line.hanging?' hanging':''));
    if(line.hanging){
     const prefix=el('span','reading-prefix');
     if(line.markerStart!==null){
      appendPart(prefix,view.plain.slice(line.start,line.markerStart),'reading-indent',line.start,hits);
      appendPart(prefix,view.plain.slice(line.markerStart,line.markerStart+1),'',line.markerStart,hits);
-     appendPart(prefix,view.plain.slice(line.markerStart+1,line.bodyStart),'reading-indent',line.markerStart+1,hits);
+     appendPart(prefix,view.plain.slice(line.markerStart+1,line.bodyStart),'',line.markerStart+1,hits);
     }else appendPart(prefix,view.plain.slice(line.start,line.bodyStart),'reading-indent',line.start,hits);
     row.append(prefix);
    }

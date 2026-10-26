@@ -176,12 +176,12 @@ main:focus { outline: none; }
 .variant-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 24px; margin-bottom: 6px; }
 .variant-label { color: #8f9fb9; font-size: 13px; }
 /* Hanging dialogue markers; all original characters remain in DOM order. */
-.plain-flow { display: flex; flex-direction: column; }
-.reading-line { display: block; min-height: 1.65em; }
-.reading-line.hanging { --marker-column: .8em; padding-left: var(--marker-column); }
-.reading-line.wide-marker { --marker-column: 1.25em; }
-.reading-prefix { display: inline-block; width: var(--marker-column); margin-left: calc(-1 * var(--marker-column)); vertical-align: top; white-space: pre; }
-.reading-words { white-space: pre-wrap; }
+.plain-flow { display: grid; grid-template-columns: max-content minmax(0, 1fr); }
+.reading-line { display: block; grid-column: 1 / -1; min-width: 0; min-height: 1.65em; }
+/* Size the marker column from its actual glyphs and original trailing spaces. */
+.reading-line.hanging { display: grid; grid-template-columns: subgrid; }
+.reading-prefix { white-space: pre; }
+.reading-words { min-width: 0; white-space: pre-wrap; }
 .reading-indent { font-size: 0; }
 .vertical .language-grid { grid-template-columns: 1fr; gap: 0; }
 .vertical .language-cell { display: grid; grid-template-columns: 94px minmax(0, 1fr); align-items: start; gap: 0 20px; padding: 14px 0; border: 0; }
