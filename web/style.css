@@ -164,14 +164,14 @@ main:focus { outline: none; }
 .language-title h3 { margin: 0; color: #a9b5c9; font-size: 14px; line-height: 1.5; font-weight: 400; }
 .language-content { min-width: 0; }
 .text { margin: 0; max-width: 85ch; color: #eceff6; font-family: 'Game Main ZH', 'Game Main JA', 'Microsoft YaHei', sans-serif; font-size: 22px; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; tab-size: 4; }
-.text:lang(ja):not(.source) { font-family: 'Game Main JA', 'Game Main ZH', 'Yu Gothic', sans-serif; }
+.text:lang(ja):not(.source):not(.missing) { font-family: 'Game Main JA', 'Game Main ZH', 'Yu Gothic', sans-serif; }
 .text.source { font: 17px/1.85 var(--mono); font-variant-ligatures: none; font-feature-settings: 'liga' 0, 'calt' 0; }
 .control { color: #a0a6af; }
 .space { position: relative; }
 .space::after { content: ''; position: absolute; left: 50%; top: 52%; width: 2px; height: 2px; border-radius: 50%; background: #7c8490; transform: translate(-50%, -50%); pointer-events: none; }
 .space.full::after { width: 5px; height: 5px; border: 1px solid #707888; background: transparent; }
 .placeholder { color: #b4c1dd; cursor: help; }
-.missing { font-size: 15px; color: var(--subtle); }
+
 .variant + .variant { margin-top: 18px; }
 .variant-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 24px; margin-bottom: 6px; }
 .variant-label { color: #8f9fb9; font-size: 13px; }
@@ -334,3 +334,6 @@ dialog p { color: var(--muted); font-size: 15px; }
 .context-binding { color: #dcb97a; font-size: 12px; }
 .context-sequence > .context-message + .context-message { margin-top: 12px; }
 @media(max-width:700px) { #context-dialog { width: calc(100vw - 16px); padding-inline: 12px; max-height: 94dvh; } .context-branches { grid-template-columns: 1fr !important; } #context-dialog .text { font-size: 17px; } }
+
+/* Viewer status messages are UI copy, not dialogue in the selected language. */
+.text.missing, #context-dialog .text.missing { font: 15px/1.6 system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif; color: var(--subtle); }
