@@ -140,7 +140,7 @@ function bodyText(raw,ch,lang,highlights={}){
  const p=el('div','text'+(state.mode==='source'?' source':''));p.lang=lang==='zh'?'zh-Hans':lang;
  const view=T.format(raw,ch);
  if(view.state==='missing'||view.state==='empty'||(view.state==='control-only'&&state.mode==='plain')){
-  p.classList.add('missing');p.textContent={missing:'暂无此语言文本',empty:'空字符串','control-only':'仅含控制串 · 切换源码查看'}[view.state];return p;
+  p.classList.add('missing');p.lang='zh-Hans';p.textContent={missing:'暂无此语言文本',empty:'空字符串','control-only':'仅含控制串 · 切换源码查看'}[view.state];return p;
  }
  if(state.mode==='source'){
   const hits=state.highlight?(highlights.source||[]):[];let offset=0;
