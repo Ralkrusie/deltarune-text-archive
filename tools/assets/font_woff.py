@@ -200,3 +200,35 @@ def build_font(png_path, csv_path, out_path, lang, k=K_DEFAULT, grid=None):
         "rects": n_rect,
         "bytes": os.path.getsize(out_path),
     }
+
+
+def merge_fonts(paths, out_path):
+    """Union converted bitmap fonts, retaining the first available glyph per codepoint."""
+    from copy import deepcopy
+    from fontTools.ttLib import TTFont
+    with TTFont(paths[0], recalcTimestamp=False) as base:
+        cmap = base.getBestCmap().copy()
+        order = base.getGlyphOrder()
+        for path in paths[1:]:
+            with TTFont(path, recalcTimestamp=False) as donor:
+                if base['head'].unitsPerEm != donor['head'].unitsPerEm:
+                    raise ValueError('Font union requires equal unitsPerEm')
+                for cp, name in donor.getBestCmap().items():
+                    if cp in cmap:
+                        continue
+                    if name in order or donor['glyf'][name].isComposite():
+                        raise ValueError('Font union expects independent bitmap glyphs')
+                    cmap[cp] = name
+                    order.append(name)
+                    base['glyf'][name] = deepcopy(donor['glyf'][name])
+                    base['hmtx'][name] = donor['hmtx'][name]
+                for table, attr, fn in [('hhea', 'ascent', max), ('hhea', 'descent', min),
+                                        ('OS/2', 'sTypoAscender', max), ('OS/2', 'sTypoDescender', min),
+                                        ('OS/2', 'usWinAscent', max), ('OS/2', 'usWinDescent', max)]:
+                    setattr(base[table], attr, fn(getattr(base[table], attr), getattr(donor[table], attr)))
+        base.setGlyphOrder(order)
+        for table in base['cmap'].tables:
+            if table.isUnicode():
+                table.cmap = {cp: name for cp, name in cmap.items() if table.format != 4 or cp <= 0xFFFF}
+        base.save(out_path)
+        return {'glyphs': len(cmap), 'bytes': os.path.getsize(out_path)}

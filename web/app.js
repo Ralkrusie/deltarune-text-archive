@@ -15,6 +15,7 @@ if(location.protocol==='file:'){
 let preferences={};try{preferences=JSON.parse(localStorage.getItem('dialogue-preferences')||'{}')||{};}catch{}
 let state=M.stateFrom(new URLSearchParams(location.search),preferences,matchMedia('(max-width:700px)').matches);
 let worker,request=0,result=null,debounce,timer,searchTimer,busyRegex=false,restorePromise;
+const LOAD_TIMEOUT=120000,SEARCH_TIMEOUT=30000,REGEX_TIMEOUT=8000;
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
 function toast(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(timer);timer=setTimeout(()=>$('toast').hidden=true,2300);}
 async function copy(text){
@@ -72,25 +73,44 @@ function loadRestorePreview(){
   }
  }).catch(()=>{restorePromise=null;target.textContent='文本未能加载，切换模式后可重试。';});
 }
+function armSearchTimeout(id,phase){
+ clearTimeout(searchTimer);
+ const loading=phase==='loading',regex=state.regex;
+ searchTimer=setTimeout(()=>{
+  if(id!==request)return;
+  request++;worker?.terminate();worker=null;busyRegex=false;
+  showError(loading?'台词数据加载超过 2 分钟，已停止。请检查网络后重新加载，或先选择单个章节。':regex?'正则检索耗时过长，已停止。请简化表达式或缩小章节范围。':'检索耗时过长，已停止。请缩小章节范围后重试。',loading?'数据加载未完成':'检索未完成');
+ },loading?LOAD_TIMEOUT:regex?REGEX_TIMEOUT:SEARCH_TIMEOUT);
+}
 function runSearch(){
  clearTimeout(searchTimer);
  if(state.mode==='restore'){request++;worker?.terminate();worker=null;busyRegex=false;result=null;$('list').setAttribute('aria-busy','false');$('cancel-search').hidden=true;return;}
  if(busyRegex||state.regex||!worker){if(!makeWorker())return;}
  busyRegex=state.regex;
  if($('results').getBoundingClientRect().top < $('controls').getBoundingClientRect().height)$('results').scrollIntoView({block:'start'});
- const id=++request;$('list').setAttribute('aria-busy','true');$('status').textContent=state.q?'正在检索…':'正在读取台词…';$('error').hidden=true;$('empty').hidden=true;$('pagination').hidden=true;
+ const id=++request;$('list').setAttribute('aria-busy','true');$('status').textContent='正在准备台词数据…';$('error').hidden=true;$('empty').hidden=true;$('pagination').hidden=true;
  $('cancel-search').hidden=false;
- searchTimer=setTimeout(()=>{if(id!==request)return;request++;worker?.terminate();worker=null;busyRegex=false;showError(state.regex?'正则检索耗时过长，已停止。请简化表达式或缩小章节范围。':'检索耗时过长，已停止。请重新加载或缩小范围。');},state.regex?8000:20000);
- worker.postMessage({id,state});
+ armSearchTimeout(id,'loading');
+ worker.postMessage({id,state,progress:true});
 }
 function makeWorker(){
  if(worker)worker.terminate();
- try{worker=new Worker('search-worker.js');}catch{worker=null;showError('检索模块未能启动。请确认通过本地 HTTP 预览地址打开，再重新加载。');return false;}
+ // A new protocol URL avoids reusing a cached worker without phase notifications.
+ try{worker=new Worker('search-worker.js?protocol=2');}catch{worker=null;showError('检索模块未能启动，请重新加载页面后重试。');return false;}
  const activeWorker=worker;
  worker.onmessage=({data})=>{
   if(worker!==activeWorker||data.id!==request)return;
+  if(data.type==='phase'){
+   if(data.phase==='loading'){
+    // Progress is informative; it must not extend the overall loading deadline.
+    $('status').textContent=`正在加载台词数据（${data.completed}/${data.total} 章完成）…`;
+   }else if(data.phase==='searching'){
+    $('status').textContent='数据已就绪，正在检索…';armSearchTimeout(data.id,'searching');
+   }
+   return;
+  }
   clearTimeout(searchTimer);busyRegex=false;$('cancel-search').hidden=true;
-  if(data.type==='error'){showError(data.message);return;}
+  if(data.type==='error'){showError(data.message,data.phase==='searching'?'检索未完成':'数据加载未完成');return;}
   state.page=data.page;result=data;persist();render(data);
  };
  worker.onerror=()=>{
@@ -100,7 +120,7 @@ function makeWorker(){
  };
  return true;
 }
-function showError(message){clearTimeout(searchTimer);busyRegex=false;$('cancel-search').hidden=true;$('pagination').hidden=true;result=null;$('list').replaceChildren();$('range').textContent='';$('status').textContent='加载未完成';$('error').hidden=false;$('error').querySelector('p').textContent=message;$('list').setAttribute('aria-busy','false');}
+function showError(message,status='加载未完成'){clearTimeout(searchTimer);busyRegex=false;$('cancel-search').hidden=true;$('pagination').hidden=true;result=null;$('list').replaceChildren();$('range').textContent='';$('status').textContent=status;$('error').hidden=false;$('error').querySelector('p').textContent=message;$('list').setAttribute('aria-busy','false');}
 function appendPart(parent,text,cls,start,hits,spaces=false){
  // DOM text nodes only; neither game strings nor search queries become HTML.
  const cuts=new Set([0,text.length]);

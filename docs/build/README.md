@@ -37,7 +37,7 @@ python -m pip install -r requirements-assets.txt
 python -m tools.assets.build_assets --game "PATH_TO_ORIGINAL_GAME" --zh-game "PATH_TO_PATCHED_GAME" --umt "PATH_TO_UMT/UndertaleModCli.exe"
 ```
 
-导出 Logo、书台、互动贴图和音效，转换汉化第一章 `fnt_main` 为标题使用的 WOFF2。它不提供五章台词的完整字体还原。素材先在 `local/asset-build/<批次>/` 验证，再写入 `local/ui-assets/`；被替换文件保存在该批次，日志及机器路径仅留本地。
+导出 Logo、书台、互动贴图和音效，转换汉化第一章 `fnt_main`，并合并原版五章 `fnt_ja_main`（同码点优先第五章，再依次补入前章），用于标题和简洁正文。日文优先日文字体，其他语言优先汉化字体，互相补缺；目前原文中的 `漬` 和网页标记 `〔〕` 仍回退系统字体。源码模式保留等宽字体。它不提供五章台词的完整字体还原。素材先在 `local/asset-build/<批次>/` 验证，再写入 `local/ui-assets/`；被替换文件保存在该批次，日志及机器路径仅留本地。
 
 `config/site-assets.json` 决定发布哪些资源及其路径；不递归发布导出目录。JetBrains 字体和占位 GIF 已随仓库提供，来源见 [THIRD_PARTY](../../THIRD_PARTY.md)。仅有语言表不能完成当前完整站点构建。
 

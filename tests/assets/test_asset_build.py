@@ -14,7 +14,7 @@ class AssetBuildTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
             game, zh = root/'game', root/'zh'
-            for folder, chapters in ((game, (1, 2, 4, 5)), (zh, (1,))):
+            for folder, chapters in ((game, (1, 2, 3, 4, 5)), (zh, (1,))):
                 for ch in chapters:
                     p=folder/f'chapter{ch}_windows/data.win'
                     p.parent.mkdir(parents=True); p.write_bytes(b'game')

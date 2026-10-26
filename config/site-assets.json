@@ -10,6 +10,10 @@
       "target": "assets/ui/brand/spr_castle_book_pillar_0.png"
     },
     {
+      "source": "local/ui-assets/fnt_ja_main.woff2",
+      "target": "assets/ui/fonts/fnt_ja_main.woff2"
+    },
+    {
       "source": "local/ui-assets/fnt_main.woff2",
       "target": "assets/ui/fonts/fnt_main.woff2"
     },

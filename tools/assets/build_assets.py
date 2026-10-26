@@ -1,4 +1,4 @@
-"""Export the website's game assets and Chinese main font with UndertaleModCli.
+"""Export the website's game assets and multilingual main fonts with UndertaleModCli.
 
 Game packages are read-only. Export into local/asset-build first; install only
 manifest-listed files after validation, preserving replaced files in that run.
@@ -40,10 +40,11 @@ def command(cli):
 def jobs(game, zh_game):
     plan = []
     for ch, scripts in (
-        (1, ['export_brand_assets.csx']),
-        (2, ['export_book_asset.csx', 'export_yellow_soul.csx', 'export_soul_switch.csx']),
-        (4, ['export_soul_assets.csx', 'export_extra_souls.csx']),
-        (5, ['export_soul_assets.csx', 'export_extra_souls.csx']),
+        (1, ['export_brand_assets.csx', 'export_main_font.csx']),
+        (2, ['export_book_asset.csx', 'export_yellow_soul.csx', 'export_soul_switch.csx', 'export_main_font.csx']),
+        (3, ['export_main_font.csx']),
+        (4, ['export_soul_assets.csx', 'export_extra_souls.csx', 'export_main_font.csx']),
+        (5, ['export_soul_assets.csx', 'export_extra_souls.csx', 'export_main_font.csx']),
     ):
         plan.append((f'en-ch{ch}', game/f'chapter{ch}_windows/data.win', ch, scripts))
     plan.append(('zh-main', zh_game/'chapter1_windows/data.win', 1, ['export_main_font.csx']))
@@ -100,7 +101,8 @@ def build(game, zh_game, cli):
                    'DR_SOUL_SWITCH_SOURCE': str(game/'chapter2_windows'),
                    'DR_SOUL_SWITCH_ASSETS': str(generated),
                    'DR_EXTRA_SOUL_CHAPTER': str(ch), 'DR_EXTRA_SOUL_ASSETS': str(generated/'extra'),
-                   'DR_MAIN_FONT_ASSETS': str(fonts)}
+                   'DR_MAIN_FONT_ASSETS': str(fonts/label),
+                   'DR_MAIN_FONT_NAME': 'fnt_main' if label == 'zh-main' else 'fnt_ja_main'}
             args = prefix+['load', str(package)]
             for name in scripts:
                 args.extend(['-s', str(ROOT/'tools/assets/umt'/name)])
@@ -108,8 +110,8 @@ def build(game, zh_game, cli):
                 result = subprocess.run(args, env=env, stdout=log, stderr=subprocess.STDOUT)
             if result.returncode:
                 raise ValueError(f'UMT failed: see {stage/(label+".log")}')
-        from .font_woff import build_font, grid_for
-        record['font'] = build_font(str(fonts/'fnt_main.png'), str(fonts/'glyphs_fnt_main.csv'),
+        from .font_woff import build_font, grid_for, merge_fonts
+        record['font'] = build_font(str(fonts/'zh-main/fnt_main.png'), str(fonts/'zh-main/glyphs_fnt_main.csv'),
                                    str(generated/'fnt_main.woff2'), 'zh', grid=grid_for('fnt_main', 'zh'))
         if not record['font']:
             raise ValueError('Font conversion produced no glyphs')
@@ -117,6 +119,17 @@ def build(game, zh_game, cli):
         with TTFont(generated/'fnt_main.woff2') as font:
             if not set(map(ord, '台词库')).issubset(font.getBestCmap()):
                 raise ValueError('Chinese main font is missing title glyphs; check --zh-game')
+        japanese = []
+        record['japanese_fonts'] = {}
+        for ch in range(5, 0, -1):
+            source = fonts/f'en-ch{ch}'
+            output = source/'fnt_ja_main.woff2'
+            record['japanese_fonts'][str(ch)] = build_font(
+                str(source/'fnt_ja_main.png'), str(source/'glyphs_fnt_ja_main.csv'), str(output), 'ja')
+            if not record['japanese_fonts'][str(ch)]:
+                raise ValueError(f'Japanese CH{ch} main font produced no glyphs')
+            japanese.append(output)
+        record['japanese_union'] = merge_fonts(japanese, generated/'fnt_ja_main.woff2')
         # Validate the same whitelist as the website before touching live assets.
         (stage/'config').mkdir()
         shutil.copy2(ROOT/'config/site-assets.json', stage/'config/site-assets.json')
