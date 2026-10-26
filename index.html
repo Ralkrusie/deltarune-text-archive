@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark"><meta name="description" content="DELTARUNE 五章台词，英文、日文与中文对照。">
+<title>DELTARUNE · 台词库</title>
+<link rel="stylesheet" href="style.css">
+<script defer src="soul.js"></script><script defer src="text.js"></script><script defer src="model.js"></script><script defer src="actions.js"></script><script defer src="context.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+<a class="skip" href="#results">跳到台词</a>
+<div class="shell">
+<header class="masthead"><h1 class="brand"><img class="game-logo" src="assets/ui/brand/IMAGE_LOGO_0.png" width="224" height="34" alt="DELTARUNE"><span>台词库</span></h1><div class="header-book"><img class="book-pillar" src="assets/ui/brand/spr_castle_book_pillar_0.png" width="25" height="33" alt=""><button id="soul-home" class="soul-home" type="button" aria-label="召回灵魂" hidden></button><button id="soul-button" class="soul-button" type="button" aria-label="红色灵魂：点击切换为黄色"><span class="soul-art" aria-hidden="true"><img id="soul-sprite" src="assets/soul/sprites/spr_dodgeheart_0.png" width="20" height="20" alt=""></span></button></div><div class="release-info"><p><span class="meta-label">游戏</span>第 1—5 章 <a class="meta-value" href="https://bsky.app/profile/undertale.com/post/3mrvxcef42c2a" target="_blank" rel="noopener noreferrer">v0.0.253</a><span class="release-date">2026-07-31</span></p><p><span class="meta-label">汉化</span><a href="https://github.com/gm3dr/DeltaruneChinese" target="_blank" rel="noopener noreferrer">好人汉化组</a> <span class="meta-value">V261024</span></p><nav class="release-links" aria-label="项目与作者"><a href="https://github.com/Ralkrusie/deltarune-text-archive" target="_blank" rel="noopener noreferrer">GitHub 仓库</a><a href="https://space.bilibili.com/571877935" target="_blank" rel="noopener noreferrer">联系作者</a></nav><div class="release-links"><span>英文 · 日本語 · 中文</span><button id="about" class="quiet">关于这个版本</button><button id="settings" class="quiet" type="button" aria-haspopup="dialog">设置</button></div></div></header>
+<section class="controls" id="controls" aria-label="检索与显示设置">
+<div class="search-toolbar">
+<form id="search-form" role="search"><label class="sr-only" for="search">搜索台词或 key</label><input id="search" type="search" placeholder="搜索台词或 key" autocomplete="off" spellcheck="false"><button class="search-submit" type="submit">搜索</button></form>
+<div class="search-options" aria-label="搜索选项"><label><input id="match-case" type="checkbox">区分大小写</label><label title="以连续的字母、数字、下划线为词；中文和日文不做自动分词"><input id="whole-word" type="checkbox">整词匹配</label><label><input id="highlight" type="checkbox" checked>高亮匹配</label><label title="直接输入表达式，不加 / 分隔符，例如 ^(YES|NO)$"><input id="regex" type="checkbox">正则表达式</label></div>
+</div>
+<details id="filter-panel" open><summary>章节、语言与显示设置</summary><div class="filter-content">
+<div class="filter"><span class="filter-label" id="chapter-label">章节（多选）</span><div id="chapters" class="chips" role="group" aria-labelledby="chapter-label"></div></div>
+<div class="filter languages"><span class="filter-label" id="language-label" title="搜索始终覆盖英文、日文和全部中文译法">显示语言</span><div id="languages" class="chips" role="group" aria-labelledby="language-label"></div></div>
+<div class="filter translation-row" id="translation-row"><span class="filter-label" id="translation-label">中文人名译法</span><div id="translations" class="chips" role="group" aria-labelledby="translation-label"></div><span class="sr-only" id="translation-hint">相同译文只显示一次</span></div>
+<div class="view-row"><div class="view-setting"><span class="filter-label">显示</span><div class="segments" id="modes" role="group" aria-label="显示模式"></div></div><div class="view-setting"><span class="filter-label">排列</span><div class="segments" id="layouts" role="group" aria-label="语言排列"></div></div></div>
+</div></details>
+</section>
+<section id="restore-preview" class="restore-preview" aria-label="还原模式预留页" hidden>
+<img src="assets/ui/placeholder/Man_overworld_tree.gif" alt="Man 站在树旁" width="212" height="182">
+<div id="restore-text" class="restore-text" data-key="obj_credits_ch4_slash_Create_0_gml_67_0" aria-live="polite">正在加载…</div>
+</section>
+<main id="results" tabindex="-1"><div class="results-heading"><p id="status" role="status" aria-live="polite">正在加载文本…</p><div class="search-progress"><span id="range"></span><button id="cancel-search" class="action-button" hidden>取消检索</button></div></div><div id="error" class="notice" hidden><p></p><button id="retry" class="button">重新加载</button></div><div id="empty" class="empty" hidden><h2>没有找到这句台词</h2><p>试试更短的词语，或扩大章节范围。</p><button id="reset" class="button">重置检索条件</button></div><div id="list" aria-busy="true"></div><nav id="pagination" aria-label="结果分页" hidden><button id="previous" class="button">上一页</button><span id="page-label"></span><button id="next" class="button">下一页</button></nav></main>
+<footer><span>DELTARUNE 文本查阅工具 · 非官方项目</span><span>中文文本：好人汉化组</span></footer>
+</div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<span id="soul-status" class="sr-only" role="status" aria-live="polite"></span>
+<dialog id="context-dialog" aria-labelledby="context-title"><div class="context-top"><div><h2 id="context-title">查看上下文</h2><span class="context-resize-hint">拖动右下角调整大小</span></div><div><button id="context-start" class="quiet" type="button">结构开头</button><button id="close-context" class="quiet" type="button" aria-label="关闭上下文">关闭</button></div></div><div id="context-content"></div></dialog>
+<dialog id="settings-dialog" aria-labelledby="settings-title"><div class="dialog-top"><h2 id="settings-title">设置</h2><button id="close-settings" class="quiet" type="button" aria-label="关闭设置">关闭</button></div><label class="setting-toggle"><input id="soul-enabled" type="checkbox" checked><span>灵魂互动</span></label></dialog>
+<dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-top"><h2 id="about-title">关于这个版本</h2><button id="close-about" class="quiet" aria-label="关闭关于">关闭</button></div>
+<p>这里收录了 DELTARUNE 第 1–5 章的英文、日文和中文文本，方便搜索台词、比较翻译和查阅对话上下文。</p>
+<p><strong>阅读方式</strong>：简洁模式适合直接阅读；源码模式保留文本中的颜色、停顿等控制指令，方便核对原文。“还原”模式仍在制作中，目前只有占位展示。</p>
+<p><strong>搜索与对照</strong>：可以同时选择多个章节，自由切换显示语言和中文人名译法。搜索会查找所有语言，即使某种语言没有显示，也可能搜到对应台词。</p>
+<p><strong>查看上下文</strong>：可以查看附近的对话，以及选项和条件分支。目前为测试版，分支判断可能有误，请结合游戏实际情况核对。</p>
+<p><strong>阅读时请留意</strong>：库中也可能包含正常游玩时不会出现的文本；同一条文本在不同章节会分别列出。图片和需要在游戏中填入的名字、数值等内容暂以文字标记代替，说话人和头像等信息还在整理中。</p>
+<p>“Wiki 源码”可查看对应的游戏代码。链接依据本项目使用的源码生成，可能与 Wiki 的版本或行号存在差异。</p>
+<p>这是非官方项目。游戏文本属于其相应权利方，中文翻译来自<a href="https://github.com/gm3dr/DeltaruneChinese" target="_blank" rel="noopener noreferrer">好人汉化组</a>。源码模式使用 <a href="fonts/OFL.txt" target="_blank" rel="noopener noreferrer">JetBrains Mono NL</a> 字体，中日文字形由系统字体补齐。</p></dialog>
+<noscript>此页面需要启用 JavaScript 才能加载和检索台词。</noscript>
+</body></html>
