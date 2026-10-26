@@ -59,7 +59,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
 .masthead { display: grid; grid-template-columns: minmax(0, 1fr) 100px minmax(0, 1fr); align-items: center; gap: 32px; padding: 30px 0 26px; }
 .brand { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 448px; max-width: 100%; margin: 0; flex: none; }
 .game-logo { display: block; width: 100%; height: auto; image-rendering: pixelated; }
-.brand span { font: 40px/1.2 'Game Main ZH', 'Microsoft YaHei', sans-serif; }
+.brand-title { font: 40px/1.2 'Game Main ZH', 'Microsoft YaHei', sans-serif; }
+.brand-caption { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
+.site-version { color: var(--muted); font: 16px/1.2 'Game Main ZH', 'Microsoft YaHei', sans-serif; white-space: nowrap; }
 /* Original sprite frames, aligned on whole pixels. */
 .header-book { position: relative; width: 100px; height: 132px; justify-self: center; user-select: none; }
 .book-pillar { display: block; width: 100px; height: 132px; image-rendering: pixelated; }
@@ -215,7 +217,7 @@ dialog p { color: var(--muted); font-size: 15px; }
   .search-toolbar { grid-template-columns: 1fr; gap: 4px; }
   .search-options { gap: 8px 24px; }
   .brand { width: 336px; }
-  .brand span { font-size: 34px; }
+  .brand-title { font-size: 34px; }
   .view-row { margin-left: 0; }
 }
 @media (max-width: 1000px) {
@@ -233,7 +235,7 @@ dialog p { color: var(--muted); font-size: 15px; }
   .masthead { grid-template-columns: 1fr; gap: 20px; padding: 24px 0; }
   .header-book { grid-row: 1; }
   .brand { width: 336px; }
-  .brand span { font-size: 32px; }
+  .brand-title { font-size: 32px; }
   .release-info { justify-self: start; text-align: left; font-size: 13px; }
   .release-date { display: inline; margin-left: 10px; font-size: 11px; }
   .release-links { justify-content: flex-start; margin-top: 8px; font-size: 12px; }

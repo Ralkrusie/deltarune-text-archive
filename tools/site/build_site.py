@@ -1,6 +1,7 @@
 """Assemble only the static viewer and verified chapter packages into dist/."""
 import json
 import html
+import re
 from pathlib import Path
 from tools.text.import_texts import sha, disjoint
 from .build_site_data import build
@@ -18,6 +19,10 @@ WEB_FILES = (
 
 def assemble(root=ROOT):
     root = Path(root).resolve()
+    version = (root / 'VERSION').read_text(encoding='utf-8').strip()
+    match = re.fullmatch(r'(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-(alpha|beta|rc)\.([1-9]\d*))?', version)
+    if not match:
+        raise ValueError('VERSION must use X.Y.Z or X.Y.Z-alpha/beta/rc.N')
     source, data, target = root / 'web', root / 'build/site-data', root / 'dist'
     links = root / 'local/source-links'
     build(root / 'build/texts', data, links if links.exists() else None)
@@ -34,6 +39,7 @@ def assemble(root=ROOT):
     game_date = release.get('game_release_date') if fresh else None
     markup = payload['index.html'].decode('utf-8-sig').replace('__PATCH_VERSION__', html.escape(patch or '版本待核对')).replace('__GAME_VERSION__', html.escape(game or '版本待核对'))
     markup = markup.replace('__GAME_DATE__', html.escape(game_date or '日期待核对'))
+    markup = markup.replace('__SITE_VERSION__', version)
     payload['index.html'] = markup.encode('utf-8')
     payload.update(asset_payload(root))
     for name in ['manifest.json', *[f'ch{ch}.json' for ch in range(1, 6)]]:
@@ -66,7 +72,8 @@ def assemble(root=ROOT):
         p = target / name
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_bytes(raw)
-    report = {'files': [{'path': name, 'bytes': len(raw), 'sha256': sha(raw)} for name, raw in payload.items()],
+    report = {'site_version': version,
+              'files': [{'path': name, 'bytes': len(raw), 'sha256': sha(raw)} for name, raw in payload.items()],
               'total_bytes': sum(map(len, payload.values()))}
     (root / 'build/site-build.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
     print(f"Built {len(payload)} files, {report['total_bytes']/1024**2:.2f} MiB into {target}")

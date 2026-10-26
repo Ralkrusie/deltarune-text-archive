@@ -19,6 +19,7 @@ class SiteBuildTests(unittest.TestCase):
         temp = tempfile.TemporaryDirectory(prefix='site-test-', dir=parent)
         self.addCleanup(temp.cleanup)
         self.root = Path(temp.name)
+        (self.root / 'VERSION').write_text('0.1.0-alpha.1\n', encoding='utf-8')
         for name in WEB_FILES:
             target = self.root / 'web' / name
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -40,6 +41,9 @@ class SiteBuildTests(unittest.TestCase):
     def test_build_uses_actual_page_modules_and_roundtrips_text(self):
         site = assemble(self.root)
         markup = (site / 'index.html').read_text(encoding='utf-8')
+        self.assertIn('v0.1.0-alpha.1', markup)
+        self.assertIn('早期测试版', markup)
+        self.assertNotIn('__SITE_', markup)
         for name in re.findall(r'<script\b[^>]*src="([^"]+)"', markup):
             self.assertTrue((site / name).is_file(), name)
         for ch in range(1, 6):
@@ -68,5 +72,13 @@ class SiteBuildTests(unittest.TestCase):
         before = (site / 'index.html').read_bytes()
         self.asset.unlink()
         with self.assertRaises(FileNotFoundError):
+            assemble(self.root)
+        self.assertEqual((site / 'index.html').read_bytes(), before)
+
+    def test_invalid_version_preserves_existing_site(self):
+        site = assemble(self.root)
+        before = (site / 'index.html').read_bytes()
+        (self.root / 'VERSION').write_text('0.1.0-alpha.01', encoding='utf-8')
+        with self.assertRaisesRegex(ValueError, 'VERSION'):
             assemble(self.root)
         self.assertEqual((site / 'index.html').read_bytes(), before)

@@ -77,3 +77,7 @@ python -m tools.site.serve --port 8800
 完整构建并检查通过后，提交源码并推送 `main`，再运行 `python -m tools.site.publish`。该命令核对构建清单和文件摘要，将网站成品发布到 `origin/gh-pages`，保留发布历史，不切换工作分支、不上传本地原料。要求工作区干净且本地 `main` 与远程一致；推送失败时不会强制覆盖远程。
 
 首次在仓库 Settings → Pages 选择 Deploy from a branch、`gh-pages`、`/(root)`。以后更新该分支会自动发布；在 Actions 查看发布状态。`main` 存源码，`gh-pages` 存网站成品，因此只推送 `main` 不会更新网站。
+
+网站版本由根目录 `VERSION` 统一提供，构建时写入页头和构建报告，与游戏、汉化版本独立。当前用 `0.1.0-alpha.N`：每次公开发布递增 N，本地修改和普通提交不递增；下一阶段用 `0.2.0-alpha.1`。功能范围确定、主要流程稳定后再进入 beta，达到首版验收目标后发布 `1.0.0`。构建支持 `X.Y.Z` 和 `X.Y.Z-alpha/beta/rc.N`，N 从 1 起。
+
+每次版本发布为对应源码提交创建同名 Git 标签（如 `v0.1.0-alpha.1`），在 GitHub Release 简述变化和已知问题；已发布标签不移动，修正另发新版。发布分支的提交说明记录来源源码提交，便于定位和回退。
