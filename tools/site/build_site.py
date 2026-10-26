@@ -2,6 +2,7 @@
 import json
 import html
 import re
+import base64
 from pathlib import Path
 from tools.text.import_texts import sha, disjoint
 from .build_site_data import build
@@ -10,7 +11,7 @@ from tools.assets.site_assets import asset_payload
 
 ROOT = Path(__file__).resolve().parents[2]
 WEB_FILES = (
-    'index.html', 'style.css', 'text.js', 'model.js', 'actions.js', 'query.js',
+    'index.html', 'favicon.svg', 'style.css', 'text.js', 'model.js', 'actions.js', 'query.js',
     'soul.js',
     'app.js', 'context.js', 'search-worker.js',
     'fonts/JetBrainsMonoNL-Regular.ttf', 'fonts/OFL.txt', 'fonts/SOURCE.json',
@@ -42,6 +43,9 @@ def assemble(root=ROOT):
     markup = markup.replace('__SITE_VERSION__', version)
     payload['index.html'] = markup.encode('utf-8')
     payload.update(asset_payload(root))
+    # Embed the original sprite: SVG follows the dark rim, with no external image request.
+    book = base64.b64encode(payload['assets/ui/brand/spr_castle_book_pillar_0.png']).decode('ascii')
+    payload['favicon.svg'] = payload['favicon.svg'].replace(b'__BOOK_PILLAR_PNG__', book.encode('ascii'))
     for name in ['manifest.json', *[f'ch{ch}.json' for ch in range(1, 6)]]:
         payload['data/' + name] = (data / name).read_bytes()
     context_path=root/'local/context-files/contexts.json'

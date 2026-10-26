@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -2 25 25">
+  <!-- Follow the original dark rim, including its pixel steps, above the pillar shaft. -->
+  <defs><clipPath id="book-top"><path d="M0 0h25v17h-1v1h-2v1h-3v1H6v-1H3v-1H1v-1H0z"/></clipPath></defs>
+  <image width="25" height="33" href="data:image/png;base64,__BOOK_PILLAR_PNG__" clip-path="url(#book-top)" style="image-rendering:pixelated"/>
+</svg>

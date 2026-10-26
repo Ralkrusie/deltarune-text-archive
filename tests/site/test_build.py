@@ -35,6 +35,7 @@ class SiteBuildTests(unittest.TestCase):
         self.asset.write_bytes(b'asset fixture')
         (self.root / 'config/site-assets.json').write_text(json.dumps({'schema': 1, 'files': [
             {'source': 'local/ui-assets/test.png', 'target': 'assets/ui/test.png'},
+            {'source': 'local/ui-assets/test.png', 'target': 'assets/ui/brand/spr_castle_book_pillar_0.png'},
         ]}), encoding='utf-8')
         run(self.root / 'input', self.root / 'build/texts')
 
@@ -44,6 +45,8 @@ class SiteBuildTests(unittest.TestCase):
         self.assertIn('v0.1.0-alpha.1', markup)
         self.assertIn('早期测试版', markup)
         self.assertNotIn('__SITE_', markup)
+        self.assertIn('href="favicon.svg"', markup)
+        self.assertNotIn(b'__BOOK_PILLAR_PNG__', (site / 'favicon.svg').read_bytes())
         for name in re.findall(r'<script\b[^>]*src="([^"]+)"', markup):
             self.assertTrue((site / name).is_file(), name)
         for ch in range(1, 6):
