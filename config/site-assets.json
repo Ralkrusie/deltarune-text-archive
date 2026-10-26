@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "files": [
+    {
+      "source": "local/ui-assets/IMAGE_LOGO_0.png",
+      "target": "assets/ui/brand/IMAGE_LOGO_0.png"
+    },
+    {
+      "source": "local/ui-assets/spr_castle_book_pillar_0.png",
+      "target": "assets/ui/brand/spr_castle_book_pillar_0.png"
+    },
+    {
+      "source": "local/ui-assets/fnt_main.woff2",
+      "target": "assets/ui/fonts/fnt_main.woff2"
+    },
+    {
+      "source": "local/ui-assets/spr_dodgeheart_0.png",
+      "target": "assets/soul/sprites/spr_dodgeheart_0.png"
+    },
+    {
+      "source": "local/ui-assets/spr_greenheart_0.png",
+      "target": "assets/soul/sprites/spr_greenheart_0.png"
+    },
+    {
+      "source": "local/ui-assets/spr_orangeheart2_0.png",
+      "target": "assets/soul/sprites/spr_orangeheart2_0.png"
+    },
+    {
+      "source": "local/ui-assets/spr_purpleheart_0.png",
+      "target": "assets/soul/sprites/spr_purpleheart_0.png"
+    },
+    {
+      "source": "local/ui-assets/yellow/spr_yellowheart_0.png",
+      "target": "assets/soul/sprites/spr_yellowheart_0.png"
+    },
+    {
+      "source": "local/ui-assets/yellow/spr_yellowheart_2.png",
+      "target": "assets/soul/sprites/spr_yellowheart_2.png"
+    },
+    {
+      "source": "local/ui-assets/yellow/spr_yheart_charge_0.png",
+      "target": "assets/soul/sprites/spr_yheart_charge_0.png"
+    },
+    {
+      "source": "local/ui-assets/yellow/spr_yheart_shot_0.png",
+      "target": "assets/soul/sprites/spr_yheart_shot_0.png"
+    },
+    {
+      "source": "local/ui-assets/yellow/spr_yheart_bigshot_0.png",
+      "target": "assets/soul/sprites/spr_yheart_bigshot_0.png"
+    },
+    {
+      "source": "local/ui-assets/extra/spr_spearblocker_0.png",
+      "target": "assets/soul/sprites/spr_spearblocker_0.png"
+    },
+    {
+      "source": "local/ui-assets/extra/spr_pinkdust_0.png",
+      "target": "assets/soul/sprites/spr_pinkdust_0.png"
+    },
+    {
+      "source": "local/ui-assets/extra/spr_pinkdust_1.png",
+      "target": "assets/soul/sprites/spr_pinkdust_1.png"
+    },
+    {
+      "source": "local/ui-assets/extra/spr_pinkdust_2.png",
+      "target": "assets/soul/sprites/spr_pinkdust_2.png"
+    },
+    {
+      "source": "local/ui-assets/extra/spr_pinkdust_3.png",
+      "target": "assets/soul/sprites/spr_pinkdust_3.png"
+    },
+    {
+      "source": "local/ui-assets/extra/spr_pinkdust_4.png",
+      "target": "assets/soul/sprites/spr_pinkdust_4.png"
+    },
+    {
+      "source": "local/ui-assets/extra/spr_orangeheart_outline_0.png",
+      "target": "assets/soul/sprites/spr_orangeheart_outline_0.png"
+    },
+    {
+      "source": "local/ui-assets/extra/spr_orangeheart_outline_1.png",
+      "target": "assets/soul/sprites/spr_orangeheart_outline_1.png"
+    },
+    {
+      "source": "local/ui-assets/extra/spr_orangeheart_white_0.png",
+      "target": "assets/soul/sprites/spr_orangeheart_white_0.png"
+    },
+    {
+      "source": "local/ui-assets/snd_great_shine.ogg",
+      "target": "assets/soul/audio/snd_great_shine.ogg"
+    },
+    {
+      "source": "local/ui-assets/yellow/snd_heartshot_dr_b.wav",
+      "target": "assets/soul/audio/snd_heartshot_dr_b.wav"
+    },
+    {
+      "source": "local/ui-assets/yellow/snd_chargeshot_charge.wav",
+      "target": "assets/soul/audio/snd_chargeshot_charge.wav"
+    },
+    {
+      "source": "local/ui-assets/yellow/snd_chargeshot_fire.wav",
+      "target": "assets/soul/audio/snd_chargeshot_fire.wav"
+    },
+    {
+      "source": "local/ui-assets/extra/snd_wing.wav",
+      "target": "assets/soul/audio/snd_wing.wav"
+    },
+    {
+      "source": "local/ui-assets/extra/snd_explosion_mmx3.wav",
+      "target": "assets/soul/audio/snd_explosion_mmx3.wav"
+    },
+    {
+      "source": "web/assets/ui/placeholder/Man_overworld_tree.gif",
+      "target": "assets/ui/placeholder/Man_overworld_tree.gif"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "sources": [
+    {
+      "path": "OnlineDialogueViewer/tools/pack_fonts.py",
+      "sha256": "768ba90432e1bf1665c65468c2c39fe4bb48e8e70e2e43ecd8eb9d3675c8f554"
+    },
+    {
+      "path": "OnlineDialogueViewer/tools/pack_fonts_woff.py",
+      "sha256": "868ac7eae459fa1d5df3db264a696e5af6cb7c1720317c55c2fcf2e3b8d655bc"
+    }
+  ],
+  "changes": [
+    "Only required conversion functions retained; standalone imports.",
+    "WOFF2 written directly with fixed timestamps for deterministic builds."
+  ],
+  "scope": "Current zh fnt_main UI font; not all dialogue font selection or rendering."
+}

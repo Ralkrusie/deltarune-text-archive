@@ -1,0 +1,104 @@
+{
+  "kind": "game-text-excerpts",
+  "game_version": "v0.0.253",
+  "game_release": "2026-07-31",
+  "translation": "好人汉化组 V261024",
+  "note": "从当前统一输入按 key 原样摘录；语言表收录不等于已验证游戏可达性。未上传或发布。",
+  "chapters": {
+    "1": {
+      "keys": [
+        "obj_krisroom_slash_Create_0_gml_22_0",
+        "obj_krisroom_slash_Step_0_gml_92_0",
+        "obj_npc_room_slash_Other_10_gml_15_0",
+        "obj_npc_room_slash_Other_10_gml_16_0",
+        "obj_readable_room1_slash_Other_10_gml_11_0",
+        "obj_readable_room1_slash_Other_10_gml_17_0",
+        "obj_readable_room1_slash_Other_10_gml_18_0",
+        "obj_alphysalley_event_slash_Step_0_gml_25_0"
+      ],
+      "inputs": {
+        "lang_en.json": "6a1d6cfd166bc7220a8440e19a4dfbde923056e2af333bc00b1084a11953c08f",
+        "lang_ja.json": "63a096fb5ffb5b90df0a9e86530fd3a527f9b342263d5cbfa3249b6bd38fa17e",
+        "lang_zh.json": "9be1a9ab503f0391cae55e1133947b018a8b0e50a9f7018debbdf4b7f2617fc8",
+        "lang_zh_names.json": "0a84c1689baa76efbc63d12cd544cfd302237b9ac662e4d9d22df7986f02544e",
+        "lang_zh_recruitable.json": "a4ee74d7c93db590374959c85089c13cc70905b2b4200c0639158db842692a14"
+      }
+    },
+    "2": {
+      "keys": [
+        "obj_treasure_room_slash_Other_10_gml_76_0",
+        "obj_treasure_room_slash_Other_10_gml_83_0",
+        "obj_battlecontroller_slash_Step_0_gml_42_0",
+        "obj_battlecontroller_slash_Step_0_gml_46_0",
+        "obj_battlecontroller_slash_Step_0_gml_69_0",
+        "obj_berdlyb2_enemy_slash_Step_0_gml_124_0",
+        "obj_berdlyb2_enemy_slash_Step_0_gml_125_0",
+        "obj_berdlyb2_enemy_slash_Step_0_gml_126_0"
+      ],
+      "inputs": {
+        "lang_en.json": "f1775ba190448068e864a675c45758c43cb538cfec57b348855e233ec770acd6",
+        "lang_ja.json": "d8c3b929a46c470502ecece6a86648d384bc85ad3b201b576cc5a2cfa9e085a5",
+        "lang_zh.json": "b6aa4490625527f2d3923d6f7406cbe3565167851716ae583e1ed0d76b32391f",
+        "lang_zh_names.json": "4abad1268c794446fed8313a8fdf508685f06359d32c76359df9f5ba5023f7a1",
+        "lang_zh_recruitable.json": "352fc7b10a3d1de63fcb462503fea87fae042d2747cd4fff221b3c59c1603014"
+      }
+    },
+    "3": {
+      "keys": [
+        "obj_treasure_room_slash_Other_10_gml_76_0",
+        "obj_treasure_room_slash_Other_10_gml_83_0",
+        "obj_b1boardend_slash_Step_0_gml_45_0",
+        "obj_b2_moneyhole_slash_Step_0_gml_23_0",
+        "obj_b2loverscliff_slash_Step_0_gml_178_0",
+        "obj_b2loverscliff_slash_Step_0_gml_197_0",
+        "obj_b2loverscliff_slash_Step_0_gml_213_0",
+        "obj_b2loverscliff_slash_Step_0_gml_260_0"
+      ],
+      "inputs": {
+        "lang_en.json": "55209a495320048d7d13b619e86b79dab6eda4157f6df78b8b84dc7ea783d268",
+        "lang_ja.json": "164ae8054d5bd6b1de9046ce3be9b264c9f35288e841798a83ab4c96b400e1c3",
+        "lang_zh.json": "ff8ef09ddc98e37f34af63eaac697190a3fcfca559737fabdd919ce0f71df471",
+        "lang_zh_names.json": "a5fff9cac649b74fca5a5647bbc1ae6ecef7ad57c7527090e9ff93ea14143329",
+        "lang_zh_recruitable.json": "3006e0992d0a71c816a02283641638e7f61bc0e7ce033bc640616b12e5ec1f83"
+      }
+    },
+    "4": {
+      "keys": [
+        "obj_treasure_room_slash_Other_10_gml_76_0",
+        "obj_treasure_room_slash_Other_10_gml_83_0",
+        "obj_balthizard_enemy_slash_Step_0_gml_289_0",
+        "obj_balthizard_enemy_slash_Step_0_gml_290_0",
+        "obj_balthizard_enemy_slash_Step_0_gml_291_0",
+        "obj_balthizard_enemy_slash_Step_0_gml_292_0",
+        "obj_balthizard_enemy_slash_Step_0_gml_297_0",
+        "obj_balthizard_enemy_slash_Step_0_gml_302_0"
+      ],
+      "inputs": {
+        "lang_en.json": "38feebf22c68d0ce177ca2da3f917a0f0c6bc61e0a310bd582ff29995d3ee27d",
+        "lang_ja.json": "d0a4cb8ba4638ab7344e39e21deae7286516bf8bd5e4b1887260f1178128325f",
+        "lang_zh.json": "99bfda690d592d81d9c00c6d5a5c8d108ba1673ea01cec9649b0594c419f1156",
+        "lang_zh_names.json": "57866c11d4c3c18a1fd547df1c493537c969786c504ff6f1fe5c27a4d1abf30f",
+        "lang_zh_recruitable.json": "9e1c9aab3d4712833d29aa434057c82fe1c10767b9fffb5e2af83e81ad821d99"
+      }
+    },
+    "5": {
+      "keys": [
+        "obj_treasure_room_slash_Other_10_gml_76_0",
+        "obj_treasure_room_slash_Other_10_gml_83_0",
+        "obj_aqua_enemy_slash_Create_0_gml_54_0",
+        "obj_aqua_enemy_slash_Create_0_gml_58_0",
+        "obj_aqua_enemy_slash_Create_0_gml_62_0",
+        "obj_aqua_enemy_slash_Step_0_gml_373_0",
+        "obj_aqua_enemy_slash_Step_0_gml_379_0",
+        "obj_aqua_enemy_slash_Step_0_gml_387_0"
+      ],
+      "inputs": {
+        "lang_en.json": "21c83a4386a07f67338f45065e945a0279f4d8d558b476b34df0e2e50d568dec",
+        "lang_ja.json": "89b117add88ebd012f7eb45c0c3905c5d002e4e9401eeb42c412447fa132fabf",
+        "lang_zh.json": "d4cee0f17764af9e053115362f4b91623406f295a308d86b2b774a576f832f86",
+        "lang_zh_names.json": "0941d42acf06ec085b4d8b58927fc3ade21a5f149bcc59c34a30ed873cbd8324",
+        "lang_zh_recruitable.json": "95682a644e8f9937a337f5b9bea390e1ea19c55a0afe5a0f6ecf3d014feda967"
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+# Stable source text across platforms; preserve raw language input bytes.
+* text=auto eol=lf
+*.cmd text eol=crlf
+examples/input/** -text whitespace=cr-at-eol
+*.png binary
+*.gif binary
+*.ttf binary
+*.woff2 binary
+web/fonts/OFL.txt -text -whitespace

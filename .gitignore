@@ -1,0 +1,17 @@
+# Local inputs and derived data never belong in the code repository.
+/local/
+/input/
+/build/
+/dist/
+/node_modules/
+/.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+*.sqlite*
+*.db
+*.win
+*.exe
+*.log
