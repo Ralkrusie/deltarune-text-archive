@@ -1,0 +1,202 @@
+{
+  "2": {},
+  "3": {
+    "obj_board_npc_slash_Other_10_gml_348_0": {
+      "file": "gml_Object_obj_board_npc_Other_10.gml",
+      "call": "msgsetloc",
+      "english_sha256": "fe4b10ebf4df4e3c2fe552eca25bc8df1bc196f44a9410b5b40d15a27e15063d",
+      "reason": "296 属可达流程（room_board_2 集齐 3 张照片）；458 位于无入口废弃房间 room_board_3（开发残留）",
+      "variants_sha256": [
+        "23547d078fad3be27e642fc5dbf1cee93700319e2081d3cccb07cdbfa2e799ff",
+        "fe4b10ebf4df4e3c2fe552eca25bc8df1bc196f44a9410b5b40d15a27e15063d"
+      ]
+    }
+  },
+  "4": {
+    "scr_monstersetup_slash_scr_monstersetup_gml_7_0": {
+      "file": "gml_GlobalScript_scr_monstersetup.gml",
+      "call": "stringsetloc",
+      "english_sha256": "0021d5fe20a08754dd965d947e4830740633aa94b4555d03067aaa6a3e6e1214",
+      "reason": "L7「Enemy」为正常敌人 ACT（lang 表有译文）；L2213 为 multiboss 调试示例",
+      "variants_sha256": [
+        "0021d5fe20a08754dd965d947e4830740633aa94b4555d03067aaa6a3e6e1214",
+        "0f8e744b306f824084c92d7eb900f44f4fe86c01b26a899fd033eb2251c56cb2"
+      ]
+    },
+    "scr_monstersetup_slash_scr_monstersetup_gml_21_0": {
+      "file": "gml_GlobalScript_scr_monstersetup.gml",
+      "call": "stringsetloc",
+      "english_sha256": "e981ddae45d8f4ca53f1ccbe613ad254a041dacf65a06026099a6302d332113b",
+      "reason": "L20「Warning」为正常 ACT（有译文）；后半为 multiboss 示例（无译文）",
+      "variants_sha256": [
+        "aa1c342daeb99a7dd8a63d75bed9ad127b763c6cd74891b0ce1a090898c7534e",
+        "e981ddae45d8f4ca53f1ccbe613ad254a041dacf65a06026099a6302d332113b"
+      ]
+    },
+    "scr_monstersetup_slash_scr_monstersetup_gml_23_0": {
+      "file": "gml_GlobalScript_scr_monstersetup.gml",
+      "call": "stringsetloc",
+      "english_sha256": "2e9b5a0c4e6aeb0891cc2c8e346bf9d556bd5590327441bfda28fdf36ff4db43",
+      "reason": "L22「Victory」为正常 ACT（有译文）；后半为 multiboss 示例",
+      "variants_sha256": [
+        "137724e73bdf10845dadfa89c8fe269c5f8971e51c6d4fec0418b87ceb976de2",
+        "2e9b5a0c4e6aeb0891cc2c8e346bf9d556bd5590327441bfda28fdf36ff4db43",
+        "7d2cdb86a605116a79a71347dbe4d25f828ca635261d9343efe6c96507628707"
+      ]
+    },
+    "scr_monstersetup_slash_scr_monstersetup_gml_42_0": {
+      "file": "gml_GlobalScript_scr_monstersetup.gml",
+      "call": "stringsetloc",
+      "english_sha256": "49e5aa3d5833d15c3f766874c432e98c328664509dd56326d9b52c3b20cfc4f9",
+      "reason": "L38「SimuDance」为正常 ACT（有译文）；后半为 multiboss 示例",
+      "variants_sha256": [
+        "49e5aa3d5833d15c3f766874c432e98c328664509dd56326d9b52c3b20cfc4f9",
+        "7d2cdb86a605116a79a71347dbe4d25f828ca635261d9343efe6c96507628707"
+      ]
+    },
+    "obj_credits_slash_Step_0_gml_22_0": {
+      "file": "gml_Object_obj_credits_Step_0.gml",
+      "call": "stringsetloc",
+      "english_sha256": "11012a8623e958a2b46fc910d209280c789328566b5ab5b3652c71c1ccf7b4fb",
+      "reason": "L9（obj_credits，ch2 版）有官方译文「第2章」；L16（obj_credits_2 中间版）无译文 → 判为废弃代",
+      "variants_sha256": [
+        "11012a8623e958a2b46fc910d209280c789328566b5ab5b3652c71c1ccf7b4fb",
+        "24eac3fefb58a26a9bb95f96a216fdb0b0dc0edda866f72e3a66442b0d70259f"
+      ]
+    },
+    "obj_credits_slash_Step_0_gml_192_0": {
+      "file": "gml_Object_obj_credits_Step_0.gml",
+      "call": "stringsetloc",
+      "english_sha256": "7d3e56c2a4bd48aec63afd0ffc2053e73cd84cc80e477179cbeb1a1643a68935",
+      "reason": "L174（obj_credits）有官方译文；L342（obj_credits_2）无译文 → 判为废弃代",
+      "variants_sha256": [
+        "483c5cf03252b47a5768d0b86ebf41358fb80526be2d8b122506f9aa2f84fc27",
+        "7d3e56c2a4bd48aec63afd0ffc2053e73cd84cc80e477179cbeb1a1643a68935"
+      ]
+    },
+    "obj_npc_room_animated_slash_Other_10_gml_374_0": {
+      "file": "gml_Object_obj_npc_room_animated_Other_10.gml",
+      "call": "msgsetloc",
+      "english_sha256": "446f3dfe5114c503b0dbad084d9c034bf15368001fc6eeebca841bad90e6a566",
+      "reason": "L222 位于可达房间 room_town_church（lang 表存的就是这条）；L253/255/262 位于无入口房间 room_darkness_example",
+      "variants_sha256": [
+        "0e63ed0b04a77d1c45f4d366f478bfa94cb89ec32a1400ae0833ae588cf1d8fd",
+        "126ef441e7a4191b49bc5d41df36f18d157b9b9a7c6f4d91c7f57e847e0d524e",
+        "446f3dfe5114c503b0dbad084d9c034bf15368001fc6eeebca841bad90e6a566",
+        "5c03b3725109081541fb65abd7cc75090727230509561104d92e08870f3048aa"
+      ]
+    },
+    "scr_encountersetup_slash_scr_encountersetup_gml_60_0": {
+      "file": "gml_GlobalScript_scr_encountersetup.gml",
+      "call": "stringsetloc",
+      "english_sha256": "ea9a5686dfd4ee8743c6caf66f9e6b7350095e1b1a4ccc41cd8fc4bdfe18bcff",
+      "reason": "三条均为 debug（encounter 500/501 multiboss 示例），无官方译文；保留首个",
+      "variants_sha256": [
+        "0349b7063793291c0b2ddfe0c5017eb914c4c6624bb581a707f1b0a82faddcfd",
+        "ea9a5686dfd4ee8743c6caf66f9e6b7350095e1b1a4ccc41cd8fc4bdfe18bcff",
+        "fb8b99807f68f2cb4de299863227e444d13c31b2a5e80b6d3ac5464601d83aaf"
+      ]
+    },
+    "obj_baseenemy_slash_Step_0_gml_27_0": {
+      "file": "gml_Object_obj_baseenemy_Step_0.gml",
+      "call": "msgsetloc",
+      "english_sha256": "81acaf2188173482b9ca8e16324a9d3a5c88956e94109823c25b65dc0c881e8b",
+      "reason": "基类模板占位「Message&A」vs multiboss 示例「HOMING&DIAMONDS!」；两条均无译文（debug），保留基类",
+      "variants_sha256": [
+        "81acaf2188173482b9ca8e16324a9d3a5c88956e94109823c25b65dc0c881e8b",
+        "f52ffd62a95885b413e742432f27c000b0e879b3f10b158c821b011f91bd4c7e"
+      ]
+    },
+    "obj_baseenemy_slash_Step_0_gml_28_0": {
+      "file": "gml_Object_obj_baseenemy_Step_0.gml",
+      "call": "msgsetloc",
+      "english_sha256": "a5f4f1ceea16950e55dd2eff4984cc81e8e466a11ecef5ae0f9b79243c32c52a",
+      "reason": "基类模板占位「Message&B」vs multiboss 示例；两条均无译文，保留基类",
+      "variants_sha256": [
+        "a46959cc7a60cf34a34b5e13e9731e756a7fdf1c7e7940f18d512f4a1f856787",
+        "a5f4f1ceea16950e55dd2eff4984cc81e8e466a11ecef5ae0f9b79243c32c52a"
+      ]
+    },
+    "obj_baseenemy_slash_Step_0_gml_29_0": {
+      "file": "gml_Object_obj_baseenemy_Step_0.gml",
+      "call": "msgsetloc",
+      "english_sha256": "9963460af9ebee9f3ec7472d941b7b8a5cc8348e37b63bfaca6f1263a0d1c6f0",
+      "reason": "基类模板占位「Message&C」vs multiboss 示例；两条均无译文，保留基类",
+      "variants_sha256": [
+        "36405627eebc766d8a6da57b48c58695f4a7e9eecad3affc578c1da85b48607a",
+        "9963460af9ebee9f3ec7472d941b7b8a5cc8348e37b63bfaca6f1263a0d1c6f0"
+      ]
+    },
+    "obj_baseenemy_slash_Step_0_gml_127_0": {
+      "file": "gml_Object_obj_baseenemy_Step_0.gml",
+      "call": "msgsetloc",
+      "english_sha256": "aa4c4fd10616c66bf78f6c43d07b049174cec52dc07d1b1ff3b8bc8dcb934102",
+      "reason": "基类 ACT 文本 vs multiboss 示例文本；两条均无译文（debug），保留基类",
+      "variants_sha256": [
+        "9cef8e7dea8003658c3a123e1fd36a14f6220873da8e98f9a517e1f1bdad1575",
+        "aa4c4fd10616c66bf78f6c43d07b049174cec52dc07d1b1ff3b8bc8dcb934102"
+      ]
+    },
+    "obj_musical_controller_slash_Step_0_gml_260_0": {
+      "file": "gml_Object_obj_multiboss_controller_Step_0.gml",
+      "call": "msgsetloc",
+      "english_sha256": "74433a26c870cc138f027bf3de35079be97f0c2eb23e7004b4b5520b8abf1438",
+      "reason": "两条均为 multiboss 调试文本（控制器 vs 敌人实例），无译文；保留控制器侧",
+      "variants_sha256": [
+        "74433a26c870cc138f027bf3de35079be97f0c2eb23e7004b4b5520b8abf1438",
+        "ae806977024a839849fb19f575f41d7dc751ebbb092ea1d02bc983f5ce9463e2"
+      ]
+    },
+    "obj_musical_controller_slash_Step_0_gml_261_0": {
+      "file": "gml_Object_obj_multiboss_controller_Step_0.gml",
+      "call": "msgsetloc",
+      "english_sha256": "513b90365022cb5824ad429c8ac6478552f553d78fca3872ea66977e3225f3a1",
+      "reason": "同上（multiboss 调试，无译文）",
+      "variants_sha256": [
+        "513b90365022cb5824ad429c8ac6478552f553d78fca3872ea66977e3225f3a1",
+        "fcbdbefc75c9f8da98e474ad9e51bcb3909820db5980cc2b6ca64fbc1c10e154"
+      ]
+    },
+    "obj_musical_controller_slash_Step_0_gml_262_0": {
+      "file": "gml_Object_obj_multiboss_controller_Step_0.gml",
+      "call": "msgsetloc",
+      "english_sha256": "33dec88104174cf66095c95d7553a3c1683eabe54707f681593746301f57fbf2",
+      "reason": "同上（multiboss 调试，无译文）",
+      "variants_sha256": [
+        "33dec88104174cf66095c95d7553a3c1683eabe54707f681593746301f57fbf2",
+        "87eb1ff64e87a554e8b77735eb407d6248f42959a5825283ff550750c15751b2"
+      ]
+    },
+    "obj_musical_controller_slash_Step_0_gml_263_0": {
+      "file": "gml_Object_obj_multiboss_controller_Step_0.gml",
+      "call": "msgsetloc",
+      "english_sha256": "770ed91261fc348356f9f2fc1d09efd4f534ea81e273e13bcd067b893f3fc6a8",
+      "reason": "同上（multiboss 调试，无译文）",
+      "variants_sha256": [
+        "75af02de20cbef8308ff18ec5d8a294fbdb3e407f66078a2ef39dbe0b1e6ca87",
+        "770ed91261fc348356f9f2fc1d09efd4f534ea81e273e13bcd067b893f3fc6a8"
+      ]
+    },
+    "obj_musical_controller_slash_Step_0_gml_264_0": {
+      "file": "gml_Object_obj_multiboss_controller_Step_0.gml",
+      "call": "msgsetloc",
+      "english_sha256": "d72dda1ddabbc7f7a2e3004245369509a6e81c94824ebef79b6fed865cc8f583",
+      "reason": "同上（multiboss 调试，无译文）",
+      "variants_sha256": [
+        "d72dda1ddabbc7f7a2e3004245369509a6e81c94824ebef79b6fed865cc8f583",
+        "e86bc3a3d69a08469083e291e5cc790aed6dee20cbea8ddc36646db5e333c002"
+      ]
+    },
+    "obj_musical_controller_slash_Step_0_gml_265_0": {
+      "file": "gml_Object_obj_multiboss_controller_Step_0.gml",
+      "call": "msgsetloc",
+      "english_sha256": "e868f523fbd8ad01d3a55e73a78a9444dbe82c919b1165349ff6babf49aea313",
+      "reason": "同上（multiboss 调试，无译文）",
+      "variants_sha256": [
+        "e868f523fbd8ad01d3a55e73a78a9444dbe82c919b1165349ff6babf49aea313",
+        "fee233a0d706bbb9b94b2b5a50cbf2af34bd22e6ff2051cfb790f423ae0019fa"
+      ]
+    }
+  },
+  "5": {}
+}

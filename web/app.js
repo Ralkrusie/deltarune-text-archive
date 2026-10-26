@@ -5,7 +5,7 @@ const T=window.DialogueText,M=window.DialogueModel,A=window.DialogueActions,$=id
 if(location.protocol==='file:'){
  $('status').textContent='请通过本地预览启动';
  $('error').hidden=false;
- $('error').querySelector('p').textContent='你正在直接打开 HTML。请双击项目根目录的 preview.cmd，或运行 python tools/serve.py --open。浏览器会通过本机 HTTP 地址加载文本，无需联网。';
+ $('error').querySelector('p').textContent='你正在直接打开 HTML。请双击项目根目录的 preview.cmd，或运行 python -m tools.site.serve --open。浏览器会通过本机 HTTP 地址加载文本，无需联网。';
  const link=document.createElement('a');link.href='http://127.0.0.1:8800/';link.textContent='已有 8800 预览服务？打开页面';$('error').append(link);
  $('retry').hidden=true;$('list').setAttribute('aria-busy','false');
  document.querySelectorAll('button,input').forEach(node=>node.disabled=true);
