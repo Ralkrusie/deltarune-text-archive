@@ -13,6 +13,9 @@ if(location.protocol==='file:'){
 }
 
 let preferences={};try{preferences=JSON.parse(localStorage.getItem('dialogue-preferences')||'{}')||{};}catch{}
+let compact=preferences.compact===true;
+document.documentElement.dataset.compact=String(compact);
+$('compact-enabled').checked=compact;
 let state=M.stateFrom(new URLSearchParams(location.search),preferences,matchMedia('(max-width:700px)').matches);
 let worker,request=0,result=null,debounce,timer,searchTimer,busyRegex=false,restorePromise;
 const LOAD_TIMEOUT=120000,SEARCH_TIMEOUT=30000,REGEX_TIMEOUT=8000;
@@ -28,7 +31,7 @@ async function copy(text){
 function persist(historyMode='replace'){
  const url=new URL(location.href);url.search=M.paramsFor(state).toString();url.hash='';
  if(url.href!==location.href)history[historyMode==='push'?'pushState':'replaceState'](null,'',url);
- try{localStorage.setItem('dialogue-preferences',JSON.stringify({lang:state.lang.join(','),zh:state.zh,mode:state.mode,layout:state.layout,highlight:state.highlight}));}catch{}
+ try{localStorage.setItem('dialogue-preferences',JSON.stringify({lang:state.lang.join(','),zh:state.zh,mode:state.mode,layout:state.layout,highlight:state.highlight,compact}));}catch{}
 }
 function buttons(container,items,selected,action){
  $(container).replaceChildren();
@@ -178,7 +181,7 @@ function bodyText(raw,ch,lang,highlights={}){
 }
 async function copyWithFeedback(button,text){const label=button.textContent;button.disabled=true;const ok=await copy(text);button.textContent=ok?'已复制':'复制失败';setTimeout(()=>{button.textContent=label;button.disabled=false;},1200);}
 function cell(row,lang){
- const n=el('section','language-cell'),title=el('div','language-title'),h=el('h3','',{en:'English',ja:'日本語',zh:'中文'}[lang]);title.append(h);n.append(title);
+ const n=el('section','language-cell'),title=el('div','language-title'),h=el('h3','',{en:'English',ja:'日本語',zh:'中文'}[lang]);title.append(h);n.append(title);n.setAttribute('aria-label',h.textContent);
  const content=el('div','language-content');n.append(content);
  const groups=lang==='zh'?M.chineseRows(row,state.zh):[{raw:row[lang],labels:[],fields:[lang]}];
  for(const group of groups){
@@ -188,7 +191,15 @@ function cell(row,lang){
  }
  return n;
 }
-const contextView=window.DialogueContext.mount({dialog:$('context-dialog'),content:$('context-content'),title:$('context-title'),close:$('close-context'),start:$('context-start'),cell,getState:()=>state});
+function actionMenu(...items){
+ const menu=el('details','compact-actions'),summary=el('summary','action-button','…'),panel=el('div','compact-menu-panel');
+ summary.setAttribute('aria-label','台词操作');summary.title='台词操作';panel.append(...items);menu.append(summary,panel);
+ panel.addEventListener('click',e=>{if(e.target.closest('button,a'))menu.open=false;});
+ menu.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();menu.open=false;summary.focus();}});
+ return menu;
+}
+addEventListener('click',e=>{for(const menu of document.querySelectorAll('.compact-actions[open]'))if(!menu.contains(e.target))menu.open=false;});
+const contextView=window.DialogueContext.mount({dialog:$('context-dialog'),content:$('context-content'),title:$('context-title'),close:$('close-context'),start:$('context-start'),cell,actionMenu,getState:()=>({...state,compact})});
 function render(data){
  $('list').className=state.layout;$('list').style.setProperty('--columns',state.lang.length);$('list').replaceChildren();$('list').setAttribute('aria-busy','false');
  $('empty').hidden=data.total!==0;$('error').hidden=true;
@@ -199,7 +210,7 @@ function render(data){
   const header=el('header','entry-head'),identity=el('div','entry-identity'),actions=el('div','entry-actions');
   const key=el('code','key');appendPart(key,row.key,'',0,state.highlight?(row.highlights?.key||[]):[]);
   const keyCopy=el('button','action-button key-copy','复制 key');keyCopy.onclick=()=>copyWithFeedback(keyCopy,row.key);
-  identity.append(el('span','chapter-tag',`Ch${row.chapter}`),key,keyCopy);header.append(identity,actions);
+  identity.append(el('span','chapter-tag',`Ch${row.chapter}`),key);if(!compact)identity.append(keyCopy);header.append(identity,actions);
   const sourceArea=el('div','entry-source'),sources=row.sources||[];
   const sourceLink=o=>{const a=el('a','source-link','wiki 源码');a.href=A.sourceURL(row.chapter,o.file,o.line);a.target='_blank';a.rel='noopener noreferrer';a.title=o.file+' : '+o.line+'（本地位置；线上版本可能不同）';return a;};
   if(sources.length===1)sourceArea.append(sourceLink(sources[0]));
@@ -208,7 +219,7 @@ function render(data){
   const copies=el('div','entry-copies'),copyAll=el('button','action-button','复制本条');
   copyAll.title='按当前语言、模式和中文译法复制：key + 全部可见版本';copyAll.onclick=()=>copyWithFeedback(copyAll,A.copyEntry(row,state));
   const contextButton=el('button','action-button','查看上下文');contextButton.setAttribute('aria-haspopup','dialog');contextButton.onclick=()=>contextView.show(row);
-  copies.append(contextButton,copyAll);actions.append(sourceArea,copies);article.append(header);
+  copies.append(contextButton,copyAll);if(compact)actions.append(actionMenu(keyCopy,contextButton,copyAll,sourceArea));else actions.append(sourceArea,copies);article.append(header);
   const holder=el('div','entry-body'),grid=el('div','language-grid');
   for(const lang of state.lang)grid.append(cell(row,lang));holder.append(grid);article.append(holder);$('list').append(article);
  }
@@ -228,6 +239,7 @@ $('match-case').onchange=()=>change({caseSensitive:$('match-case').checked,key:'
 $('whole-word').onchange=()=>change({wholeWord:$('whole-word').checked,key:'',page:1});
 $('regex').onchange=()=>change({regex:$('regex').checked,key:'',page:1});
 $('highlight').onchange=()=>change({highlight:$('highlight').checked},false);
+$('compact-enabled').onchange=()=>{compact=$('compact-enabled').checked;document.documentElement.dataset.compact=String(compact);persist();if(result)render(result);};
 $('about').onclick=()=>$('about-dialog').showModal();$('close-about').onclick=()=>$('about-dialog').close();
 $('about-dialog').addEventListener('click',e=>{if(e.target===$('about-dialog')){const b=e.target.getBoundingClientRect();if(e.clientX<b.left||e.clientX>b.right||e.clientY<b.top||e.clientY>b.bottom)e.target.close();}});
 addEventListener('popstate',()=>{clearTimeout(debounce);state=M.stateFrom(new URLSearchParams(location.search),{},matchMedia('(max-width:700px)').matches);controls();runSearch();});
