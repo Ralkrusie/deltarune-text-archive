@@ -18,6 +18,15 @@ def validate(pack, text_manifest, tables):
     ids=set()
     def node(n,ch,depth=0):
         if depth>128:raise ValueError('Context nesting limit exceeded')
+        if 'entry_guards' in n:
+            if not isinstance(n['entry_guards'],list) or not n['entry_guards']:raise ValueError('Invalid entry guards')
+            for g in n['entry_guards']:
+                if not isinstance(g,dict):raise ValueError('Invalid entry guard')
+                s=g.get('source',{})
+                if (not isinstance(s,dict) or not isinstance(g.get('condition'),str) or not g['condition'] or g.get('meaning')!='passed_at_source'
+                    or type(g.get('visible')) is not bool or not s.get('file','').startswith('gml_')
+                    or '/' in s['file'] or '\\' in s['file'] or type(s.get('line')) is not int or s['line']<1):
+                    raise ValueError('Invalid entry guard')
         kind=n.get('type')
         if kind=='message':
             missing=n.get('binding')=='missing_key' and n.get('key') not in tables[ch] and 'source_english' in n and (n['source_english'] is None or isinstance(n['source_english'],str))
@@ -27,9 +36,17 @@ def validate(pack, text_manifest, tables):
             if not s.get('file','').startswith('gml_') or '/' in s['file'] or '\\' in s['file'] or type(s.get('line')) is not int or s['line']<1:
                 raise ValueError('Invalid context source')
         elif kind in ('sequence','block','blocks'):
-            for c in n['children']:node(c,ch,depth+1)
+            for i,c in enumerate(n['children']):
+                if c.get('join_next') and (i+1==len(n['children']) or n['children'][i+1].get('type')!='message' or n['children'][i+1].get('usage')=='reference'):
+                    raise ValueError('Join has no following common message')
+                node(c,ch,depth+1)
         elif kind in ('choice','condition'):
             if len(n['branches'])<2:raise ValueError('Incomplete branch set')
+            if 'join_next' in n and (n['join_next'] is not True or n.get('revisit')):raise ValueError('Invalid common join')
+            if 'revisit' in n:
+                r=n['revisit']
+                if kind!='condition' or len(n['branches'])!=2 or not isinstance(r,dict) or type(r.get('flag')) is not int or r['flag']<0 or r.get('from')!=0 or r.get('to')!=1 or type(r.get('write_line')) is not int or r['write_line']<1:
+                    raise ValueError('Invalid revisit transition')
             for b in n['branches']:
                 if kind=='choice':node(b['option'],ch,depth+1)
                 elif not isinstance(b.get('label'),str):raise ValueError('Missing condition label')

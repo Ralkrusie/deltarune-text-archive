@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "chapter": 2,
+  "scope": "writer-created smallface only",
+  "sources": {
+    "gml_GlobalScript_scr_smallface": "a80fe4bfbe27343653b36279db5a4e43a85005e471ae7b7d989684eeb6c5ec6c",
+    "gml_GlobalScript_scr_smallface_reset": "607156b2ee5cb809719c541fd81432b2c3d04d60756cbed3ae620456d9570e08",
+    "gml_Object_obj_smallface_Create_0": "4e276900947bc7f529ea30bf539ef8eaf80b7d8034282524b2cf79b80820bd25",
+    "gml_Object_obj_smallface_Alarm_0": "27a8c075a12cc5de92daf45515567881e3a66929e143451c8eb609f6282bdc44",
+    "gml_Object_obj_smallface_Draw_0": "4ef4aafda88239635a156be98f9483e2853f4af3fd98c625124f65d494a4685c",
+    "gml_Object_obj_smallface_Draw_64": "0cbf7afd571b811e510a05820ebb0b95c37f7ccf85f3bc9d4054c5d39449ec63"
+  },
+  "selectors": {
+    "susie": "susie",
+    "ralsei": "ralsei",
+    "lancer": "lancer",
+    "noelle": "noelle",
+    "queen": "queen",
+    "rouxls": "rouxls",
+    "berdly": "berdly",
+    "rudy": "rudy",
+    "noelle_cropped": "noelle"
+  }
+}

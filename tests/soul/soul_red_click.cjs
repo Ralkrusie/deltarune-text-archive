@@ -1,12 +1,13 @@
 'use strict';
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
-const listeners={};let enabled=true,red=true,desktop=true,modal=false,hit=[],coords;
+const listeners={},timers=[];let enabled=true,red=true,desktop=true,modal=false,hit=[],coords;
 class Element{
  constructor(){this.events={};this.children=[];this.style={removeProperty(){}};this.classList={add(){},remove(){}};}
  addEventListener(name,fn){(this.events[name]??=[]).push(fn)}
  contains(node){return this.children.includes(node)}
  closest(selector){if(selector.startsWith(':disabled'))return this.disabled?this:null;if(selector.includes('dialog'))return this.editable?this:null;return this.focusable?this:null}
  getBoundingClientRect(){return this.rect||{left:100,top:200,width:44,height:44}}
+ blur(){this.blurred=true;document.activeElement=new Element()}
  focus(options){this.focused=options;document.activeElement=this}
  dispatchEvent(event){this.received=event;this.count=(this.count||0)+1;return true}
  hasPointerCapture(){return false}
@@ -18,7 +19,7 @@ const document={activeElement:new Element(),hidden:false,body:{},documentElement
  querySelector:()=>modal?{}:null,addEventListener(){},elementsFromPoint(x,y){coords=[x,y];return hit}};
 const context={module:{exports:{}},Element,document,window:{scrollY:900},innerHeight:800,
  matchMedia:()=>({get matches(){return desktop},addEventListener(){}}),addEventListener:(name,fn)=>(listeners[name]??=[]).push(fn),
- MutationObserver:class{observe(){}},MouseEvent:class{constructor(type,options){this.type=type;Object.assign(this,options)}},setTimeout,Event};
+ MutationObserver:class{observe(){}},MouseEvent:class{constructor(type,options){this.type=type;Object.assign(this,options)}},setTimeout:fn=>timers.push(fn),Event};
 vm.runInNewContext(fs.readFileSync(require.resolve('../../web/soul.js'),'utf8'),context);
 context.module.exports.movement.mount({button,home,isEnabled:()=>enabled,isKeyboardEnabled:()=>true,isClickEnabled:()=>red});
 function press(patch={}){const event={key:'z',code:'KeyZ',target:document.activeElement,preventDefault(){this.defaultPrevented=true},...patch};for(const fn of listeners.keydown)fn(event);return event}
@@ -40,3 +41,18 @@ button.rect={left:100,top:200,width:44,height:44};
 for(const fn of button.events.pointerdown)fn({pointerType:'mouse',button:0,pointerId:1,clientX:120,clientY:220});
 press();assert.equal(target.count,2,'Dragging does not activate what lies under the soul');
 console.log('Red Z click: center hit-test, overlay exclusion, focus, modifiers, typing, color/desktop guards, disabled targets and dragging passed.');
+
+// Escape exits immediately, while Enter must preserve the form's default submission.
+document.activeElement=input;input.tagName='INPUT';
+assert.equal(press({key:'Escape',code:'Escape'}).defaultPrevented,true);assert.equal(input.blurred,true);
+input.blurred=false;document.activeElement=input;
+assert.equal(press({key:'Enter',code:'Enter'}).defaultPrevented,undefined);
+assert.equal(document.activeElement,input);timers.shift()();assert.equal(input.blurred,true);
+for(const flag of ['isComposing','repeat','ctrlKey','altKey','metaKey','shiftKey','defaultPrevented']){
+ input.blurred=false;document.activeElement=input;press({key:'Escape',code:'Escape',[flag]:true});assert.equal(input.blurred,false);
+}
+input.blurred=false;document.activeElement=input;press({key:'Enter',code:'Enter',keyCode:229});assert.equal(timers.length,0);
+modal=true;press({key:'Escape',code:'Escape'});assert.equal(input.blurred,false);modal=false;
+red=false;press({key:'Escape',code:'Escape'});assert.equal(input.blurred,false);red=true;
+input.tagName='TEXTAREA';press({key:'Enter',code:'Enter'});assert.equal(timers.length,0);
+console.log('Red keyboard exit: Escape, deferred Enter, IME, modifiers, dialogs and multiline editing passed.');

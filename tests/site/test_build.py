@@ -5,6 +5,7 @@ import re
 import shutil
 import tempfile
 import unittest
+from urllib.parse import urlsplit, parse_qs
 
 from tools.site.build_site import assemble, WEB_FILES
 from tools.text.import_texts import FILES, run, sha
@@ -48,7 +49,13 @@ class SiteBuildTests(unittest.TestCase):
         self.assertIn('href="favicon.svg"', markup)
         self.assertNotIn(b'__BOOK_PILLAR_PNG__', (site / 'favicon.svg').read_bytes())
         for name in re.findall(r'<script\b[^>]*src="([^"]+)"', markup):
-            self.assertTrue((site / name).is_file(), name)
+            url=urlsplit(name)
+            self.assertTrue((site / url.path).is_file(), name)
+            if url.path in ('context.js', 'app.js', 'soul.js'):
+                self.assertEqual(parse_qs(url.query),{'v':[sha((site/url.path).read_bytes())]})
+        styles=[urlsplit(name) for name in re.findall(r'<link\b[^>]*href="([^"]+)"',markup)]
+        style=next(url for url in styles if url.path=='style.css')
+        self.assertEqual(parse_qs(style.query),{'v':[sha((site/style.path).read_bytes())]})
         for ch in range(1, 6):
             data = json.loads((site / f'data/ch{ch}.json').read_text(encoding='utf-8'))
             self.assertEqual(data['rows'][0][0], 'test')

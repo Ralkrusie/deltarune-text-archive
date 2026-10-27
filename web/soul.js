@@ -127,6 +127,15 @@
    target.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window,button:0,buttons:0,detail:1,clientX:x,clientY:y}));
   }
   addEventListener('keydown',event=>{
+   if((event.key==='Escape'||event.key==='Enter')&&isClickEnabled()&&allowed()&&!document.hidden&&!document.querySelector('dialog[open]')&&editing(event.target)){
+    if(event.isComposing||event.keyCode===229||event.repeat||event.ctrlKey||event.altKey||event.metaKey||event.shiftKey||event.defaultPrevented)return;
+    const field=document.activeElement;
+    if(event.key==='Escape'){event.preventDefault();field?.blur();return;}
+    // Let Enter submit single-line fields before returning arrow keys to the soul.
+    // Multiline editors retain Enter for newlines; Escape remains their exit key.
+    if(field?.tagName==='INPUT')setTimeout(()=>{if(document.activeElement===field)field.blur();},0);
+    return;
+   }
    if(event.code==='KeyZ'){
     if(!isClickEnabled()||blocked()||flight||drag||event.repeat||event.isComposing||event.defaultPrevented||event.shiftKey||event.ctrlKey||event.altKey||event.metaKey||editing(event.target))return;
     event.preventDefault();clickUnderSoul();return;
@@ -424,6 +433,7 @@
   }
   return rails.filter(r=>direction*(r.y-current.y)>2).sort((a,b)=>direction*(a.y-b.y))[0]||null;
  }
+ function dustRotation(dx,dy){return Math.atan2(dy,dx)+Math.PI/2;}
  function emitsTrail(color,state,jumping){return color==='orange'?state==='dash':color==='purple'&&jumping;}
  function soundBank(){
   const names={wing:'snd_wing',dash:'snd_explosion_mmx3',charge:'snd_chargeshot_charge'};
@@ -471,7 +481,7 @@
   function beginJump(target,position,screenEntry=false){
    const p=project(target,position.x+22,position.y+22),dist=Math.hypot(p.x-position.x-22,p.y-position.y-22);
    jump={target,screenEntry,remaining:clamp(dist/1800,0.1,0.26)};rail=target;repeat=0.3;
-   sounds.effect('wing');dust.push({x:position.x+22,y:position.y+22+scrollY,age:0,dir:Math.sign(p.y-position.y-22)});
+   sounds.effect('wing');dust.push({x:position.x+22,y:position.y+22+scrollY,age:0,angle:dustRotation(p.x-position.x-22,p.y-position.y-22)});
   }
   function visibleRails(list,height){const bottom=document.getElementById('controls').getBoundingClientRect().bottom;return list.filter(r=>r.axis==='y'?r.bottom>=bottom+15&&r.top<=height-22:r.y>=22&&r.y<=height-22&&(r.element.id==='controls'||r.y>=bottom+15));}
   function purpleStep({position,dx,dy,dt,bounds}){
@@ -563,7 +573,7 @@
    if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}
    ctx.setTransform(canvas.width/w,0,0,canvas.height/h,0,0);ctx.clearRect(0,0,w,h);ctx.imageSmoothingEnabled=false;
    for(const p of trails)image(p.color,p.x,p.y-scrollY,p.angle,Math.max(0,0.5-p.age*(p.color==='purple'?1.875:1.5)));
-   for(const p of dust){const img=images['dust'+Math.min(4,Math.floor(p.age*30))];if(!img.complete||!img.naturalWidth)continue;ctx.save();ctx.translate(p.x,p.y-scrollY);ctx.rotate(p.dir<0?0:Math.PI);for(const mirror of [-1,1]){ctx.save();ctx.scale(mirror,1);ctx.globalAlpha=1-p.age*4;ctx.drawImage(img,-30,0,30,30);ctx.restore();}ctx.restore();}
+   for(const p of dust){const img=images['dust'+Math.min(4,Math.floor(p.age*30))];if(!img.complete||!img.naturalWidth)continue;ctx.save();ctx.translate(p.x,p.y-scrollY);ctx.rotate(p.angle);for(const mirror of [-1,1]){ctx.save();ctx.scale(mirror,1);ctx.globalAlpha=1-p.age*4;ctx.drawImage(img,-30,0,30,30);ctx.restore();}ctx.restore();}
   }
   function schedule(){
    if(color()!=='purple'||!motion.roaming())return;
@@ -593,7 +603,7 @@
    sync(){cancel();rail=null;lastDir='';angle=-Math.PI/2;axe.hidden=color()!=='green';axe.style.transform='translate(-50%,-50%) rotate('+angle+'rad)';if(color()==='purple'&&motion.roaming())schedule();}
   };
  }
- const api={mount,orangeModel,greenDelay,nearest,neighbor,project,emitsTrail,visibleContentRail,toolbarExit,createSoundBank:soundBank};
+ const api={mount,orangeModel,greenDelay,nearest,neighbor,project,emitsTrail,dustRotation,visibleContentRail,toolbarExit,createSoundBank:soundBank};
  return api;
  })();
 
@@ -681,10 +691,10 @@
   button.hidden=!enabled;
   motion.sync();
   angle=Math.PI/2;button.style.setProperty('--soul-angle',angle+'rad');yellow.sync();
-  const label=enabled?`${soul.name}灵魂：点击切换为${souls[(index+1)%souls.length].name}`:'红色灵魂：互动已关闭';
+  const label=enabled?`${soul.name}灵魂：点击切换为${souls[(index+1)%souls.length].name}`:'红色灵魂：交互已关闭';
   button.setAttribute('aria-label',label);
   toggle.checked=enabled;
-  if(announce)status.textContent=enabled?`已切换为${soul.name}灵魂与主题`:'灵魂互动已关闭，已恢复蓝色主题';
+  if(announce)status.textContent=enabled?`已切换为${soul.name}灵魂与主题`:'灵魂交互已关闭，已恢复蓝色主题';
  }
  function save(){try{localStorage.setItem(storageKey,JSON.stringify({enabled,color:souls[index].id}));}catch{}}
  function nextSoul(){if(!enabled)return;index=(index+1)%souls.length;apply(true);save();switchSound.play();playFlash();}
@@ -693,6 +703,7 @@
  const heldKeys=new Set();let shiftOnly=false;
  window.addEventListener('keydown',event=>{
   heldKeys.add(event.code||event.key);
+  if(event.code==='KeyX'&&!event.repeat&&!event.isComposing&&event.keyCode!==229&&!event.defaultPrevented&&!event.ctrlKey&&!event.altKey&&!event.metaKey&&!event.shiftKey&&motion.canInteract()){event.preventDefault();shiftOnly=false;nextSoul();return;}
   if(event.key!=='Shift'){shiftOnly=false;return;}
   if(event.repeat)return;
   shiftOnly=heldKeys.size===1&&!event.ctrlKey&&!event.altKey&&!event.metaKey&&!event.isComposing&&motion.canInteract();

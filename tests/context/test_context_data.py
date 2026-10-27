@@ -38,6 +38,38 @@ class ContextContractTests(unittest.TestCase):
         self.message['type']='unproven-call'
         with self.assertRaisesRegex(ValueError,'Unknown'):validate(self.pack,self.manifest,self.tables)
 
+    def test_entry_guard_is_a_source_fact_with_a_safe_location(self):
+        fact={'condition':'!(blocked)','meaning':'passed_at_source','visible':True,
+              'source':{'file':'gml_fixture.gml','line':2}}
+        self.message['entry_guards']=[fact]
+        validate(self.pack,self.manifest,self.tables)
+        for bad in (None,{}, {**fact,'meaning':'current_value'}, {**fact,'visible':1},
+                    {**fact,'source':{'file':'gml_/../private.gml','line':2}},
+                    {**fact,'source':{'file':'gml_fixture.gml','line':0}}):
+            self.message['entry_guards']=[bad]
+            with self.assertRaisesRegex(ValueError,'entry guard'):validate(self.pack,self.manifest,self.tables)
+
+    def test_join_requires_one_following_message_in_the_same_sequence(self):
+        fork={'type':'condition','join_next':True,'branches':[
+            {'label':'global.choice == 0','body':self.message},
+            {'label':'else','body':self.message}]}
+        body={'type':'sequence','children':[fork,self.message]}
+        self.pack['scenes'][0]['body']=body
+        validate(self.pack,self.manifest,self.tables)
+        body['children'].pop()
+        with self.assertRaisesRegex(ValueError,'following'):validate(self.pack,self.manifest,self.tables)
+
+    def test_revisit_preserves_conditions_and_requires_transition_evidence(self):
+        body={'type':'condition','revisit':{'flag':123,'from':0,'to':1,'write_line':8},
+              'branches':[{'label':'flag == 0','body':self.message},
+                          {'label':'!(flag == 0)','body':self.message}]}
+        self.pack['scenes'][0]['body']=body
+        validate(self.pack,self.manifest,self.tables)
+        for bad in ({'flag':123}, {'flag':123,'from':0,'to':0,'write_line':8},
+                    {'flag':123,'from':0,'to':1,'write_line':0}):
+            body['revisit']=bad
+            with self.assertRaisesRegex(ValueError,'revisit'):validate(self.pack,self.manifest,self.tables)
+
     def test_choice_options_and_repeated_uses_stay_distinct(self):
         second=copy.deepcopy(self.message);second['occurrence_id']='occurrence:two'
         body={'type':'choice','branches':[

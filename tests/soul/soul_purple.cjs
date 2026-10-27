@@ -44,3 +44,12 @@ assert.equal(scroll,1000,'partially occluded vertical entry should not pull came
 const far={element:{},left:20,right:980,y:1000},old={element:{},left:20,right:980,y:-500};
 assert.equal(toolbarExit([old,far],{x:500,y:165},188,698).y,1000,'if no line is visible, use the next one below, never old content');
 console.log('Purple controller: first landing, second step, recall, wheel-scroll re-entry on horizontal/vertical lines passed.');
+
+const {dustRotation}=env.module.exports.variants;
+// The dust sprite starts below the origin: its center must point opposite travel.
+for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1],[1,-1]]){
+ const a=dustRotation(dx,dy),length=Math.hypot(dx,dy);
+ assert(Math.abs(-Math.sin(a)+dx/length)<1e-9);
+ assert(Math.abs(Math.cos(a)+dy/length)<1e-9);
+}
+console.log('Purple jump dust points behind horizontal, vertical and diagonal travel.');

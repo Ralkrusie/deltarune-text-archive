@@ -12,10 +12,11 @@ function fileOptions(index,key){
  return [...new Set([...native,...related])].map(i=>({...index.files[i],related:!native.includes(i)}));
 }
 function lanes(n){
+ if(n.revisit)return Math.max(1,...n.branches.map(b=>lanes(b.body)));
  if(n.branches)return n.branches.reduce((sum,b)=>sum+lanes(b.body),0);
  return Math.max(1,...(n.children||[]).map(lanes));
 }
-function mount({dialog,content,title,close,start,cell,getState}){
+function mount({dialog,content,title,close,start,cell,actionMenu,getState}){
  const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
  let serial=0,packPromise,observer;const chapters=new Map(),indexes=new Map(),chunks=new Map();
  async function json(path,options){const r=await fetch(path,options);if(!r.ok)throw Error('上下文数据未能加载');return r.json();}
@@ -32,7 +33,7 @@ function mount({dialog,content,title,close,start,cell,getState}){
   if(!/^(?:index-ch[1-5]|files\/[a-f0-9]{24})\.json$/.test(meta.path))throw Error('上下文文件路径无效');
   if(!chunks.has(meta.path)){
    if(chunks.size>=4)chunks.delete(chunks.keys().next().value);
-   chunks.set(meta.path,json('data/context/'+meta.path).catch(e=>{chunks.delete(meta.path);throw e;}));
+   chunks.set(meta.path,json('data/context/'+meta.path+'?v='+encodeURIComponent(meta.sha256)).catch(e=>{chunks.delete(meta.path);throw e;}));
   }
   return chunks.get(meta.path);
  }
@@ -70,11 +71,21 @@ function mount({dialog,content,title,close,start,cell,getState}){
     const languages=el('div','context-languages');card.append(languages);
     const fill=()=>{languages.replaceChildren();languages.style.minHeight='';for(const lang of state.lang)languages.append(cell(item,lang));card.dataset.loaded='true';};
     if(ref.key===row.key||!observer)fill();
-    else{languages.style.minHeight=(state.lang.length*85)+'px';languages.append(el('span','context-note','…'));pending.set(card,fill);observer.observe(card);}
+    else{languages.style.minHeight=(state.lang.length*(state.compact?40:85))+'px';languages.append(el('span','context-note','…'));pending.set(card,fill);observer.observe(card);}
     const evidence=el('div','context-source');
-    evidence.append(el('code','',ref.key));const link=el('a','','wiki 源码 · L'+ref.source.line);link.href=root.DialogueActions.sourceURL(row.chapter,ref.source.file,ref.source.line);link.target='_blank';link.rel='noopener noreferrer';evidence.append(link);card.append(evidence);return card;
+    evidence.append(el('code','',ref.key));const link=el('a','','wiki 源码 · L'+ref.source.line);link.href=root.DialogueActions.sourceURL(row.chapter,ref.source.file,ref.source.line);link.target='_blank';link.rel='noopener noreferrer';evidence.append(link);if(state.compact&&actionMenu){const tools=el('div','context-tools');tools.append(actionMenu(evidence));card.append(tools);}else card.append(evidence);return card;
    }
    function node(n){
+    const guards=(n.entry_guards||[]).filter(g=>g.visible);
+    if(guards.length){
+     const wrapper=el('div','context-guarded');
+     for(const guard of guards){
+      const label=el('p','context-condition','前置：'+guard.condition);
+      label.title=`L${guard.source.line} 的退出检查未触发；此处记录通过检查时的条件，不代表后续变量不变。`;
+      wrapper.append(label);
+     }
+     wrapper.append(node({...n,entry_guards:[]}));return wrapper;
+    }
     if(n.type==='message')return message(n);
     if(n.type==='end'||n.type==='join')return el('p','context-end',n.label);
     if(n.type==='blocks'){
@@ -88,16 +99,35 @@ function mount({dialog,content,title,close,start,cell,getState}){
     if(n.type==='sequence'){
      const seq=el('div','context-sequence');for(const [i,c] of n.children.entries()){if(i&&c.usage!=='reference'&&n.children[i-1].usage!=='reference')seq.append(el('div','context-connector','↓'));seq.append(node(c));}if(!n.children.length)seq.append(el('p','context-empty','—'));return seq;
     }
-    const group=el('section','context-fork '+n.type);if(n.title)group.append(el('h3','context-fork-title',n.title));
+    const group=el('section','context-fork '+n.type+(n.revisit?' context-revisit':''));if(n.title)group.append(el('h3','context-fork-title',n.title));
     const branches=el('div','context-branches');
-    branches.style.gridTemplateColumns=n.branches.map(b=>`minmax(0,${lanes(b.body)}fr)`).join(' ');
-    for(const b of n.branches){
+    branches.style.gridTemplateColumns=n.revisit?'minmax(0,1fr)':n.branches.map(b=>`minmax(0,${lanes(b.body)}fr)`).join(' ');
+    for(const [i,b] of n.branches.entries()){
      const branch=el('section','context-branch');
      if(b.option){branch.append(el('span','context-branch-label','选择'),message(b.option,true));}
-     else branch.append(el('p','context-condition',b.label));
-     branch.append(el('div','context-connector','↓'),node(b.body));branches.append(branch);
+     else if(n.revisit){
+      const label=el('p','context-branch-label',i?'再次选择':'首次选择');
+      label.title=b.label+(i?'（期间未重置该 flag）':`；L${n.revisit.write_line} 写入 ${n.revisit.to}`);
+      branch.append(label,el('div','context-note',b.label));
+     }else branch.append(el('p','context-condition',b.label));
+     if(!(b.option&&b.body.type==='sequence'&&!b.body.children.length))branch.append(el('div','context-connector','↓'),node(b.body));
+     branches.append(branch);
     }
-    group.append(branches);return group;
+    group.append(branches);
+    if(n.join_next){
+     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+     svg.setAttribute('class','context-join-lines');svg.setAttribute('viewBox','0 0 100 24');
+     svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('aria-hidden','true');
+     const weights=n.branches.map(b=>lanes(b.body)),total=weights.reduce((a,b)=>a+b,0);let left=0;
+     for(const weight of weights){
+      const x=(left+weight/2)/total*100;left+=weight;
+      const path=document.createElementNS(svg.namespaceURI,'path');
+      path.setAttribute('d',`M ${x} 0 V 10 H 50 V 24`);path.setAttribute('fill','none');
+      path.setAttribute('stroke','currentColor');path.setAttribute('vector-effect','non-scaling-stroke');svg.append(path);
+     }
+     group.append(svg);
+    }
+    return group;
    }
    let pending=new WeakMap();
    async function renderFile(option){

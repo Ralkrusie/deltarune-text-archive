@@ -12,6 +12,7 @@ assert.deepEqual(scenesFor(pack,4,'missing'),[]);
 assert.deepEqual(scenesFor({scenes:[]},4,'same'),[]);
 assert.deepEqual(refs(pack.scenes[0].body).map(r=>r.occurrence_id),['option','use1','use2','other']);
 assert.equal(lanes({type:'choice',branches:[{body:{type:'condition',branches:[{body:message('a')},{body:message('b')}]}},{body:message('c')}]}),3);
+assert.equal(lanes({type:'choice',branches:[{body:{type:'condition',revisit:{flag:123,from:0,to:1,write_line:8},branches:[{body:message('a')},{body:message('b')}]}},{body:message('c')}]}),2);
 assert.deepEqual(refs({type:'blocks',children:[{type:'block',children:[message('block1')]},{type:'block',children:[message('block2')]}]}).map(r=>r.occurrence_id),['block1','block2']);
 console.log('Context lookup: chapter isolation, options, repeated uses and missing coverage passed');
 const index={files:[{file:'native.gml'},{file:'caller.gml'},{file:'other.gml'}],by_key:{same:[0,2]},related_by_key:{same:[1,0]}};

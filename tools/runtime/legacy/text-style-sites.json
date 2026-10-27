@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "source": "data/exported/code/ch2/gml_Object_obj_writer_Draw_0.gml",
+  "source_sha256": "7597703c209cce4e007419710fb30c86027f183ee8b5f5a6d7bbfb3c9235cc0c",
+  "sites": [
+    {
+      "site": 1,
+      "original_call": "draw_text_transformed(wx + random(shake), wy + random(shake), mychar, textscale, textscale, 0);",
+      "recipe": "random(shake) XY, textscale"
+    },
+    {
+      "site": 2,
+      "original_call": "draw_text_color(wx + random(shake) + 1, wy + random(shake) + 1, mychar, xcolor, xcolor, xcolor, xcolor, 0.3);",
+      "recipe": "random XY + (1,1) shadow"
+    },
+    {
+      "site": 3,
+      "original_call": "draw_text_color(wx + random(shake), wy + random(shake), mychar, c_white, c_white, xcolor, xcolor, 1);",
+      "recipe": "random XY; white-to-xcolor gradient"
+    },
+    {
+      "site": 4,
+      "original_call": "draw_text_color(wx + random(shake) + 1, wy + random(shake) + 1, mychar, c_dkgray, c_dkgray, c_navy, c_navy, 1);",
+      "recipe": "random XY + (1,1); darkgray-to-navy shadow"
+    },
+    {
+      "site": 5,
+      "original_call": "draw_text(wx + random(shake), wy + random(shake), mychar);",
+      "recipe": "random XY foreground"
+    },
+    {
+      "site": 6,
+      "original_call": "draw_text(wx, wy, mychar);",
+      "recipe": "fixed core, alpha=specfade"
+    },
+    {
+      "site": 7,
+      "original_call": "draw_text(wx + 1, wy, mychar);",
+      "recipe": "fixed axial offset, alpha=(0.3+0.1*sin(siner/14))*specfade"
+    },
+    {
+      "site": 8,
+      "original_call": "draw_text(wx - 1, wy, mychar);",
+      "recipe": "fixed axial offset, alpha=(0.3+0.1*sin(siner/14))*specfade"
+    },
+    {
+      "site": 9,
+      "original_call": "draw_text(wx, wy + 1, mychar);",
+      "recipe": "fixed axial offset, alpha=(0.3+0.1*sin(siner/14))*specfade"
+    },
+    {
+      "site": 10,
+      "original_call": "draw_text(wx, wy - 1, mychar);",
+      "recipe": "fixed axial offset, alpha=(0.3+0.1*sin(siner/14))*specfade"
+    },
+    {
+      "site": 11,
+      "original_call": "draw_text(wx + 1, wy + 1, mychar);",
+      "recipe": "fixed diagonal offset, alpha=(0.08+0.04*sin(siner/14))*specfade"
+    },
+    {
+      "site": 12,
+      "original_call": "draw_text(wx - 1, wy - 1, mychar);",
+      "recipe": "fixed diagonal offset, alpha=(0.08+0.04*sin(siner/14))*specfade"
+    },
+    {
+      "site": 13,
+      "original_call": "draw_text(wx - 1, wy + 1, mychar);",
+      "recipe": "fixed diagonal offset, alpha=(0.08+0.04*sin(siner/14))*specfade"
+    },
+    {
+      "site": 14,
+      "original_call": "draw_text(wx + 1, wy - 1, mychar);",
+      "recipe": "fixed diagonal offset, alpha=(0.08+0.04*sin(siner/14))*specfade"
+    },
+    {
+      "site": 15,
+      "original_call": "draw_text(wx + sin(siner / 4), wy + cos(siner / 4), mychar);",
+      "recipe": "orbit XY=(sin(siner/4),cos(siner/4)), white"
+    },
+    {
+      "site": 16,
+      "original_call": "draw_text(wx + sin(siner / 5), wy + cos(siner / 5), mychar);",
+      "recipe": "orbit XY=(sin(siner/5),cos(siner/5)), white"
+    },
+    {
+      "site": 17,
+      "original_call": "draw_text(wx + sin(siner / 7), wy + cos(siner / 7), mychar);",
+      "recipe": "orbit XY=(sin(siner/7),cos(siner/7)), white"
+    },
+    {
+      "site": 18,
+      "original_call": "draw_text(wx + sin(siner / 9), wy + cos(siner / 9), mychar);",
+      "recipe": "orbit XY=(sin(siner/9),cos(siner/9)), white"
+    },
+    {
+      "site": 19,
+      "original_call": "draw_text(wx + specx[i], wy + specy[i], mychar);",
+      "recipe": "7 trails; n==1 updates XY by lengthdir(2,315+random(15)); reset XY when X>=40; alpha=(40-X)/40*0.7; white"
+    }
+  ]
+}
