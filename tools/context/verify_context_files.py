@@ -41,6 +41,7 @@ def verify(code, texts=ROOT/'build/texts', local=ROOT/'local/context-files', pri
             def visit(node):
                 yield node
                 for child in node.get('children',[]):yield from visit(child)
+                if 'prefix' in node:yield from visit(node['prefix'])
                 for branch in node.get('branches',[]):yield from visit(branch['body'])
             condition=next(n for n in visit(scene['body']) if n['type']=='condition' and n['branches'][0]['label']=='obj_mainchara.x >= 4310 && global.interact == 0')
             assert [r['key'] for r in references(condition['branches'][0]['body'])]==[

@@ -39,7 +39,7 @@ def build(code, texts=ROOT/'build/texts', out=ROOT/'local/context-all'):
     began=time.perf_counter();api=backend()
     manifest_bytes=(texts/'manifest.json').read_bytes();binding=digest(manifest_bytes)
     out.mkdir(parents=True,exist_ok=True);(out/'files').mkdir(exist_ok=True)
-    inventory={};chapter_paths={};summaries=[];diagnostics=[];rules=[];sources_proof={};missing={}
+    inventory={};chapter_paths={};summaries=[];diagnostics=[];rules=[];sources_proof={};missing={};queue_audit=[];direct_audit=[]
     def write(path,data):
         raw=encoded(data);(out/path).write_bytes(raw)
         meta={'path':path,'sha256':digest(raw),'bytes':len(raw)};inventory[path]=meta;return meta
@@ -74,6 +74,8 @@ def build(code, texts=ROOT/'build/texts', out=ROOT/'local/context-all'):
             counts['references']+=len(native);counts.update(r.get('binding','matched') for r in native)
             chapter_rules.update(e['rule'] for e in analyzer.evidence)
             rules.extend({'chapter':ch,**e} for e in analyzer.evidence)
+            queue_audit.extend({'chapter':ch,**e} for e in analyzer.queue_audit)
+            direct_audit.extend({'chapter':ch,**e} for e in analyzer.direct_audit)
             diagnostics.extend({'chapter':ch,**e} for e in analyzer.diagnostics)
             # Only shared protocol helpers need persistent parsed trees.
             if name!='gml_GlobalScript_scr_text.gml':analyzer.cache.pop(name,None)
@@ -93,7 +95,7 @@ def build(code, texts=ROOT/'build/texts', out=ROOT/'local/context-all'):
     raw=encoded(manifest);(out/'contexts.json').write_bytes(raw)
     report={'schema':2,'text_manifest_sha256':binding,'contexts_sha256':digest(raw),'files':inventory,
             'chapters':summaries,'diagnostics':diagnostics,'rules':rules,'sources':sources_proof,
-            'missing_keys':missing,'total_bytes':sum(v['bytes'] for v in inventory.values())+len(raw),
+            'missing_keys':missing,'queued_menus':queue_audit,'direct_menus':direct_audit,'total_bytes':sum(v['bytes'] for v in inventory.values())+len(raw),
             'seconds':round(time.perf_counter()-began,2)}
     (out/'evidence.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(json.dumps({'total_files':sum(s['context_files'] for s in summaries),'total_bytes':report['total_bytes'],

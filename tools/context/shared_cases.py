@@ -133,14 +133,73 @@ class SharedCases:
             if n.kind=='stmt' and n.start not in assignments and re.search(r'global\.choicemsg', ''.join(self.tokens(n.text))):return None
         return {i:options[i][0] for i in range(count)}
 
+    def buffer_protocol(self):
+        """The C2/3/4 writer waits; confirming replaces it before the next case.
+
+        Required only for the newly accepted padding/recursive-menu forms.
+        Inspect sibling statements, not merely matching words anywhere in a file.
+        """
+        a=self.a
+        writer=a.file('gml_Object_obj_writer_Draw_0.gml')['nodes']
+        expected=self.tokens('''if(instance_exists(obj_choicer_neo)==false){
+            choicer=instance_create(0,0,obj_choicer_neo);
+            choicer.choicetotal=real(nextchar2)-1;} halt=5;''')
+        branches=[n for n in a.flow.walk(writer) if n.kind=='if' and self.tokens(n.text)==
+                  self.tokens('nextchar2=="2" || nextchar2=="3" || nextchar2=="4"')]
+        if len(branches)!=1:return False
+        branch=branches[0]
+        if self.tokens(''.join(n.text if n.kind=='stmt' else a.file('gml_Object_obj_writer_Draw_0.gml')['source'][n.start:n.end]
+                               for n in a.flat(branch.children)))!=expected:return False
+        alarm=a.file('gml_Object_obj_choicer_neo_Alarm_0.gml')
+        for parent in a.flow.walk(alarm['nodes']):
+            nodes=a.flat(parent.children)
+            for i,n in enumerate(nodes):
+                if n.kind!='with' or self.tokens(n.text)!=['writer']:continue
+                following=nodes[i:i+5]
+                if len(following)!=5:continue
+                destroy,face,increment,call,event=following
+                if (self.tokens(''.join(c.text for c in a.flat(destroy.children)))==self.tokens('instance_destroy();')
+                    and face.kind=='with' and self.tokens(face.text)==['obj_choicer_neo']
+                    and self.tokens(''.join(c.text for c in a.flat(face.children)))==self.tokens('global.fc=remfc;')
+                    and all(c.kind=='stmt' for c in (increment,call,event))
+                    and self.tokens(increment.text+call.text+event.text)==self.tokens('global.msc+=1;scr_text(global.msc);event_user(0);')):
+                    return True
+        return False
+
+    def padding(self,prompt,before,after):
+        """Only forward, constant, whitespace message slots after the prompt."""
+        trailing=[n for n in after if self.message(n) is not None]
+        if any('global.msg' in n.text and self.message(n) is None for n in after):return None
+        if not trailing:return []
+        if not self.buffer_verified:return None
+        slots=[]
+        for n in [*before,prompt,*after]:
+            if n.kind!='stmt':return None
+            if 'global.msg' not in n.text:continue
+            match=re.fullmatch(r'global\.msg\[(\d+)\]\s*=\s*[\s\S]*;',n.text)
+            if not match or self.message(n) is None:return None
+            slots.append(int(match[1]))
+        if not slots or slots!=sorted(set(slots)):return None
+        if not re.match(r'global\.msg\[\d+\]\s*=',prompt.text):return None
+        for n in after:
+            if n.text=='break;':continue
+            text=self.message(n)
+            if text is None or text.strip():return None
+        return trailing
+
     def plan(self,switch):
         a=self.a
         if self.name!='gml_GlobalScript_scr_text.gml':return {},set()
         protocol=self.protocol()
         if protocol is None:return {},set()
+        self.buffer_verified=self.buffer_protocol()
+        from .shared_effects import SharedEffects
+        effects=SharedEffects(a)
         plans={};consumed=set();cases=switch.children
-        for menu,response in zip(cases,cases[1:]):
-            if menu.start in consumed or not menu.text.isdigit() or not response.text.isdigit():continue
+        # Prove the inner question first. Its labels may be prepared before the
+        # previous answer is tested; only its C prompt determines where it opens.
+        for menu,response in reversed(list(zip(cases,cases[1:]))):
+            if not menu.text.isdigit() or not response.text.isdigit():continue
             value=int(menu.text)
             if int(response.text)!=value+1 or {value,value+1}&set(protocol['excluded_literal_entries']):continue
             def reject(reason):self.rejections[value]=reason
@@ -157,7 +216,8 @@ class SharedCases:
             if any(r['offset']>prompt.start for r in options.values()):reject('late_option_assignment');continue
             if any(n.kind!='stmt' for n in before+after):reject('complex_prompt_path');continue
             if any('%' in (self.message(n) or '') or re.search(r'\\C\d',self.message(n) or '') for n in before):reject('earlier_message_end');continue
-            if any(self.message(n) is not None for n in after):reject('message_after_prompt');continue
+            padding=self.padding(prompt,before,after)
+            if padding is None:reject('message_after_prompt');continue
             safe=set(a.gml.FUNCTIONS)|{'msgset','msgnext','scr_speaker'}
             if any(c['call'] not in safe for n in a.flow.walk(menu.children) if n.kind!='block' for c in a.calls(n.text)):
                 reject('opaque_menu_call');continue
@@ -167,29 +227,68 @@ class SharedCases:
             if any(t in ('return','exit','continue','function') for t in menu_token_list+response_tokens) or menu_token_list.count('break')!=1 or response_tokens.count('break')!=1:
                 reject('early_transfer');continue
             if re.search(r'global\.(?:msc|choice)'+WRITE+r'|(?:\+\+|--)global\.(?:msc|choice)',menu_tokens):reject('menu_protocol_write');continue
-            if re.search(r'global\.choice(?:msg)?(?:\[|'+WRITE+r')|(?:\+\+|--)global\.choice', ''.join(response_tokens)):
+            response_text=''.join(response_tokens)
+            if re.search(r'global\.choice(?:\[|'+WRITE+r')|(?:\+\+|--)global\.choice',response_text):
                 reject('new_menu_or_choice_write');continue
-            if self.prompts(response.children):reject('response_opens_menu');continue
+            child=plans.get(response.start)
+            has_menu=bool(self.prompts(response.children))
+            if has_menu and (child is None or not self.buffer_verified):reject('response_opens_menu');continue
+            if re.search(r'global\.choicemsg(?:\[|'+WRITE+r')',response_text) and not child:reject('new_menu_or_choice_write');continue
             roots=[n for n in response_nodes[:-1] if n.kind=='if']
-            # One exclusive if/else chain avoids re-evaluating an answer after
-            # an opaque side effect in a preceding independent if arm.
-            if len(roots)!=1:reject('non_exclusive_response');continue
+            # Separate equality tests are exclusive only if every intervening
+            # effect preserves the answer. Do not infer this from function names.
+            independent=len(roots)>1;effect_proof=None
+            if independent:
+                matches=[re.fullmatch(r'global\.choice\s*==\s*(\d+)',n.text) for n in roots]
+                if (child or any(n.other for n in roots) or not all(matches)
+                    or len({int(m[1]) for m in matches})!=len(matches)
+                    or {int(m[1]) for m in matches}!=set(options)):
+                    reject('non_exclusive_response');continue
+                effects.used=set();effects.reason=''
+                if not effects.safe(menu_nodes[:-1],allow_options=True) or not effects.safe(response_nodes[:-1]):
+                    reject('independent_response:'+effects.reason);continue
+                effect_proof=effects.proof()
+            elif not roots:reject('non_exclusive_response');continue
             first=response_nodes.index(roots[0])
             if any(c['call'] not in safe for n in response_nodes[:first] for c in a.calls(n.text)):
                 reject('opaque_response_prefix');continue
-            matched=a.choice_responses(self.name,response.children,options)
+            prefix=response_nodes[:first]
+            # A new fixed menu may be prepared before testing the old answer.
+            # Preserve unused slot references once in the common prefix. Visible
+            # labels move to the child's proven prompt, never to the old answer.
+            if child and any(n.kind!='stmt' or not re.fullmatch(r'global\.choicemsg\[\d+\]\s*=\s*[\s\S]*;',n.text) for n in prefix):
+                reject('unsupported_nested_prefix');continue
+            matched=a.choice_responses(self.name,response_nodes[first:] if child else response.children,options)
             if matched is None:reject('unmapped_response_or_common_text');continue
             mapped,tail=matched
             if tail:reject('common_response_tail');continue
             # Each visible answer must have its own lexical response arm.
             if any(not mapped[i] for i in options):reject('missing_response_arm');continue
             plans[menu.start]={'options':options,'mapped':mapped,'prompt':prompt.start,
-                'consumed':response.start,'omit':{r['occurrence_id'] for r in options.values()}}
+                'consumed':response.start,'omit':{r['occurrence_id'] for r in options.values()} | (child['omit'] if child else set()),
+                'nested':child,'prefix_nodes':prefix if child else [],'padding':padding,
+                'effect_proof':effect_proof,
+                'menu_case':value,'response_case':value+1,'menu_start':menu.start,'response_start':response.start}
+        # Install only reachable plans in the projection, once per source case.
+        # An unproved parent leaves its independently proved child as a block.
+        active={}
+        def register(plan):
+            active[plan['menu_start']]=plan;consumed.add(plan['consumed'])
+            if plan['nested']:register(plan['nested'])
+        for case in cases:
+            if case.start in plans and case.start not in consumed:register(plans[case.start])
+        for plan in active.values():
+            menu=next(c for c in cases if c.start==plan['menu_start'])
+            response=next(c for c in cases if c.start==plan['response_start'])
             a.shared_message_writes.update(n.start for n in a.flow.walk(menu.children+response.children)
                 if self.message(n) is not None)
-            consumed.add(response.start)
-            a.evidence.append({'rule':'shared_case_choice','file':self.name,'menu_case':value,'response_case':value+1,
+            a.shared_padding_writes.update(n.start for n in plan['padding'])
+            a.evidence.append({'rule':'shared_case_choice','file':self.name,'menu_case':plan['menu_case'],'response_case':plan['response_case'],
                 'menu_line':a.file(self.name)['source'].count('\n',0,menu.start)+1,
                 'response_line':a.file(self.name)['source'].count('\n',0,response.start)+1,
-                'option_count':count,'entry':'scr_text(global.msc)','protocol':protocol})
-        return plans,consumed
+                'option_count':len(plan['options']),'entry':'scr_text(global.msc)','protocol':protocol,
+                **({'padding_lines':[a.file(self.name)['source'].count('\n',0,n.start)+1 for n in plan['padding']]} if plan['padding'] else {}),
+                **({'nested_menu_case':plan['nested']['menu_case']} if plan['nested'] else {})})
+            if plan['effect_proof'] is not None:
+                a.evidence[-1].update(response_form='independent_equality',effect_helpers=plan['effect_proof'])
+        return active,consumed

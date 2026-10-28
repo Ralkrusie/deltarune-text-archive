@@ -48,9 +48,18 @@ python -m tools.assets.build_assets --game "PATH_TO_ORIGINAL_GAME" --zh-game "PA
 ```sh
 python -m tools.context.build_context_all --code "local/code" --texts build/texts --out local/context-all
 python -m tools.context.verify_context_all --code "local/code" --texts build/texts --out local/context-all
+python -m tools.context.summarize_context --context local/context-all --out build/context-summary.json
 ```
 
 更换语言或源码后重新生成。上下文为局部静态结构，边界和产物见[上下文契约](../data/CONTEXT.md)。
+
+开发时可独立登记选择题和文本相关条件；不改变上下文包，也不在网站上增加标记：
+
+```sh
+python -m tools.context.audit_context --code "local/code" --texts build/texts --context local/context-all --out build/context-audit
+```
+
+查看 `build/context-audit/review.md`，完整清单为同目录的 `registry.jsonl`。后续批次使用不同输出目录，并加 `--previous build/context-audit`，生成状态／原因变化清单。登记范围、状态含义及统计边界见[开发审计约定](../data/CONTEXT_AUDIT.md)。
 
 `local/release.json` 可填写 `game_version`、`game_release_date`、`translation_version`，以及当前 `build/texts/manifest.json` 的 SHA-256 字段 `text_manifest_sha256`；未绑定或摘要不符时页面显示版本待核对。
 

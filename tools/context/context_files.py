@@ -22,6 +22,7 @@ def choice_nodes(choice):
     node=dict(type='choice',title='玩家选择',branches=[
         {'option':copy.deepcopy(r),'body':sequence(choice['bodies'][i])} for i,r in sorted(choice['options'].items())])
     tail=choice.get('tail',[])
+    if choice.get('prefix'):node['prefix']=sequence(choice['prefix'])
     if tail:node['join_next']=True
     return [node,*tail]
 
@@ -39,6 +40,7 @@ class Analyzer:
         self.flow,self.gml,self.schema,self.calls=api
         self.cache={};self.evidence=[];self.diagnostics=[];self.continuations={}
         self.scoped_choices={};self.scoped_consumed=set()
+        self.queued=None;self.queue_audit=[];self.direct=None;self.direct_audit=[]
 
     def file(self,name):
         if name not in self.cache:
@@ -120,6 +122,7 @@ class Analyzer:
                 n['entry_guards']=own
                 used.update((p['source']['line'],p['condition']) for p in own)
             for c in n.get('children',[]):attach(c,shared)
+            if 'prefix' in n:attach(n['prefix'],shared)
             for b in n.get('branches',[]):
                 # Choice labels remain identity-bearing references as well.
                 if 'option' in b:attach(b['option'],shared)
@@ -331,10 +334,14 @@ class Analyzer:
 
     def project(self,name,nodes,omit=(),choice_scope=False):
         out=[]
+        if self.queued:omit=set(omit)|self.queued.omit
+        if self.direct:omit=set(omit)|self.direct.omit
         flat=self.flat(nodes)
         for index,n in enumerate(flat):
             if n.start in self.scoped_consumed:continue
-            if not any(r['occurrence_id'] not in omit for r in self.within(name,n)) and not any(n.start<=p<n.end for p in self.prompt_choices):continue
+            prompts=set(self.prompt_choices)|(set(self.queued.plans) if self.queued else set())
+            if self.direct:prompts.update(self.direct.plans)
+            if not any(r['occurrence_id'] not in omit for r in self.within(name,n)) and not any(n.start<=p<n.end for p in prompts):continue
             if n.start in self.scoped_choices:
                 choice,variable=self.scoped_choices[n.start]
                 children=self.project(name,n.children,set(omit)|choice['omit'])
@@ -363,13 +370,21 @@ class Analyzer:
                 rs=[copy.deepcopy(r) for r in self.within(name,n) if r['occurrence_id'] not in omit]
                 # A string reference is not automatically a displayed main message.
                 for r in rs:
-                    if not r['call'].startswith(('msg','c_msg')) and n.start not in self.shared_message_writes:
+                    if n.start in self.shared_padding_writes or (not r['call'].startswith(('msg','c_msg')) and n.start not in self.shared_message_writes):
                         r['usage']='reference'
                 out.extend(rs)
                 if n.start in self.prompt_choices:
                     choice=self.prompt_choices[n.start]
-                    bodies={i:self.project(name,choice['mapped'][i]) for i in choice['options']}
-                    out.extend(choice_nodes({**choice,'bodies':bodies}))
+                    nested=choice.get('nested')
+                    if nested:self.prompt_choices[nested['prompt']]=nested
+                    bodies={i:self.project(name,choice['mapped'][i],choice['omit']) for i in choice['options']}
+                    prefix=self.project(name,choice.get('prefix_nodes',[]),choice['omit'])
+                    if nested:del self.prompt_choices[nested['prompt']]
+                    out.extend(choice_nodes({**choice,'bodies':bodies,'prefix':prefix}))
+                if self.queued and n.start in self.queued.plans:
+                    out.extend(self.queued.render(n.start))
+                if self.direct and n.start in self.direct.plans:
+                    out.extend(self.direct.render(n.start))
             elif n.kind=='switch':
                 cases=[]
                 plans={};consumed=set()
@@ -650,9 +665,10 @@ class Analyzer:
 
     def analyze(self,name):
         self.evidence=[];self.diagnostics=[];self.continuations={}
+        self.queued=None;self.queue_audit=[];self.direct=None;self.direct_audit=[]
         self.scoped_choices={};self.scoped_consumed=set()
         self.prompt_choices={};self.shared_rejections={}
-        self.shared_message_writes=set()
+        self.shared_message_writes=set();self.shared_padding_writes=set()
         data=self.file(name);nodes=data['nodes'];stages={}
         if data.get('parse_error') is not None:self.diagnostics.append({'file':name,'reason':'parse_error','detail':data['parse_error']})
         for n in nodes:
@@ -666,9 +682,17 @@ class Analyzer:
                 choices[n.start]=choice;consumed.update(choice['consumed'])
         self.connect_dialogue_continuations(name,nodes,stages,choices,consumed)
         self.connect_scoped_choices(name,nodes,set(choices)|consumed)
+        from .queued_choices import QueuedChoices
+        self.queued=QueuedChoices(self,name,set(choices)|consumed|set(self.scoped_choices)|self.scoped_consumed).build()
+        self.queue_audit=self.queued.audit
+        from .direct_choices import DirectChoices
+        excluded=set(choices)|consumed|set(self.scoped_choices)|self.scoped_consumed|self.queued.consumed
+        excluded.update(p['root'].start for p in self.queued.plans.values())
+        self.direct=DirectChoices(self,name,excluded).build()
+        self.direct_audit=self.direct.audit
         blocks=[]
         for n in nodes:
-            if n.start in consumed or n.start in self.scoped_consumed:continue
+            if n.start in consumed or n.start in self.scoped_consumed or n.start in self.queued.consumed or n.start in self.direct.consumed:continue
             plain_stage=self.stage(n) is not None and not n.other
             choice=choices.get(n.start);children=self.project(name,n.children if plain_stage else [n],choice['omit'] if choice else ())
             if choice:
@@ -692,19 +716,19 @@ class Analyzer:
 
 def build(files, code, texts=ROOT/'build/texts', out=ROOT/'local/context-files'):
     from .context_paths import paths
+    from .build_context_all import Sources
     code,texts,out=paths(code,texts,out)
-    api=backend();scenes=[];evidence=[];hashes={};diagnostics=[]
+    api=backend();scenes=[];evidence=[];hashes={};diagnostics=[];queue_audit=[];direct_audit=[]
     tables={ch:{r['key']:r for r in json.loads((texts/f'trilingual_chapter{ch}.json').read_text(encoding='utf-8'))['lines']} for ch in range(1,6)}
     for path in files:
         p=Path(path)
         if len(p.parts)!=2 or not re.fullmatch(r'ch[1-5]',p.parts[0]) or not re.fullmatch(r'gml_\w+\.gml',p.name):raise ValueError('Invalid code path')
-        ch=int(p.parts[0][-1]);names=[p.name,'gml_GlobalScript_scr_text.gml','gml_Object_obj_choicer_neo_Alarm_0.gml','gml_Object_obj_choicer_neo_Other_10.gml','gml_GlobalScript_scr_cutscene_commands.gml','gml_GlobalScript_c_msc.gml']
-        names.append(re.sub(r'_Step_\d+\.gml$','_Create_0.gml',p.name))
-        names.extend(['gml_GlobalScript_scr_flag_get.gml','gml_GlobalScript_scr_flag_set.gml'])
-        sources={name:(code/p.parts[0]/name).read_text(encoding='utf-8-sig') for name in set(names) if (code/p.parts[0]/name).exists()}
-        source_hashes={name:digest((code/p.parts[0]/name).read_bytes()) for name in sources}
+        ch=int(p.parts[0][-1])
+        sources=Sources(code/p.parts[0]);source_hashes=sources.hashes
         analyzer=Analyzer(sources,ch,tables[ch],api,source_hashes);scene=analyzer.analyze(p.name);scenes.append(scene)
         evidence.extend(analyzer.evidence);diagnostics.extend(analyzer.diagnostics)
+        queue_audit.extend({'chapter':ch,**e} for e in analyzer.queue_audit)
+        direct_audit.extend({'chapter':ch,**e} for e in analyzer.direct_audit)
         hashes.update({f'ch{ch}/'+name:record['hash'] for name,record in analyzer.cache.items()})
         print(json.dumps({'file':path,'references':scene['reference_count'],'links':dict(Counter(e['rule'] for e in analyzer.evidence))},ensure_ascii=False),flush=True)
     manifest=(texts/'manifest.json').read_bytes()
@@ -713,7 +737,7 @@ def build(files, code, texts=ROOT/'build/texts', out=ROOT/'local/context-files')
     out.mkdir(parents=True,exist_ok=True)
     payload=(json.dumps(pack,ensure_ascii=False,separators=(',',':'))+'\n').encode('utf-8')
     (out/'contexts.json').write_bytes(payload)
-    (out/'evidence.json').write_text(json.dumps({'contexts_sha256':digest(payload),'sources':hashes,'rules':evidence,'diagnostics':diagnostics,'coverage':{s['id']:s['reference_count'] for s in scenes}},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    (out/'evidence.json').write_text(json.dumps({'contexts_sha256':digest(payload),'sources':hashes,'rules':evidence,'queued_menus':queue_audit,'direct_menus':direct_audit,'diagnostics':diagnostics,'coverage':{s['id']:s['reference_count'] for s in scenes}},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     return pack
 
 

@@ -7,6 +7,11 @@ import re
 def references(node):
     if node['type']=='message':yield node
     for child in node.get('children',[]):yield from references(child)
+    if 'prefix' in node:
+        for branch in node.get('branches',[]):yield branch['option']
+        yield from references(node['prefix'])
+        for branch in node.get('branches',[]):yield from references(branch['body'])
+        return
     for branch in node.get('branches',[]):
         if 'option' in branch:yield branch['option']
         yield from references(branch['body'])
@@ -28,6 +33,12 @@ def validate(pack, text_manifest, tables):
                     or '/' in s['file'] or '\\' in s['file'] or type(s.get('line')) is not int or s['line']<1):
                     raise ValueError('Invalid entry guard')
         kind=n.get('type')
+        if 'prefix' in n:
+            prefix=n['prefix']
+            if (kind!='choice' or not isinstance(prefix,dict) or prefix.get('type')!='sequence'
+                or not isinstance(prefix.get('children'),list) or not prefix['children']):
+                raise ValueError('Invalid choice response prefix')
+            node(prefix,ch,depth+1)
         if kind=='message':
             missing=n.get('binding')=='missing_key' and n.get('key') not in tables[ch] and 'source_english' in n and (n['source_english'] is None or isinstance(n['source_english'],str))
             if (n.get('key') not in tables[ch] and not missing) or not str(n.get('occurrence_id','')).startswith('occurrence:'):

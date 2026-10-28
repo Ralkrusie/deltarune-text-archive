@@ -80,6 +80,34 @@ class ContextContractTests(unittest.TestCase):
         self.assertEqual([r['occurrence_id'] for r in references(body)],
                          ['occurrence:one','occurrence:two','occurrence:two'])
 
+    def test_choice_shared_response_prefix_and_tail_keep_each_use_once(self):
+        def message(identity):
+            return {**self.message,'occurrence_id':'occurrence:'+identity}
+        choice={'type':'choice','join_next':True,
+                'prefix':{'type':'sequence','children':[message('prefix')]},
+                'branches':[{'option':message('option0'),'body':message('answer0')},
+                            {'option':message('option1'),'body':message('answer1')}]}
+        body={'type':'sequence','children':[choice,message('tail')]}
+        self.pack['scenes'][0]['body']=body
+        validate(self.pack,self.manifest,self.tables)
+        self.assertEqual([r['occurrence_id'] for r in references(body)],
+                         ['occurrence:'+s for s in ('option0','option1','prefix','answer0','answer1','tail')])
+        choice['prefix']['children'][0]['key']='not-in-texts'
+        with self.assertRaisesRegex(ValueError,'reference'):validate(self.pack,self.manifest,self.tables)
+
+    def test_response_prefix_is_nonempty_and_only_belongs_to_a_choice(self):
+        choice={'type':'choice','branches':[
+            {'option':self.message,'body':self.message},
+            {'option':self.message,'body':self.message}]}
+        self.pack['scenes'][0]['body']=choice
+        for invalid in (None,{}, {'type':'sequence','children':[]},
+                        {'type':'block','children':[self.message]}):
+            choice['prefix']=invalid
+            with self.subTest(prefix=invalid),self.assertRaisesRegex(ValueError,'response prefix'):
+                validate(self.pack,self.manifest,self.tables)
+        self.pack['scenes'][0]['body']={**self.message,'prefix':{'type':'sequence','children':[self.message]}}
+        with self.assertRaisesRegex(ValueError,'response prefix'):validate(self.pack,self.manifest,self.tables)
+
     def catalog(self,folder,corruption=None):
         binding=sha(self.manifest);chapters={};files={}
         for ch in range(1,6):
