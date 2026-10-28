@@ -3,6 +3,12 @@
 function refs(node){
  const out=node.type==='message'?[node]:[];
  for(const c of node.children||[])out.push(...refs(c));
+ if(node.prefix){
+  for(const b of node.branches||[])out.push(b.option);
+  out.push(...refs(node.prefix));
+  for(const b of node.branches||[])out.push(...refs(b.body));
+  return out;
+ }
  for(const b of node.branches||[]){if(b.option)out.push(b.option);out.push(...refs(b.body));}
  return out;
 }
@@ -13,7 +19,7 @@ function fileOptions(index,key){
 }
 function lanes(n){
  if(n.revisit)return Math.max(1,...n.branches.map(b=>lanes(b.body)));
- if(n.branches)return n.branches.reduce((sum,b)=>sum+lanes(b.body),0);
+ if(n.branches)return Math.max(n.prefix?lanes(n.prefix):1,n.branches.reduce((sum,b)=>sum+lanes(b.body),0));
  return Math.max(1,...(n.children||[]).map(lanes));
 }
 function mount({dialog,content,title,close,start,cell,actionMenu,getState}){
@@ -100,11 +106,35 @@ function mount({dialog,content,title,close,start,cell,actionMenu,getState}){
      const seq=el('div','context-sequence');for(const [i,c] of n.children.entries()){if(i&&c.usage!=='reference'&&n.children[i-1].usage!=='reference')seq.append(el('div','context-connector','↓'));seq.append(node(c));}if(!n.children.length)seq.append(el('p','context-empty','—'));return seq;
     }
     const group=el('section','context-fork '+n.type+(n.revisit?' context-revisit':''));if(n.title)group.append(el('h3','context-fork-title',n.title));
+    const columns=n.revisit?'minmax(0,1fr)':n.branches.map(b=>`minmax(0,${lanes(b.body)}fr)`).join(' ');
+    function lines(reverse=false){
+     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+     svg.setAttribute('class','context-join-lines');svg.setAttribute('viewBox','0 0 100 24');
+     svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('aria-hidden','true');
+     const weights=n.branches.map(b=>lanes(b.body)),total=weights.reduce((a,b)=>a+b,0);let left=0;
+     for(const weight of weights){
+      const x=(left+weight/2)/total*100;left+=weight;
+      const path=document.createElementNS(svg.namespaceURI,'path');
+      path.setAttribute('d',reverse?`M 50 0 V 14 H ${x} V 24`:`M ${x} 0 V 10 H 50 V 24`);path.setAttribute('fill','none');
+      path.setAttribute('stroke','currentColor');path.setAttribute('vector-effect','non-scaling-stroke');svg.append(path);
+     }
+     return svg;
+    }
+    if(n.prefix){
+     const options=el('div','context-branches context-options');options.style.gridTemplateColumns=columns;
+     for(const [i,b] of n.branches.entries()){
+      const option=el('section','context-branch');option.append(el('span','context-branch-label','选项 '+(i+1)),message(b.option,true));options.append(option);
+     }
+     group.append(options,lines(),node(n.prefix),lines(true));
+    }
     const branches=el('div','context-branches');
-    branches.style.gridTemplateColumns=n.revisit?'minmax(0,1fr)':n.branches.map(b=>`minmax(0,${lanes(b.body)}fr)`).join(' ');
+    branches.style.gridTemplateColumns=columns;
     for(const [i,b] of n.branches.entries()){
      const branch=el('section','context-branch');
-     if(b.option){branch.append(el('span','context-branch-label','选择'),message(b.option,true));}
+     if(b.option){
+      branch.append(el('span','context-branch-label',n.prefix?'选项 '+(i+1):'选择'));
+      if(!n.prefix)branch.append(message(b.option,true));
+     }
      else if(n.revisit){
       const label=el('p','context-branch-label',i?'再次选择':'首次选择');
       label.title=b.label+(i?'（期间未重置该 flag）':`；L${n.revisit.write_line} 写入 ${n.revisit.to}`);
@@ -114,19 +144,7 @@ function mount({dialog,content,title,close,start,cell,actionMenu,getState}){
      branches.append(branch);
     }
     group.append(branches);
-    if(n.join_next){
-     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-     svg.setAttribute('class','context-join-lines');svg.setAttribute('viewBox','0 0 100 24');
-     svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('aria-hidden','true');
-     const weights=n.branches.map(b=>lanes(b.body)),total=weights.reduce((a,b)=>a+b,0);let left=0;
-     for(const weight of weights){
-      const x=(left+weight/2)/total*100;left+=weight;
-      const path=document.createElementNS(svg.namespaceURI,'path');
-      path.setAttribute('d',`M ${x} 0 V 10 H 50 V 24`);path.setAttribute('fill','none');
-      path.setAttribute('stroke','currentColor');path.setAttribute('vector-effect','non-scaling-stroke');svg.append(path);
-     }
-     group.append(svg);
-    }
+    if(n.join_next)group.append(lines());
     return group;
    }
    let pending=new WeakMap();
