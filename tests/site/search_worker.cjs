@@ -15,11 +15,23 @@ async function search(patch){
  return new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('worker timeout')),15000);complete=message=>{clearTimeout(timeout);if(message.type==='error')reject(Error(message.message));else resolve(message);};sandbox.onmessage({data:{id:++id,state}});});
 }
 (async()=>{
- let r=await search({});assert.equal(r.total,66144);assert.equal(r.rows.length,30);
- r=await search({q:'obj_dummyenemy_slash_Step_0_gml_558_0'});assert.equal(r.total,5);
+ let r=await search({});assert.equal(r.records,66144);assert(r.total<r.records);assert.equal(r.rows.length,30);
+ console.log('Cross-chapter inventory:',JSON.stringify({records:r.records,groups:r.total}));
+ r=await search({q:'obj_dummyenemy_slash_Step_0_gml_558_0'});assert.equal(r.records,5);assert.equal(r.total,1);assert.equal(r.rows[0].copies.length,5);
  r=await search({ch:4,key:'obj_dummyenemy_slash_Step_0_gml_558_0'});assert.equal(r.total,1);assert.equal(r.rows[0].chapter,4);
+ assert.deepEqual(Array.from(r.rows[0].chapters),[1,2,3,4,5]);
  r=await search({ch:[1,3],key:'obj_dummyenemy_slash_Step_0_gml_558_0'});
- assert.deepEqual(Array.from(r.rows,row=>row.chapter),[1,3]);
+ assert.deepEqual(Array.from(r.rows[0].copies,row=>row.chapter),[1,3]);
+ assert.equal(r.rows[0].chapter,1);assert.deepEqual(Array.from(r.rows[0].chapters),[1,2,3,4,5]);
+ r=await search({q:"B-but Kris doesn't have"});assert.equal(r.total,1);assert.equal(r.records,4);assert.equal(r.rows[0].translationDifference,true);
+ for(const member of r.rows[0].copies){const single=await search({ch:member.chapter,key:member.key});assert.equal(single.total,1);assert.equal(single.rows[0].chapter,member.chapter);assert(!single.rows[0].copies);}
+ r=await search({q:'？ 可-可是Kris'});assert.equal(r.records,3);assert.equal(r.total,1);
+ assert.equal(r.rows[0].chapter,2,'Use a matching translation, not the earliest nonmatching chapter');
+ assert.deepEqual(Array.from(r.rows[0].copies,row=>row.chapter),[2,3,4]);
+ assert.deepEqual(Array.from(r.rows[0].chapters),[1,2,3,4]);
+ r=await search({ch:[3,4],q:"B-but Kris doesn't have"});assert.equal(r.rows[0].chapter,3);
+ assert.deepEqual(Array.from(r.rows[0].chapters),[1,2,3,4]);
+ for(const ch of [1,2,3,4,5]){const single=await search({ch});const data=JSON.parse(fs.readFileSync(path.join(root,`dist/data/ch${ch}.json`),'utf8'));assert.equal(single.total,data.rows.length);assert.equal(single.records,data.rows.length);}
  const hidden=await search({ch:[1],q:'克里斯',lang:['en'],zh:'default'});
  const shown=await search({ch:[1],q:'克里斯',lang:['zh'],zh:'names'});
  assert(hidden.total>0);assert.equal(hidden.total,shown.total);assert.deepEqual(hidden.rows,shown.rows);

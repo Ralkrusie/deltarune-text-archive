@@ -4,6 +4,7 @@ import json
 import re
 from pathlib import Path
 from tools.text.import_texts import CHAPTERS, FILES, disjoint, load_json, sha
+from .display_dedup import annotate
 
 
 def compact(value):
@@ -16,7 +17,7 @@ def build(texts, out, sources=None):
     manifest_raw = (texts / 'manifest.json').read_bytes()
     source_manifest = load_json(manifest_raw, 'manifest.json')
     expected = {r['path']: r['sha256'] for r in source_manifest['outputs']}
-    pending, chapters = [], []
+    pending, chapters, packages = [], [], []
     for ch in CHAPTERS:
         filename = f'trilingual_chapter{ch}.json'
         raw = (texts / filename).read_bytes()
@@ -57,7 +58,11 @@ def build(texts, out, sources=None):
                 if type(file_id) is not int or not 0 <= file_id < len(links['files']) or type(line) is not int or line < 1:
                     raise ValueError('Invalid source location')
             row.append(locations)
-        encoded = compact({'source_files': links['files'], 'schema': 1, 'chapter': ch, 'languages': list(FILES), 'strings': strings, 'rows': rows})
+        packages.append({'source_files': links['files'], 'schema': 1, 'chapter': ch, 'languages': list(FILES), 'strings': strings, 'rows': rows})
+    annotate(packages)
+    for package in packages:
+        ch, rows, strings = package['chapter'], package['rows'], package['strings']
+        encoded = compact(package)
         name = f'ch{ch}.json'
         pending.append((name, encoded))
         chapters.append({'chapter': ch, 'path': name, 'rows': len(rows), 'strings': len(strings),

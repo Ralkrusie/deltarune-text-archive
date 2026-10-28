@@ -21,7 +21,7 @@ function boot(regex=false){
 }
 for(const regex of [false,true]){
  const h=boot(regex),worker=h.workers[0];
- assert.match(worker.url,/protocol=2/);
+ assert.match(worker.url,/protocol=4/);
  assert.equal(worker.sent[0].progress,true);
  h.advance(25000);assert.equal(worker.terminated,false,'Slow downloads must survive the former 20s limit');
  h.send({type:'phase',phase:'loading',completed:2,total:5});

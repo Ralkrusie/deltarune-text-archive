@@ -98,8 +98,8 @@ function runSearch(){
 }
 function makeWorker(){
  if(worker)worker.terminate();
- // A new protocol URL avoids reusing a cached worker without phase notifications.
- try{worker=new Worker('search-worker.js?protocol=2');}catch{worker=null;showError('检索模块未能启动，请重新加载页面后重试。');return false;}
+ // A new protocol URL avoids reusing a cached worker with an older result shape.
+ try{worker=new Worker('search-worker.js?protocol=4');}catch{worker=null;showError('检索模块未能启动，请重新加载页面后重试。');return false;}
  const activeWorker=worker;
  worker.onmessage=({data})=>{
   if(worker!==activeWorker||data.id!==request)return;
@@ -200,17 +200,23 @@ function actionMenu(...items){
 }
 addEventListener('click',e=>{for(const menu of document.querySelectorAll('.compact-actions[open]'))if(!menu.contains(e.target))menu.open=false;});
 const contextView=window.DialogueContext.mount({dialog:$('context-dialog'),content:$('context-content'),title:$('context-title'),close:$('close-context'),start:$('context-start'),cell,actionMenu,getState:()=>({...state,compact})});
+function chapterLabel(row){
+ const chapters=[...new Set(row.chapters||[row.chapter])].sort((a,b)=>a-b),ranges=[];
+ for(const ch of chapters){const last=ranges.at(-1);if(last&&ch===last[1]+1)last[1]=ch;else ranges.push([ch,ch]);}
+ return 'Ch'+ranges.map(([a,b])=>a===b?String(a):`${a}-${b}`).join(',')+(chapters.length>1?'?':'');
+}
 function render(data){
  $('list').className=state.layout;$('list').style.setProperty('--columns',state.lang.length);$('list').replaceChildren();$('list').setAttribute('aria-busy','false');
  $('empty').hidden=data.total!==0;$('error').hidden=true;
  $('status').replaceChildren(document.createTextNode(state.q?'找到 ':'共 '),el('strong','',data.total.toLocaleString()),document.createTextNode(' 条章节记录'));
+ if(data.records>data.total)$('status').replaceChildren(document.createTextNode(`命中 ${data.records.toLocaleString()} 条章节记录 · 跨章去重后 ${data.total.toLocaleString()} 组`));
  $('range').textContent=data.total?`${((data.page-1)*30+1).toLocaleString()} — ${Math.min(data.page*30,data.total).toLocaleString()}`:'';
  for(const row of data.rows){
   const article=el('article','entry');article.dataset.key=row.key;article.dataset.chapter=row.chapter;
   const header=el('header','entry-head'),identity=el('div','entry-identity'),actions=el('div','entry-actions');
   const key=el('code','key');appendPart(key,row.key,'',0,state.highlight?(row.highlights?.key||[]):[]);
   const keyCopy=el('button','action-button key-copy','复制 key');keyCopy.onclick=()=>copyWithFeedback(keyCopy,row.key);
-  identity.append(el('span','chapter-tag',`Ch${row.chapter}`),key);if(!compact)identity.append(keyCopy);header.append(identity,actions);
+  identity.append(el('span','chapter-tag',chapterLabel(row)),key);if(!compact)identity.append(keyCopy);header.append(identity,actions);
   const sourceArea=el('div','entry-source'),sources=row.sources||[];
   const sourceLink=o=>{const a=el('a','source-link','wiki 源码');a.href=A.sourceURL(row.chapter,o.file,o.line);a.target='_blank';a.rel='noopener noreferrer';a.title=o.file+' : '+o.line+'（本地位置；线上版本可能不同）';return a;};
   if(sources.length===1)sourceArea.append(sourceLink(sources[0]));
@@ -219,7 +225,7 @@ function render(data){
   const copies=el('div','entry-copies'),copyAll=el('button','action-button','复制本条');
   copyAll.title='按当前语言、模式和中文译法复制：key + 全部可见版本';copyAll.onclick=()=>copyWithFeedback(copyAll,A.copyEntry(row,state));
   const contextButton=el('button','action-button','查看上下文');contextButton.setAttribute('aria-haspopup','dialog');contextButton.onclick=()=>contextView.show(row);
-  copies.append(contextButton,copyAll);if(compact)actions.append(actionMenu(keyCopy,contextButton,copyAll,sourceArea));else actions.append(sourceArea,copies);article.append(header);
+  copies.append(contextButton,copyAll);if(compact)actions.append(contextButton,actionMenu(keyCopy,copyAll,sourceArea));else actions.append(sourceArea,copies);article.append(header);
   const holder=el('div','entry-body'),grid=el('div','language-grid');
   for(const lang of state.lang)grid.append(cell(row,lang));holder.append(grid);article.append(holder);$('list').append(article);
  }

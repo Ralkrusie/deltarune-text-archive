@@ -50,13 +50,32 @@ self.onmessage=async event=>{
     if(++visited%1000===0){await new Promise(resolve=>setTimeout(resolve,0));if(id!==newest)return;}
    }
   }
-  const pages=Math.max(1,Math.ceil(found.length/30)),page=Math.min(state.page,pages);
+  // Search first, then fold only matching records in the selected chapters.
+  // Single-chapter queries always return every matching chapter/key.
+  const groups=[],byGroup=new Map();
+  for(const ref of found){
+   const [data,index]=ref,meta=data.display_dedup;
+   const groupId=selected.length>1&&meta?.schema==='key-english-1'?meta.groups[index]:null;
+   if(Number.isInteger(groupId)&&groupId>=0&&typeof meta.revision==='string'){
+    const identity=`${meta.revision}:${groupId}`;
+    if(!byGroup.has(identity)){const group=[];byGroup.set(identity,group);groups.push(group);}
+    byGroup.get(identity).push(ref);
+   }else groups.push([ref]);
+  }
+  const pages=Math.max(1,Math.ceil(groups.length/30)),page=Math.min(state.page,pages);
   // Regex and highlight computation stay inside the terminable worker, never on the UI thread.
-  const rows=found.slice((page-1)*30,page*30).map(([data,i])=>{
+  const rows=groups.slice((page-1)*30,page*30).map(group=>{
+   const [data,i]=group[0];
    const row=T.decodeRow(data,data.rows[i]);row.highlights={key:matcher?matcher.ranges(row.key):[]};
+   const meta=data.display_dedup,groupId=meta?.groups[i];
+   row.chapters=meta?.schema==='key-english-1'&&meta.chapters?.[groupId]||[row.chapter];
+   if(group.length>1){
+    row.copies=group.map(([d,n])=>({chapter:d.chapter,key:d.rows[n][0]}));
+    row.translationDifference=fields.filter(f=>f!=='en').some(f=>new Set(group.map(([d,n])=>{const v=d.rows[n][d.languages.indexOf(f)+1];return v===null?null:d.strings[v];})).size>1);
+   }
    for(const field of fields){const text=indexed(data,data.rows[i][data.languages.indexOf(field)+1]);row.highlights[field]={source:matcher&&text?matcher.ranges(text.source):[],plain:matcher&&text?matcher.ranges(text.plain):[]};}
    return row;
   });
-  if(id===newest)self.postMessage({id,type:'result',rows,total:found.length,page,pages,inventory:info.total_rows});
+  if(id===newest)self.postMessage({id,type:'result',rows,total:groups.length,records:found.length,page,pages,inventory:info.total_rows});
  }catch(e){if(id===newest)self.postMessage({id,type:'error',phase,message:e.message});}
 };

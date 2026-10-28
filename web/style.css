@@ -170,7 +170,7 @@ main:focus { outline: none; }
 .space { position: relative; }
 .space::after { content: ''; position: absolute; left: 50%; top: 52%; width: 2px; height: 2px; border-radius: 50%; background: #7c8490; transform: translate(-50%, -50%); pointer-events: none; }
 .space.full::after { width: 5px; height: 5px; border: 1px solid #707888; background: transparent; }
-.placeholder { color: #b4c1dd; cursor: help; }
+.placeholder { color: #b4c1dd; cursor: help; font-family: system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif; }
 
 .variant + .variant { margin-top: 18px; }
 .variant-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 24px; margin-bottom: 6px; }
@@ -340,11 +340,13 @@ dialog p { color: var(--muted); font-size: 15px; }
 
 /* Viewer status messages are UI copy, not dialogue in the selected language. */
 .text.missing, #context-dialog .text.missing { font: 15px/1.6 system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif; color: var(--subtle); }
+.source-missing, .context-note, .context-empty, .context-binding, .notice, .empty, #status, #search::placeholder { font-family: system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif; }
 
 /* Compact mode changes presentation only; language order and text remain intact. */
 .compact-actions { position: relative; }
 .compact-actions[open] { z-index: 12; }
-.compact-actions > summary { list-style: none; cursor: pointer; font-size: 22px; min-width: 32px; line-height: 1; }
+.compact-actions > summary { list-style: none; cursor: pointer; font-size: 0; min-width: 32px; line-height: 1; }
+.compact-actions > summary::before { content: ''; width: 3px; height: 3px; margin-inline: 8px; border-radius: 50%; background: currentColor; box-shadow: -8px 0 currentColor, 8px 0 currentColor; }
 .compact-actions > summary::-webkit-details-marker { display: none; }
 .compact-menu-panel { position: absolute; right: 0; top: 100%; z-index: 12; width: max-content; min-width: 140px; max-width: min(480px, calc(100vw - 64px)); padding: 8px; border: 1px solid var(--theme-border, #41526e); background: #101015; box-shadow: 0 6px 18px #0009; }
 .compact-menu-panel > .action-button { display: flex; width: 100%; justify-content: flex-start; }
