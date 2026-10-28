@@ -1,0 +1,7 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>本地还原试验台</title><link rel="stylesheet" href="lab.css"><link rel="stylesheet" href="preview.css"></head><body>
+<header><div><small>LOCAL LAB · FRAMEWORK 01</small><h1>还原试验台</h1><p>真实采集 → 独立场景模型 → 共用预览 → 人工核对</p></div><a id="review-link" href="review.html">进入带预览的审核页 →</a></header>
+<p class="boundary">仅本地 · 静态框架。正式站点未接入；本页不写入采集库或正式归因。</p>
+<nav id="samples" aria-label="真实样例快捷入口"></nav>
+<section class="toolbar"><label>记录批次<select id="session"></select></label><label>搜索台词 / key / 对象<input id="search" type="search" placeholder="例如 passion、Tasque"></label><label>样例类型<select id="type"><option value="all">全部可见记录</option><option value="portrait">有头像</option><option value="plain">无头像正文</option><option value="smallface">含 smallface</option><option value="carrier">仅插话载体</option><option value="choice">含选择题</option></select></label></section>
+<main><aside><p id="count"></p><div id="rows"></div></aside><article><h2 id="title"></h2><p id="binding"></p><div id="preview"></div><section class="evidence"><h3>这条记录可以核对什么</h3><p id="evidence"></p><details><summary>原始控制串</summary><pre id="raw"></pre></details><details><summary>预览输入模型（保留用法与变体绑定）</summary><pre id="scene"></pre></details></section></article></main>
+<script src="data.js"></script><script src="model.js"></script><script src="renderer.js"></script><script src="lab.js"></script></body></html>

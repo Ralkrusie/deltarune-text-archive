@@ -1,0 +1,18 @@
+const assert=require('node:assert/strict');
+const M=require('../../tools/restore/web/model.js');
+const recipe='7597703c209cce4e007419710fb30c86027f183ee8b5f5a6d7bbfb3c9235cc0c';
+const body={language:'en',text:'\\E2* Hi&||there/%',formatted_text:'\\E2* Hi&||there/%',index_space:'formatted_mystring_1based',assets:[],smallfaces:[],text_styles:{source_sha256:recipe,states:[{site:5,colors_bgr:[255],font_name:'fnt_main'},{site:4,colors_bgr:[0]}],spans:[{start_index:4,end_index:7,state_index:0},{start_index:4,end_index:7,state_index:1}]}};
+const row={id:'session:1',partition:'version-a',variant:'v1',body,view:{kind:'text',candidates:[]},choices:[]};
+const before=JSON.stringify(row),s=M.scene(row);
+assert.equal(s.glyphs.map(g=>g.char).join(''),'* Hi\n  there');
+assert.equal(s.glyphs[0].index,4);assert.equal(s.glyphs[0].color,'#ff0000');
+assert.equal(s.glyphs.at(-1).color,'#ffffff');assert.equal(JSON.stringify(row),before);
+assert.equal(M.scene({...row,variant:'v2'}).variant,'v2');
+assert.deepEqual(M.scene({...row,view:{candidates:[],kind:'text'},body:{...body,identity:{candidates:['queen']}}}).candidates,[]);
+assert.equal(M.scene({...row,body:{...body,language:'zh'}}).supported,false);
+assert.equal(M.scene({...row,source:{chapter:3}}).supported,false);
+assert.equal(M.scene({...row,body:{...body,text_styles:{...body.text_styles,source_sha256:'wrong'}}}).glyphs[0].color,'#ffffff');
+const carrier=M.scene({...row,view:{kind:'child_container'},body:{...body,text:'\\f0/%',formatted_text:'\\f0/%',smallfaces:[{text:'Happy Birthday!',sprites:[]}]}});
+assert.equal(carrier.smallfaces.length,1);assert.equal(carrier.glyphs.length,0);
+assert.equal(M.tokenize('\\Z9Hi').unknown[0],'\\Z9');
+console.log('Restore model: source indices, foreground colors, unknowns, carrier and binding checks passed');

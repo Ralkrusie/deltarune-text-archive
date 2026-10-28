@@ -17,3 +17,5 @@ python -m tools.runtime.review --bundle PATH_TO_CAPTURE_ZIP --sources PATH_TO_SO
 可多次传入 `--bundle`，每个 session 只选一份当前包。旧来源库存须放在 `sources.json` 旁的 `inventories/<sha>.json`。素材仅导出本次引用帧，原版包摘要必须匹配；不用重新导出全游戏贴图。输出含游戏文本与素材，作为本地开发审阅材料，不随参与者工具公开分发。
 
 旧记录不会因更新编译器而获得当时没有采到的来源。对照修复时应同时看旧自然记录与新机制／自然记录，区分“错误候选已撤下”和“身份已经证实”。
+
+需要直观预览时，可在此审核产物上另建[本地还原试验台](RESTORE_LOCAL.md)。它生成独立的 `index.html` 与带共用预览的 `review.html`，保持当前审核产物和默认生成器不变。首版布局／字体明确标为近似，不能代替游戏画面验收。
