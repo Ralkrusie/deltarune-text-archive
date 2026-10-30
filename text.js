@@ -58,15 +58,19 @@
             ({'\n': '\\n', '\r': '\\r', '\t': '\\t'}[c] || '\\x' + c.charCodeAt(0).toString(16).padStart(2, '0')));
     }
 
-    function format(raw, chapter) {
+    function format(raw, chapter, artwords = {}) {
         if (raw === null) return {raw: null, source: null, plain: null, state: 'missing', issues: [], tokens: []};
-        const tokens = tokenize(raw, chapter), issues = [];
+        const tokens = tokenize(raw, chapter), issues = [], artwordRanges = [];
         let plain = '', hasControl = false;
         for (const token of tokens) {
             switch (token.kind) {
                 case 'text': case 'space': case 'break': plain += token.value; break;
                 case 'control': hasControl = true; break;
                 case 'image':
+                    if (token.value.cmd === 'O' && typeof artwords[token.value.arg] === 'string') {
+                        artwordRanges.push([plain.length, plain.length + artwords[token.value.arg].length]);
+                        plain += artwords[token.value.arg]; break;
+                    }
                     plain += `〔${labels[token.value.cmd]} ${token.value.arg}〕`;
                     issues.push({kind: 'unresolved-image', raw: token.raw, start: token.start}); break;
                 case 'parameter':
@@ -80,7 +84,7 @@
             }
         }
         const state = raw === '' ? 'empty' : !plain.trim() && hasControl ? 'control-only' : 'text';
-        return {raw, source: sourceText(raw), plain, state, issues, tokens};
+        return {raw, source: sourceText(raw), plain, state, issues, tokens, artwordRanges};
     }
 
     // Layout offsets only: leave plain, source, copy and search representations intact.
@@ -105,6 +109,7 @@
 
     function decodeRow(chapterData, row) {
         const result = {chapter: chapterData.chapter, key: row[0]};
+        if (chapterData.artwords?.[row[0]]) result.artwords = chapterData.artwords[row[0]];
         chapterData.languages.forEach((language, index) => {
             result[language] = row[index + 1] === null ? null : chapterData.strings[row[index + 1]];
         });

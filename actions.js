@@ -2,22 +2,22 @@
 'use strict';
 const T=typeof module!=='undefined'&&module.exports?require('./text.js'):root.DialogueText;
 const M=typeof module!=='undefined'&&module.exports?require('./model.js'):root.DialogueModel;
-function copyValue(raw,ch,mode){
+function copyValue(raw,ch,mode,artwords={}){
  if(raw===null||raw===undefined)return '〔缺少此语言文本〕';
  if(raw==='')return '〔空字符串〕';
  if(mode==='source')return T.sourceText(raw);
- const view=T.format(raw,ch);
+ const view=T.format(raw,ch,artwords);
  if(view.state==='control-only')return '〔仅含控制串〕';
  return view.plain.replace(/[ \t]*[\r\n]+[ \t\u3000]*/g,' ').replace(/[ \t]+$/g,'');
 }
 function copyEntry(row,state){
  const languages=M.LANGUAGES.filter(l=>state.lang.includes(l)),multi=languages.length>1;
  const blocks=languages.map(lang=>{
-  const groups=lang==='zh'?M.chineseRows(row,state.zh):[{raw:row[lang],labels:[]}];
+  const groups=lang==='zh'?M.chineseRows(row,state.zh):[{raw:row[lang],labels:[],fields:[lang]}];
   return groups.map(group=>{
    let label=multi?lang.toUpperCase():'';
    if(groups.length>1)label+=(label?' ':'')+'['+group.labels.join('·')+']';
-   return (label?label+': ':'')+copyValue(group.raw,row.chapter,state.mode);
+   return (label?label+': ':'')+copyValue(group.raw,row.chapter,state.mode,row.artwords?.[group.fields[0]]);
   }).join('\n');
  });
  return row.key+'\n\n'+blocks.join('\n\n');
