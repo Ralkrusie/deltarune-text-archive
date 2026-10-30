@@ -4,11 +4,12 @@ The safety summary concerns construction of one command queue in one event.
 It does not execute queued animation or prove that a scene is reachable.
 """
 import re
+from dataclasses import replace
 
 
 NUMBER = r'-?\d+(?:\.\d+)?'
 PURE = {'abs', 'ceil', 'floor', 'round', 'min', 'max', 'clamp', 'array_length',
-        'instance_exists', 'variable_global_exists', 'sin', 'cos', 'point_distance'}
+        'instance_exists', 'variable_global_exists', 'sin', 'cos', 'point_distance', 'string'}
 # These commands contain no new menu, indirect function execution, room change
 # or state write. Their wrappers must still be proved to do nothing but enqueue.
 COMMANDS = {'select', 'sprite', 'imageindex', 'imagespeed', 'imagealpha', 'autowalk',
@@ -16,7 +17,7 @@ COMMANDS = {'select', 'sprite', 'imageindex', 'imagespeed', 'imagealpha', 'autow
     'visible', 'depth', 'wait', 'waitif', 'speaker', 'msgfacenext', 'msgface',
     'msgset', 'msgnext', 'talk', 'waitdialoguer', 'msgside', 'msgstay', 'msgsnd',
     'actortokris', 'actortocaterpillar', 'actortocaterpillarstill', 'panobj', 'pan',
-    'pannable', 'sndplay', 'snd_play', 'soundplay', 'shakeobj', 'mus2', 'waitbox', 'halt'}
+    'pannable', 'sndplay', 'snd_play', 'soundplay', 'shakeobj', 'mus2', 'mus', 'fe', 'waitbox', 'halt'}
 VISUAL_FIELDS = {'x', 'y', 'sprite_index', 'image_index', 'image_speed', 'image_alpha',
     'image_blend', 'image_xscale', 'image_yscale', 'visible', 'depth', 'facing'}
 
@@ -165,6 +166,39 @@ class QueuedProtocol:
         calls=list(self.a.calls(expression))
         return calls[0] if calls and calls[0]['offset']==0 and calls[0]['end']==len(expression) else None
 
+    def menu_setup(self, statement):
+        """A queued literal menu initializer, preserving original source offsets."""
+        call = self.direct_call(statement)
+        if not call or call['call'] != 'c_customfunc' or len(call['args']) != 1:
+            return None
+        text = statement.text
+        match = re.fullmatch(r'c_customfunc\s*\(\s*function\s*\(\s*\)\s*\{([\s\S]*)\}\s*\)\s*;', text)
+        if not match:
+            return None
+        shift = statement.start + match.start(1)
+        def shifted(n):
+            return replace(n, start=n.start+shift, end=n.end+shift,
+                           children=[shifted(c) for c in n.children], other=[shifted(c) for c in n.other])
+        nodes = [shifted(n) for n in self.a.flow.parse(match[1])]
+        if (len(nodes) < 3 or self.compact(nodes[0].text) != 'global.msc=-99;'
+                or self.compact(nodes[1].text) != 'global.choice=-1;'
+                or any(n.kind != 'stmt' or not re.match(r'global\.choicemsg(?:\[|\s*=)', n.text) for n in nodes[2:])
+                or not self.labels(nodes[2:])):
+            return None
+        return nodes
+
+    def choice_layout(self):
+        """The display-only chooser offset helper, including its deferred updater."""
+        fields = [f'opt{i}{axis}off' for i in range(4) for axis in ('x','y')] + ['heartxoff','heartyoff']
+        params = ','.join(f'arg{i}=0' for i in range(10))
+        init = ''.join(f'__{f}=arg{i};' for i,f in enumerate(fields))
+        apply = ''.join(f'{f}=other.__{f}'+('/2;' if i < 8 else ';') for i,f in enumerate(fields))
+        expected = ('function scr_choiceradjust('+params+'){var choiceradjuster=instance_create_depth(0,0,0,obj_object);'
+                    'with(choiceradjuster){'+init+'scr_debug_print("CREATED");begin_step_func=function(){var done=false;'
+                    'with(obj_choicer_neo){'+apply+'done=true;}if(done){scr_debug_print("donezo");instance_destroy();}};}'
+                    'return choiceradjuster;}')
+        return self.exact_function('scr_choiceradjust', expected)
+
     def maker(self,statement):
         call=self.direct_call(statement)
         if not call or call['call']!='c_customfunc' or not 1<=len(call['args'])<=2:
@@ -188,6 +222,9 @@ class QueuedProtocol:
         if not match:return self.fail('opaque_dialogue_maker')
         body=self.compact(match[2]);parameter=match[1]
         if body=='d_make();':return self.dialogue_factory()
+        layout = re.fullmatch(r'if\(global\.lang=="[a-z]+"\)scr_choiceradjust\(([^()]*)\);d_make\(\);', body)
+        if layout and all(re.fullmatch(NUMBER, a) for a in layout[1].split(',')):
+            return self.choice_layout() and self.dialogue_factory()
         if not parameter:
             constant=re.fullmatch(r'var(\w+)=d_make\(\);((?:\1\.(?:side|stay)=-?\d+;)+)',body)
             if constant:
@@ -245,14 +282,21 @@ class QueuedProtocol:
         command=self.a.gml.as_string_literal(args[0])
         if not self.command_body(command):return False
         if command in COMMANDS:return True
-        if command=='var':
+        if command=='delaycmd':
+            return len(args)>2 and self.queue_call(args[2:])
+        if command in ('var','varto','varadd'):
             # var: object (0 means current actor), field, value.
-            return len(args)>2 and self.a.gml.as_string_literal(args[2]) in VISUAL_FIELDS
+            return (len(args)>2 and self.a.gml.as_string_literal(args[2]) in VISUAL_FIELDS
+                    and self.command_body('var'))
         if command=='msgcmd':
             if len(args)<2:return False
             nested=self.a.gml.as_string_literal(args[1])
-            if nested=='var':return len(args)>3 and self.a.gml.as_string_literal(args[3]) in VISUAL_FIELDS
-            return nested in {'sprite','imageindex','imagespeed','addxy','facing','visible','autowalk'}
+            if nested in ('msgcmd','delaycmd','terminatekillactors'):return False
+            # The dispatcher copies four parameters and initializes slots 5/6
+            # to zero. Apply the ordinary command checks to the actual payload.
+            payload=list(args[2:6])
+            payload += ['0']*(4-len(payload))
+            return self.queue_call([args[1],*payload,'0','0'])
         # Termination only belongs after the last projected text. The parent
         # connector checks position before requesting a tail summary.
         if command=='terminatekillactors':
@@ -269,10 +313,29 @@ class QueuedProtocol:
         self._commands[command]=False
         engine=self.function('scr_cutscene_commands')
         if not engine or not isinstance(command,str):return False
-        matches=[n for n in self.a.flat(engine[1].children) if n.kind=='if'
-                 and self.compact(n.text)==self.compact('_c=="'+command+'"')]
+        def handles(n):
+            if n.kind!='if':return False
+            parts=self.compact(n.text).split('||')
+            return (all(re.fullmatch(r'_c=="\w+"',p) for p in parts)
+                    and '_c=="'+command+'"' in parts)
+        matches=[n for n in self.a.flat(engine[1].children) if handles(n)]
         if len(matches)!=1 or matches[0].other:return False
         source=engine[2][matches[0].start:matches[0].end]
+        if command=='msgcmd':
+            expected=('if(!v_ex("msgcmd")||!i_ex(msgcmd))msgcmd=instance_create(0,0,obj_cutscene_messagecmd);'
+                'var _count=msgcmd.count;msgcmd.master_object=master_object;'
+                'msgcmd.command_actor[_count]=command_actor[i];msgcmd.command_num[_count]=global.msgno;'
+                'msgcmd.command[_count]=command_arg1[i];'+
+                ''.join(f'msgcmd.command_arg{j}[_count]=command_arg{j+1}[i];' for j in range(1,5))+'msgcmd.count++;')
+            actual=''.join(engine[2][n.start:n.end] for n in self.a.flat(matches[0].children))
+            if self.compact(actual)!=self.compact(expected) or not self.message_dispatch():return False
+        if command=='delaycmd':
+            expected='delaycmd=instance_create(0,0,obj_cutscene_delaycmd);delaycmd.master_object=master_object;delaycmd.command_actor[0]=command_actor[i];delaycmd.alarm[0]=command_arg1[i];delaycmd._c=command_arg2[i];'+''.join(f'delaycmd.command_arg{j}[0]=command_arg{j+2}[i];' for j in range(1,5))+'if(instant){delaycmd.alarm[0]=0;delaycmd.instant=1;with(delaycmd)event_user(0);}'
+            actual=''.join(engine[2][n.start:n.end] for n in self.a.flat(matches[0].children))
+            event=self.source('gml_Object_obj_cutscene_delaycmd_Other_10.gml')
+            if (self.compact(actual)!=self.compact(expected) or not event
+                    or self.compact(event)!='i=0;if(i_ex(command_actor[0])||_c=="customfunc")scr_cutscene_commands();instance_destroy();'):
+                return False
         if command in ('waitbox','halt'):
             bodies={
                 'waitbox':'if(!instant){waiting=1;cs_wait_box=command_arg1[i];breakme=1;}',
@@ -286,17 +349,81 @@ class QueuedProtocol:
         if any(c['call'] in ('variable_global_set','script_execute') for c in self.a.calls(source)):return False
         self._commands[command]=True;return True
 
+    def message_dispatch(self):
+        """Verify deferred commands retain their parameters and dispatch route."""
+        expected={
+            'Create_0':('instant=0;command_num[0]=0;command[0]=0;'+
+                ''.join(f'command_arg{i}[0]=0;' for i in range(1,7))+
+                'i=0;count=0;_c="none";command_actor[0]=43894389;master_object=4839438;alarm[0]=1;msg_active=false;'
+                'if(i_ex(obj_cutscene_master))depth=obj_cutscene_master.depth-5;'),
+            'Step_0':('var _msgno=-1;'
+                'with(obj_cutscene_master){if(i_ex(mydialoguer)){if(mydialoguer.active==1&&i_ex(mydialoguer.writer))'
+                '_msgno=mydialoguer.writer.msgno;}}if(_msgno<0)exit;while(_msgno==command_num[i]){'
+                '_c=command[i];scr_cutscene_commands();i++;if(i>=array_length(command)){instance_destroy();break;}}'),
+        }
+        names={f'gml_Object_obj_cutscene_messagecmd_{event}.gml':body for event,body in expected.items()}
+        if {name for name in self.a.sources if name.startswith('gml_Object_obj_cutscene_messagecmd_')}!=set(names):return False
+        return all((source:=self.source(name)) is not None and self.compact(source)==self.compact(body)
+                   for name,body in names.items())
+
+    def staging_callback(self, statement):
+        """Inspect a literal callback's local work, never execute it.
+
+        Object creation is retained as review evidence: events of the created
+        object are outside this local menu projection. Named/delayed callbacks,
+        state/answer writes and new dialogue cannot pass this path.
+        """
+        if statement.kind!='stmt':return False
+        match=re.fullmatch(r'c_customfunc\s*\(\s*function\s*\(\s*\)\s*\{([\s\S]*)\}\s*\)\s*;',statement.text)
+        if not match or not self.ready():return False
+        def walk(nodes):
+            for node in self.a.flat(nodes):
+                if node.kind in ('if','with'):
+                    if not self.pure(node.text):return False
+                    if not walk(node.children) or not walk(node.other):return False
+                    continue
+                if node.kind!='stmt':return False
+                assignment=re.fullmatch(r'(?:var\s+)?(\w+(?:\.\w+)?)\s*=(?!=)\s*([\s\S]+);',node.text)
+                if assignment:
+                    names=assignment[1].split('.')
+                    if names[0] in ('global','self','other') or names[-1] in ('choice','choicemsg','msc','con','customcon'):return False
+                    if not self.pure(assignment[2]):return False
+                    continue
+                call=self.direct_call(node)
+                if not call or any(not self.pure(arg) for arg in call['args']):return False
+                name,args=call['call'],call['args']
+                if name in ('instance_create','instance_create_depth'):
+                    count=3 if name=='instance_create' else 4
+                    if len(args)!=count or not re.fullmatch(r'obj_\w+',args[-1].strip()):return False
+                    if re.search(r'writer|dialoguer|choicer|cutscene',args[-1]):return False
+                elif name in ('snd_play','soundplay','sound_play'):
+                    template=('function '+name+'(arg0,arg1=1,arg2=1){var _snd=audio_play_sound(arg0,50,0);'
+                        'if(arg1!=1)audio_sound_gain(_snd,arg1,0);if(arg2!=1)audio_sound_pitch(_snd,arg2);return _snd;}')
+                    if not 1<=len(args)<=3 or not self.exact_function(name,template):return False
+                elif name=='k_d':
+                    if not self.cleanup():return False
+                elif name=='scr_flag_set':
+                    if len(args)!=2 or not self.summary(name,args):return False
+                else:return False
+            return True
+        return walk(self.a.flow.parse(match[1]))
+
     def summary(self,name,args):
         """Prove a helper only queues approved commands or writes local temps."""
         if len(args)==1 and not args[0].strip():args=[]
         if name in self._checking:return False
         if name in ('c_cmd','c_cmd_x'):return self.queue_call(args)
         if name=='c_waitcustom_end':return self.ready()
+        if name=='c_waitcustom':
+            self.effects.add('queue_pause')
+            return self.ready()
         if name=='scr_flag_set':
             return self.exact_function(name,'function scr_flag_set(arg0,arg1){global.flag[arg0]=arg1;}')
         if name=='show_debug_message_concat':
             return self.exact_function(name,'function show_debug_message_concat(){}')
         if name=='k_d':return self.cleanup()
+        if name=='scr_choiceradjust':
+            return len(args)<=10 and all(re.fullmatch(NUMBER,a.strip()) for a in args) and self.choice_layout()
         fn=self.function(name)
         if not fn or not name.startswith('c_'):return False
         if name in ('c_customfunc','c_delay_customfunc','c_waitcustom'):return False
@@ -312,13 +439,32 @@ class QueuedProtocol:
             value=args[i] if i<len(args) else parts[1].strip() if len(parts)>1 else None
             if value is None:return False
             env[parts[0].strip()]=value
-        if len(args)>len(params):return False
         source=fn[2];locals_=set(re.findall(r'\bvar\s+(\w+)',source[fn[1].start:fn[1].end]))
+        body=source[fn[1].start:fn[1].end]
+        if len(args)>len(params) and (params or not re.search(r'\bargument(?:_count|\d+|\s*\[)',body)):
+            return False
         def expand(text):
-            return re.sub(r'\barg\d+\b',lambda m:env.get(m[0],m[0]),text)
+            # Quoted literals are data; argument_count selects only the branch
+            # used by this call. Do not inspect missing args in dead branches.
+            pattern=r'"(?:\\.|[^"\\])*"|\x27(?:\\.|[^\x27\\])*\x27|\bargument_count\b|\bargument\s*\[\s*(\d+)\s*\]|\bargument(\d+)\b|\b\w+\b'
+            def substitute(m):
+                if m[0].startswith(('"',"'")):return m[0]
+                if m[0]=='argument_count':return str(len(args))
+                if m[1] is not None or m[2] is not None:
+                    index=int(m[1] if m[1] is not None else m[2])
+                    if index>=len(args):raise ValueError('Missing variadic argument')
+                    return args[index]
+                return env.get(m[0],m[0])
+            return re.sub(pattern,substitute,text)
         def walk(nodes):
             for node in self.a.flat(nodes):
                 if node.kind in ('if','with'):
+                    count=re.fullmatch(r'argument_count\s*(==|!=|<=|>=|<|>)\s*(\d+)',node.text) if node.kind=='if' else None
+                    if count:
+                        left,right=len(args),int(count[2])
+                        take={'==':left==right,'!=':left!=right,'<=':left<=right,'>=':left>=right,'<':left<right,'>':left>right}[count[1]]
+                        if not walk(node.children if take else node.other):return False
+                        continue
                     if not self.pure(expand(node.text)):return False
                     if not walk(node.children) or not walk(node.other):return False
                     continue
@@ -336,6 +482,7 @@ class QueuedProtocol:
             return True
         self._checking.add(name)
         try:return walk(fn[1].children)
+        except ValueError:return False
         finally:self._checking.remove(name)
 
     def localized(self,name,fn):
@@ -391,6 +538,7 @@ class QueuedProtocol:
             if node.kind!='stmt':return self.fail('unsupported_response_control')
             text=node.text.strip();tokens=self.tokens(text);clean=''.join(tokens)
             if clean in ('global.interact=0;','global.interact=1;'):continue
+            if re.fullmatch(r'global\.facing=[0-3];',clean):continue
             if any(t in ('return','exit','break','continue','function') for t in tokens):return self.fail('response_control_transfer')
             if re.search(r'global\.(?:choice(?:msg)?|msc)(?:\[|=(?!=)|\+=|-=|\+\+|--)',clean):return self.fail('answer_or_menu_write')
             assignment=re.fullmatch(r'(?:var\s+)?(\w+)\s*=\s*([\s\S]+);',text)
@@ -411,4 +559,6 @@ class QueuedProtocol:
             if not self.summary(call['call'],call['args']):return self.fail('unproved_call:'+call['call'])
             if 'queue_termination' in self.effects and node.start<_last_text:
                 return self.fail('queue_termination_before_text')
+            if 'queue_pause' in self.effects and node.start<_last_text:
+                return self.fail('queue_pause_before_text')
         return True

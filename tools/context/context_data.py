@@ -33,6 +33,15 @@ def validate(pack, text_manifest, tables):
                     or '/' in s['file'] or '\\' in s['file'] or type(s.get('line')) is not int or s['line']<1):
                     raise ValueError('Invalid entry guard')
         kind=n.get('type')
+        if 'anchor' in n:
+            if kind!='block' or not re.fullmatch(r'state-\d+',n['anchor']) or n['anchor'] in anchors:
+                raise ValueError('Invalid context landing')
+            anchors.add(n['anchor'])
+        if 'auto_answer' in n:
+            automatic=n['auto_answer']
+            if (kind!='choice' or not isinstance(automatic,dict) or not isinstance(automatic.get('condition'),str)
+                or type(automatic.get('option')) is not int or not 0<=automatic['option']<len(n['branches'])):
+                raise ValueError('Invalid automatic answer')
         if 'prefix' in n:
             prefix=n['prefix']
             if (kind!='choice' or not isinstance(prefix,dict) or prefix.get('type')!='sequence'
@@ -64,10 +73,16 @@ def validate(pack, text_manifest, tables):
                 node(b['body'],ch,depth+1)
         elif kind in ('end','join'):
             if not isinstance(n.get('label'),str):raise ValueError('Missing endpoint label')
+        elif kind=='jump':
+            if not isinstance(n.get('label'),str) or not re.fullmatch(r'state-\d+',n.get('target','')):
+                raise ValueError('Invalid context jump')
+            jumps.append(n['target'])
         else:raise ValueError('Unknown context node type')
     for scene in pack['scenes']:
         if scene['id'] in ids or scene['chapter'] not in tables:raise ValueError('Duplicate/invalid scene')
+        anchors=set();jumps=[]
         ids.add(scene['id']);node(scene['body'],scene['chapter'])
+        if set(jumps)-anchors:raise ValueError('Missing context landing')
     return pack
 
 

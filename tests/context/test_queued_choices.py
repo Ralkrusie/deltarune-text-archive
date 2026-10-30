@@ -39,7 +39,11 @@ class InertProtocol:
     def __init__(self,analyzer,name):
         self.a=analyzer;self.reason=None;self.helpers={'fixture_protocol'}
     def ready(self):return True
+    def fail(self,reason):self.reason=reason;return False
     def labels(self,nodes):return True
+    def menu_setup(self,node):return None
+    def staging_callback(self,node):return False
+    def compact(self,text):return ''.join(t.group() for t in self.a.flow.TOKEN.finditer(text) if not t.group().startswith(('//','/*')))
     def prompt(self,node):
         calls=list(self.a.calls(node.text))
         return (node.kind=='stmt' and bool(calls) and calls[0]['call'] in ('c_msgset','c_msgnext','c_msgsetloc','c_msgnextloc')
@@ -52,7 +56,7 @@ class InertProtocol:
             if n.kind not in ('block','if','stmt'):
                 self.reason='control_flow';return False
             clean=''.join(t.group() for t in self.a.flow.TOKEN.finditer(n.text) if not t.group().startswith(('//','/*')))
-            if re.search(r'global\.choice(?:msg)?(?:\[|=(?!=)|\+=|-=|\+\+|--)|(?:\+\+|--)global\.choice',clean):
+            if re.search(r'global\.choice(?:msg)?(?:\[|=(?!=)|(?:\+|-|\*|/|%|&|\||\^|<<|>>|\?\?)=|\+\+|--)|(?:\+\+|--)global\.choice|\w+\.(?:customcon|con)=(?!=)',clean):
                 self.reason='answer_write';return False
             if any(t.group() in ('exit','return','break','continue','function') for t in self.a.flow.TOKEN.finditer(n.text)):
                 self.reason='transfer';return False
@@ -157,6 +161,32 @@ class QueuedChoicesTests(unittest.TestCase):
         scene,_=self.analyze(self.fixture(response)+consumer(answers(40),'30'))
         self.assertEqual(self.choices(scene),[])
 
+    def test_ancillary_assignment_does_not_drop_child_or_parent_menu(self):
+        response='if(global.choice==0){'+message(10)+menu('30',20)+'}else{'+message(11)+'}'
+        staging='marker=make_marker(10,20);marker.visible=false;marker.depth=900;'
+        child='if(global.choice==0){'+staging+message(40)+'}else{'+message(41)+'}'
+        scene,a=self.analyze(self.fixture(response)+consumer(child,'30'))
+        choices=self.choices(scene)
+        self.assertEqual(len(choices),2)
+        outer=next(c for c in choices if c['branches'][0]['option']['key']==key(1))
+        inner=next(c for c in choices if c['branches'][0]['option']['key']==key(20))
+        self.assertIn(inner,list(walk(outer['branches'][0]['body'])))
+        self.assertEqual([self.keys(b['body']) for b in inner['branches']],[[key(40)],[key(41)]])
+        row=next(r for r in a.queue_audit if r.get('state')=='30')
+        self.assertTrue(any('make_marker' in r['statement'] for r in row['response_review']))
+        self.assertEqual(row['relation_scope'],'local_menu_response')
+        self.assertNotIn('response_review',str(scene))
+
+    def test_response_assignment_relaxation_keeps_control_hazards(self):
+        for statement in ('marker=script_execute(callback);','marker=c_customfunc(callback);',
+                          'marker=room_goto(next_room);','marker=function(){return 0;};',
+                          'marker=variable_global_set("choice",1);',
+                          'global.marker=make_marker();','master.customcon=1;','master.con=5;',
+                          'marker=make_marker("\\\\C2");'):
+            with self.subTest(statement=statement):
+                scene,_=self.analyze(self.fixture('if(global.choice==0){'+statement+message(10)+'}else{'+message(11)+'}'))
+                self.assertEqual(self.choices(scene),[])
+
     def test_with_loop_or_deferred_producer_is_not_hoisted(self):
         for wrapped in ('with(other){'+menu()+'}','while(flag){'+menu()+'}',
                         'c_customfunc(function(){'+menu()+'});'):
@@ -210,12 +240,131 @@ class QueuedChoicesTests(unittest.TestCase):
         scene,_=self.analyze(source)
         self.assertEqual(self.choices(scene),[])
 
+    def test_unproved_staging_before_menu_is_audited_not_a_veto(self):
+        prefix='var marker=unknown_create();marker.visible=false;unknown_walk(marker);'
+        scene,a=self.analyze('if(con==20){'+prefix+menu()+'}'+consumer(answers()))
+        choice,=self.choices(scene)
+        self.assertEqual([self.keys(b['body']) for b in choice['branches']],[[key(10)],[key(11)]])
+        row=a.queue_audit[0]
+        self.assertEqual(row['relation_scope'],'local_menu_response')
+        self.assertTrue(any('unknown_walk' in r['statement'] for r in row['prefix_review']))
+        self.assertNotIn('prefix_review',str(scene))
+
+    def test_local_prefix_hazards_are_still_rejected(self):
+        prefixes=('global.choice=0;', 'global.choice%=2;', '++global.choice;',
+                  'global.choicemsg[0]="old";', 'master.customcon=1;',
+                  'if(flag){exit;}', 'c_customfunc(named_callback);',
+                  'c_delay_customfunc(30,named_callback);',
+                  'variable_global_set("choice",1);', 'c_cmd("customfunc",callback);')
+        for prefix in prefixes:
+            with self.subTest(prefix=prefix):
+                scene,_=self.analyze('if(con==20){'+prefix+menu()+'}'+consumer(answers()))
+                self.assertEqual(self.choices(scene),[])
+
+    def test_local_prefix_ignores_comments_strings_and_read_only_conditions(self):
+        prefix='unknown_walk("global.choice=0; con=9;");/* global.choice=0; */if(global.choice==0){unknown_walk();}'
+        scene,_=self.analyze('if(con==20){'+prefix+menu()+'}'+consumer(answers()))
+        self.assertEqual(len(self.choices(scene)),1)
+
+    def test_prefix_relaxation_does_not_apply_between_menu_and_answer(self):
+        source=self.fixture().replace('c_waitcustom();','c_waitcustom();unknown_walk();')
+        scene,_=self.analyze(source)
+        self.assertEqual(self.choices(scene),[])
+
+    def test_conditional_display_work_inside_menu_setup(self):
+        source=self.fixture().replace('c_customfunc(open_menu,0);',
+            'if(global.lang=="ja"){move_actor();}c_customfunc(open_menu,0);')
+        scene,_=self.analyze(source)
+        choice,=self.choices(scene)
+        self.assertEqual([self.keys(b['body']) for b in choice['branches']],[[key(10)],[key(11)]])
+        for effect in ('global.choice=0;','opaque();','exit;',option(0,30)):
+            with self.subTest(effect=effect):
+                result,_=self.analyze(source.replace('move_actor();',effect))
+                self.assertEqual(self.choices(result),[])
+
+    def test_opaque_common_suffix_keeps_answer_mapping_and_separate_source_block(self):
+        tail='var animation=function(){with(actor){step_func=function(){opacity-=0.1;};}};attach(animation);'+message(30)+'if(flag){'+message(31)+'}con=40;'
+        scene,a=self.analyze(self.fixture(answers()+tail)+'if(con==40){'+message(40)+'}')
+        choice,=self.choices(scene)
+        self.assertEqual([self.keys(b['body']) for b in choice['branches']],[[key(10)],[key(11)]])
+        self.assertNotIn('join_next',choice)
+        self.assertEqual(self.keys(scene['body']).count(key(30)),1)
+        self.assertTrue(any(n['type']=='condition' and n['branches'][0]['label']=='flag' for n in walk(scene['body'])))
+        self.assertFalse(any(r['rule']=='queued_state_continuation' for r in a.evidence))
+        self.assertTrue(any(r.get('scope')=='unexpanded_common_tail' for r in a.queue_audit[0]['response_review']))
+
+    def test_opaque_work_before_or_inside_answers_is_not_a_common_suffix(self):
+        for body in ('opaque();'+answers(),
+                     'if(global.choice==0){opaque();'+message(10)+'}else{'+message(11)+'}',
+                     answers()+'opaque();global.choice=0;',
+                     answers()+'opaque();c_msgset(0,"\\\\C2");',
+                     'if(global.choice==0){'+message(10)+'}if(flag){'+message(30)+'}if(global.choice==1){'+message(11)+'}'):
+            with self.subTest(body=body):
+                scene,_=self.analyze(self.fixture(body))
+                self.assertEqual(self.choices(scene),[])
+
     def test_opaque_producer_condition_is_not_assumed_effect_free(self):
         for source in ('if(con==20 && opaque()){'+menu()+'}'+consumer(answers()),
                        'if(con==20){if(opaque()){'+menu()+'}}'+consumer(answers())):
             with self.subTest(source=source):
                 scene,_=self.analyze(source)
                 self.assertEqual(self.choices(scene),[])
+
+    def test_state_only_answers_reach_their_text_and_shared_landing_once(self):
+        source=self.fixture('if(global.choice==0){con=30;}else{con=40;}')
+        source+='if(con==30){'+message(30)+'con=50;}if(con==40){'+message(40)+'con=50;}if(con==50){'+message(50)+'}'
+        scene,a=self.analyze(source)
+        choice,=self.choices(scene)
+        self.assertEqual([self.keys(b['body']) for b in choice['branches']],[[key(30)],[key(40)]])
+        jumps=[n for n in walk(scene['body']) if n['type']=='jump']
+        self.assertEqual(len(jumps),2)
+        self.assertEqual(len({j['target'] for j in jumps}),1)
+        self.assertEqual(self.keys(scene['body']).count(key(50)),1)
+        self.assertTrue(any(n.get('anchor')==jumps[0]['target'] for n in walk(scene['body'])))
+
+    def test_state_continuation_nests_an_existing_question(self):
+        source=self.fixture('if(global.choice==0){con=30;}else{con=40;}')
+        source+='if(con==30){'+message(30)+menu('31',20)+'}'+consumer(answers(40),'31')
+        source+='if(con==40){'+message(50)+'}'
+        scene,_=self.analyze(source)
+        outer=self.choices(scene)[0]
+        self.assertEqual(len(self.choices({'body':outer['branches'][0]['body']})),1)
+        self.assertEqual(self.keys(outer['branches'][1]['body']),[key(50)])
+
+    def test_routes_do_not_follow_cycles_extra_guards_or_conditional_writes(self):
+        for suffix in ('if(con==30 && flag){'+message(30)+'}',
+                       'if(con==30){if(flag){exit;}con=40;}if(con==40){'+message(40)+'}',
+                       'if(con==30){if(flag){con=31;}con=40;}if(con==40){'+message(40)+'}'):
+            with self.subTest(suffix=suffix):
+                scene,_=self.analyze(self.fixture('if(global.choice==0){con=30;}else{'+message(11)+'}')+suffix)
+                outer=self.choices(scene)[0]
+                self.assertNotIn(key(40),self.keys(outer['branches'][0]['body']))
+        source='if(con==10){'+message(30)+'}'+self.fixture('if(global.choice==0){con=10;}else{'+message(11)+'}')
+        scene,_=self.analyze(source)
+        self.assertNotIn(key(30),self.keys(self.choices(scene)[0]))
+
+    def test_state_writes_do_not_reorder_later_messages_or_link_empty_landings(self):
+        scene,_=self.analyze(self.fixture('if(global.choice==0){con=30;'+message(12)+'}else{'+message(11)+'}')+
+                             'if(con==30){'+message(30)+'}')
+        self.assertEqual(self.keys(self.choices(scene)[0]['branches'][0]['body']),[key(12)])
+        scene,_=self.analyze(self.fixture('if(global.choice==0){con=30;}else{con=30;}')+'if(con==30){move_actor();}')
+        self.assertFalse(any(n['type']=='jump' for n in walk(scene['body'])))
+
+    def test_timed_gate_keeps_automatic_answer_and_two_response_arms(self):
+        source='if(con==20){'+menu()+'timer=0;}'
+        source+='if(con==21.25 && customcon==1){timer++;if(timer>=30)global.choice=0;if(global.choice!=-1){con=22;timer=0;customcon=0;c_waitcustom_end();}}'
+        source+='if(con==22){'+answers()+'}'
+        scene,a=self.analyze(source)
+        choice,=self.choices(scene)
+        self.assertEqual(choice['auto_answer'],{'condition':'timer>=30','option':0})
+        self.assertEqual([self.keys(b['body']) for b in choice['branches']],[[key(10)],[key(11)]])
+        for changed in (source.replace('global.choice=0;','global.choice=unknown;'),
+                        source.replace('timer>=30','other>=30'),
+                        source.replace('c_waitcustom_end();','opaque();c_waitcustom_end();'),
+                        source.replace('if(con==22)','if(con==22 && flag)')):
+            with self.subTest(source=changed):
+                result,_=self.analyze(changed)
+                self.assertEqual(self.choices(result),[])
 
 
 if __name__=='__main__':unittest.main()

@@ -38,6 +38,21 @@ class ContextContractTests(unittest.TestCase):
         self.message['type']='unproven-call'
         with self.assertRaisesRegex(ValueError,'Unknown'):validate(self.pack,self.manifest,self.tables)
 
+    def test_jumps_require_one_landing_in_the_same_scene(self):
+        self.pack['scenes'][0]['body']={'type':'blocks','children':[
+            {'type':'block','children':[{'type':'jump','target':'state-30','label':'接续 L30'}]},
+            {'type':'block','anchor':'state-30','children':[self.message]}]}
+        validate(self.pack,self.manifest,self.tables)
+        self.pack['scenes'][0]['body']['children'][1]['anchor']='state-40'
+        with self.assertRaisesRegex(ValueError,'Missing context landing'):validate(self.pack,self.manifest,self.tables)
+
+    def test_automatic_answer_requires_an_existing_option(self):
+        self.pack['scenes'][0]['body']={'type':'choice','auto_answer':{'condition':'timer >= 30','option':0},
+            'branches':[{'option':copy.deepcopy(self.message),'body':{'type':'sequence','children':[]}} for _ in range(2)]}
+        validate(self.pack,self.manifest,self.tables)
+        self.pack['scenes'][0]['body']['auto_answer']['option']=2
+        with self.assertRaisesRegex(ValueError,'automatic answer'):validate(self.pack,self.manifest,self.tables)
+
     def test_entry_guard_is_a_source_fact_with_a_safe_location(self):
         fact={'condition':'!(blocked)','meaning':'passed_at_source','visible':True,
               'source':{'file':'gml_fixture.gml','line':2}}

@@ -7,6 +7,7 @@ Nothing in this module writes a context package or a website file.
 import argparse
 from bisect import bisect_left
 from collections import Counter, defaultdict
+from dataclasses import replace
 import json
 from pathlib import Path
 import re
@@ -125,7 +126,19 @@ class FileRegistry:
                 found = SharedCases(self.a, self.name).options(cases[-1], count)
                 if found and all(r['offset'] < node.end for r in found.values()): return found
         for flat, index in reversed(self.scopes.get(node.start, [])):
-            prefix = flat[:index]
+            prefix = []
+            for n in flat[:index]:
+                # Independently discover literal labels inside a queued setup;
+                # this does not prove the callback or bind an answer by itself.
+                match = re.fullmatch(r'c_customfunc\s*\(\s*function\s*\(\s*\)\s*\{([\s\S]*)\}\s*\)\s*;', n.text) if n.kind=='stmt' else None
+                setup = self.a.flow.parse(match[1]) if match else []
+                if (len(setup)>=3 and compact(self.a.flow,setup[0].text)=='global.msc=-99;'
+                    and compact(self.a.flow,setup[1].text)=='global.choice=-1;'
+                    and all(s.kind=='stmt' and re.match(r'global\.choicemsg(?:\[|\s*=)',s.text) for s in setup[2:])):
+                    shift=n.start+match.start(1)
+                    prefix.extend(replace(s,start=s.start+shift,end=s.end+shift) for s in setup)
+                else:
+                    prefix.append(n)
             resets = [i for i, n in enumerate(prefix) if n.kind == 'stmt'
                       and compact(self.a.flow, n.text) == 'global.choice=-1;']
             result = self.a.options(self.name, prefix[resets[-1]:] if resets else prefix, count)

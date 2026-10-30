@@ -61,6 +61,14 @@ python -m tools.context.audit_context --code "local/code" --texts build/texts --
 
 查看 `build/context-audit/review.md`，完整清单为同目录的 `registry.jsonl`。后续批次使用不同输出目录，并加 `--previous build/context-audit`，生成状态／原因变化清单。登记范围、状态含义及统计边界见[开发审计约定](../data/CONTEXT_AUDIT.md)。
 
+每次调整连接规则后，用修改前后的独立生成目录输出完整变化审查页：
+
+```sh
+python -m tools.context.compare_context --before build/context-before --after local/context-all --texts build/texts --out build/context-review
+```
+
+`index.html` 列出新增、移除、内容变化和父选择变化，并附发生变化的完整文件前后版、前置与回答中的附属工作及局部回调检查范围；末尾列出全部队列菜单候选的前后状态和停止原因，包含没有变化的候选。`comparison.json` 保留对应结构。比较器要求相同文本输入和来源文件库存，核对 occurrence 身份、正文绑定及继承的前置条件；选项卡的展示用途可以改变。该审查页只保存在开发目录，不加入网站产物。
+
 `local/release.json` 可填写 `game_version`、`game_release_date`、`translation_version`，以及当前 `build/texts/manifest.json` 的 SHA-256 字段 `text_manifest_sha256`；未绑定或摘要不符时页面显示版本待核对。
 
 可选 Wiki 位置包放在 `local/source-links/`，格式见[文本契约](../data/TEXT.md)。缺少它不影响检索和上下文；链接目标的线上版本可能与本地源码不同。

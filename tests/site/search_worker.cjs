@@ -47,6 +47,15 @@ async function search(patch){
  await assert.rejects(search({q:'[',regex:true}),/正则表达式有误/);
  r=await search({ch:1,q:'YES',lang:['en'],wholeWord:true});assert(r.total>0);
  r=await search({q:'UNMATCHED_TEST_627492'});assert.equal(r.total,0);assert.equal(r.page,1);
+ for(const [q,key,field] of [
+  ['体能大挑战','obj_ch3_BTB06_slash_Step_0_gml_211_0','zh_default'],
+  ['くつろぎのひととき','obj_room_green_room_slash_Step_0_gml_494_0','ja']
+ ]){
+  r=await search({ch:3,q});
+  const hit=r.rows.find(row=>row.key===key);assert(hit,`Artword search must find ${key}`);
+  assert(!hit[field].includes(q),'The searched word comes from the artword, not the raw string');
+  assert(hit.highlights[field].plain.length,'Artword matches must have highlight ranges');
+ }
  r=await search({ch:1,page:9999});assert.equal(r.page,r.pages);assert(r.rows.length>0);
  console.log('Real worker checks passed: all rows, key, chapter, Chinese variant, raw controls, empty result and page clamp.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

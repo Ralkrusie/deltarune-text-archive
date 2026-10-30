@@ -9,7 +9,7 @@ import re
 
 PURE_BUILTINS={'string','string_length','string_replace_all','array_length_1d',
                'instance_exists','variable_global_exists','is_undefined',
-               'abs','min','max','floor','ceil','round'}
+               'abs','min','max','floor','ceil','round','is_real','chr','string_lower'}
 GLOBAL_SCALARS={'fc','fe','typer','gold','msgno'}
 GLOBAL_ARRAYS={'msg','flag','writersnd'}
 
@@ -70,6 +70,9 @@ class SharedEffects:
 
     def check_helper(self,name,fn):
         templates={
+            'scr_anyface_next':('function scr_anyface_next(arg0,arg1){global.msgno++;scr_anyface(arg0,global.msgno,arg1);}',('scr_anyface',)),
+            'msgsetsub':('function msgsetsub(){var len=argument_count;var args;for(var i=0;i<len;i++)args[i]=argument[i];var str=substringargs(argument[1],2,args);msgset(argument[0],str);}',('substringargs','msgset')),
+            'msgsetsubloc':('function msgsetsubloc(){var len=argument_count;var args;for(var i=0;i<len;i++)args[i]=argument[i];var msg_index=argument[0];var format_string=argument[1];var localized_format_string_id=argument[len-1];if(!is_english())format_string=scr_84_get_lang_string(localized_format_string_id);var str=substringargs(format_string,2,args);msgset(msg_index,str);}',('is_english','scr_84_get_lang_string','substringargs','msgset')),
             'stringset':('function stringset(arg0){return arg0;}',()),
             'is_english':('function is_english(){return !variable_global_exists("lang")||global.lang=="en";}',()),
             'stringsetloc':('function stringsetloc(arg0,arg1){var str=arg0;if(!is_english())str=scr_84_get_lang_string(arg1);return stringset(str);}',('is_english','scr_84_get_lang_string','stringset')),
@@ -96,12 +99,12 @@ class SharedEffects:
         if name=='scr_speaker':
             if self.compact(fn[1].text)!='scr_speaker(arg0)':return False
             return self.safe(fn[1].children,targets={'_speaker','global.fc','global.fe','global.typer'})
+        if name=='scr_anyface':
+            if self.compact(fn[1].text)!='scr_anyface(arg0,arg1,arg2)':return False
+            return self.safe(fn[1].children)
         if re.fullmatch(r'scr_\w*face',name):
             if self.compact(fn[1].text) not in (name+'(arg0)',name+'(arg0,arg1)'):return False
-            nodes=self.a.flat(fn[1].children)
-            if len(nodes)!=1 or nodes[0].kind!='stmt':return False
-            match=re.fullmatch(r'global\.msg\[arg0\]\s*=\s*([\s\S]+);',nodes[0].text)
-            return bool(match and self.expression(match[1]))
+            return self.safe(fn[1].children,targets={'global.msg[arg0]'})
         return False
 
     def expression(self,text,allow_prompt=False):

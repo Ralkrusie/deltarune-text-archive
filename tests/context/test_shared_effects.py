@@ -73,6 +73,43 @@ class IndependentSharedTests(unittest.TestCase):
             s=self.sources();s[FILE]=s[FILE].replace('global.flag[82]=1;',code)
             self.assertFalse(self.analyze(s)[2],code)
 
+    def face_sources(self,ch):
+        s=self.sources(ch)
+        s[FILE]=s[FILE].replace('global.flag[82]=1;','scr_anyface_next("susie",12);global.flag[82]=1;')
+        s['gml_GlobalScript_scr_anyface_next.gml']='function scr_anyface_next(arg0,arg1){global.msgno++;scr_anyface(arg0,global.msgno,arg1);}'
+        s['gml_GlobalScript_scr_anyface.gml']='function scr_anyface(arg0,arg1,arg2){_speakerC=arg0;_msgno=arg1;_emotion=arg2;if(is_real(arg2)){if(arg2>=10)_emotion=chr(55+arg2);}_speaker=string_lower(_speakerC);if(_speaker=="susie")scr_testface(_msgno,_emotion);}'
+        s['gml_GlobalScript_scr_testface.gml']='function scr_testface(arg0,arg1){global.msg[arg0]="\\\\TS\\\\F0\\\\E"+string(arg1);}'
+        return s
+
+    def test_face_dispatch_is_checked_transitively_without_expanding_messages(self):
+        for ch in (1,2,5):
+            a,scene,choices=self.analyze(self.face_sources(ch),ch)
+            self.assertEqual(len(choices),1)
+            self.assertEqual([[r['key'] for r in references(b['body'])] for b in choices[0]['branches']],[[key(4)],[key(5)]])
+            deps={r['file'] for r in a.evidence[0]['effect_helpers']}
+            self.assertTrue({'gml_GlobalScript_scr_anyface.gml','gml_GlobalScript_scr_anyface_next.gml','gml_GlobalScript_scr_testface.gml'}<=deps)
+
+    def test_face_dispatch_rejects_changed_helper_effects_or_new_choices(self):
+        for helper,extra in [('scr_anyface_next','global.choice=1;'),('scr_anyface','global.choice=1;'),
+                             ('scr_anyface','event_user(0);'),('scr_testface','global.choice=1;')]:
+            s=self.face_sources(5);p='gml_GlobalScript_'+helper+'.gml'
+            s[p]=s[p].replace('{','{'+extra,1)
+            self.assertFalse(self.analyze(s,5)[2],helper)
+        s=self.face_sources(5)
+        s['gml_GlobalScript_scr_testface.gml']=s['gml_GlobalScript_scr_testface.gml'].replace('\\\\TS','\\\\C2')
+        self.assertFalse(self.analyze(s,5)[2])
+
+    def test_conditional_portrait_writes_only_the_requested_message_slot(self):
+        s=self.face_sources(5);p='gml_GlobalScript_scr_testface.gml'
+        s[p]='function scr_testface(arg0,arg1){if(global.chapter>=2)global.msg[arg0]="\\\\F1";else global.msg[arg0]="\\\\F0";}'
+        self.assertEqual(len(self.analyze(s,5)[2]),1)
+        for before,after in [('global.msg[arg0]','global.msg[0]'),('global.chapter>=2','unknown()'),
+                             ('else global.msg[arg0]="\\\\F0";','else global.choice=1;')]:
+            changed=dict(s);changed[p]=s[p].replace(before,after)
+            self.assertFalse(self.analyze(changed,5)[2])
+        s=self.face_sources(5);del s['gml_GlobalScript_scr_testface.gml']
+        self.assertFalse(self.analyze(s,5)[2])
+
     def test_writes_and_nested_argument_effects_stay_unconnected(self):
         for code in ('global.choice%=2;','global.choice|=2;','global.choice<<=1;',
                      'choice=1;','choicemsg=other_options;','msc=77;',

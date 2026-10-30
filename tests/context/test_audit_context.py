@@ -69,6 +69,19 @@ class ContextAuditTests(unittest.TestCase):
         rows=self.registry(opt(0)+opt(1)).build()
         self.assertEqual([r['kind'] for r in rows],['signal','signal'])
 
+    def test_callback_menu_labels_are_independently_discovered(self):
+        source='if(con==1){c_customfunc(function(){global.msc=-99;global.choice=-1;'+opt(0)+opt(1)+'});c_msgset(0,"\\\\C2");}'
+        reg=self.registry(source)
+        scene={'body':sequence([{'type':'choice','branches':[{'option':r,'body':sequence([])} for r in reg.refs]}])}
+        rows=self.registry(source,scene=scene).build()
+        prompt=next(r for r in rows if r['kind']=='choice')
+        self.assertEqual(prompt['status'],'linked')
+        self.assertEqual([r['key'] for r in prompt['option_candidates']],[key(0),key(1)])
+        self.assertFalse(any(r['kind']=='projection_gap' for r in rows))
+        altered=source.replace('global.choice=-1;','global.choice=-1;opaque();')
+        prompt=next(r for r in self.registry(altered).build() if r['kind']=='choice')
+        self.assertEqual(prompt['option_candidates'],[])
+
     def test_exact_option_occurrences_required_for_linked_status(self):
         reg=self.registry(opt(0)+opt(1)+msg(5,'\\\\C2')+msg(8))
         refs=reg.refs

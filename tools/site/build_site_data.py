@@ -5,6 +5,7 @@ import re
 from pathlib import Path
 from tools.text.import_texts import CHAPTERS, FILES, disjoint, load_json, sha
 from .display_dedup import annotate
+from tools.text.artwords import project
 
 
 def compact(value):
@@ -58,7 +59,8 @@ def build(texts, out, sources=None):
                 if type(file_id) is not int or not 0 <= file_id < len(links['files']) or type(line) is not int or line < 1:
                     raise ValueError('Invalid source location')
             row.append(locations)
-        packages.append({'source_files': links['files'], 'schema': 1, 'chapter': ch, 'languages': list(FILES), 'strings': strings, 'rows': rows})
+        artwords = project(Path(__file__).resolve().parents[2] / 'config/text/artwords.json', ch, data['lines'])
+        packages.append({'artwords': artwords, 'source_files': links['files'], 'schema': 1, 'chapter': ch, 'languages': list(FILES), 'strings': strings, 'rows': rows})
     annotate(packages)
     for package in packages:
         ch, rows, strings = package['chapter'], package['rows'], package['strings']

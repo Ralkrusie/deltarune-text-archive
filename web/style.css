@@ -182,6 +182,7 @@ main:focus { outline: none; }
 .reading-line.hanging { display: grid; grid-template-columns: subgrid; }
 .reading-prefix { white-space: pre; }
 .reading-words { min-width: 0; white-space: pre-wrap; }
+.artword { font-style: italic; color: #ffd98a; background: #2b2038; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .reading-indent { font-size: 0; }
 .vertical .language-grid { grid-template-columns: 1fr; gap: 0; }
 .vertical .language-cell { display: grid; grid-template-columns: 94px minmax(0, 1fr); align-items: start; gap: 0 20px; padding: 14px 0; border: 0; }
@@ -291,10 +292,12 @@ dialog p { color: var(--muted); font-size: 15px; }
 }
 
 /* Context is a separate flow: language stacking never follows the result layout. */
-#context-dialog { width: min(1240px, calc(100vw - 32px)); height: min(780px, 90dvh); min-width: min(360px, calc(100vw - 32px)); max-width: calc(100vw - 32px); min-height: min(260px, 90dvh); max-height: 90dvh; resize: both; overflow: auto; padding: 0 22px 24px; background: #080808; color: var(--text, #ddd); box-sizing: border-box; }
-#context-content { container-type: inline-size; }
-@container (max-width: 650px) { .context-branches { grid-template-columns: 1fr !important; } }
-.context-top { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 0; background: #080808; border-bottom: 1px solid #555; }
+#context-dialog { width: calc(100vw - 32px); height: 94dvh; min-width: min(360px, calc(100vw - 32px)); max-width: calc(100vw - 32px); min-height: min(260px, 90dvh); max-height: 94dvh; resize: both; overflow: hidden; padding: 0 22px 24px; background: #080808; color: var(--text, #ddd); box-sizing: border-box; }
+#context-dialog[open] { display: flex; flex-direction: column; }
+#context-content { min-height: 0; flex: 1; overflow: auto; scrollbar-gutter: stable; cursor: grab; }
+#context-content article, #context-content p, #context-content h3 { cursor: auto; }
+#context-content.context-panning { cursor: grabbing; user-select: none; }
+.context-top { flex-shrink: 0; position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 0; background: #080808; border-bottom: 1px solid #555; }
 .context-top h2 { margin: 0; font-size: 20px; }
 .context-top > div { display: flex; gap: 18px; align-items: center; }
 .context-top > div:first-child { display: block; }
@@ -315,14 +318,13 @@ dialog p { color: var(--muted); font-size: 15px; }
 .context-current-label { display: inline-block; font-size: 12px; color: var(--accent, #72aaff); margin-bottom: 9px; }
 .context-connector { text-align: center; color: #999; padding: 6px; line-height: 1; }
 .context-fork-title { text-align: center; font-size: 15px; font-weight: 500; margin: 12px 0; }
+.context-fork { min-width: 0; }
 .context-branches { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; border-top: 1px solid #777; padding-top: 16px; }
 .context-branch { min-width: 0; border-bottom: 1px solid #777; padding-bottom: 14px; }
 .context-branches .context-branches { border-top: 0; gap: 18px; }
 .context-condition { border-left: 3px solid var(--accent, #72aaff); padding: 10px; background: #191919; font-size: 14px; overflow-wrap: anywhere; }
 .context-branch-label { display: block; font-size: 12px; color: #aaa; margin-bottom: 7px; }
 .context-join-lines { display: block; width: 100%; height: 24px; color: #999; }
-@container (max-width: 650px) { .context-join-lines { display: none; } }
-@media(max-width:700px) { .context-join-lines { display: none; } }
 .context-option { border-color: var(--accent, #72aaff); border-radius: 0; }
 .context-end { text-align: center; border: 1px solid #555; padding: 10px; border-radius: 0; font-size: 14px; color: #bbb; }
 .context-source { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 11px; color: #aaa; margin-top: 14px; }
@@ -336,7 +338,7 @@ dialog p { color: var(--muted); font-size: 15px; }
 .context-file-picker select { min-width: 0; max-width: 100%; flex: 1; background: #111; color: #ddd; padding: 8px; border: 1px solid #666; }
 .context-binding { color: #dcb97a; font-size: 12px; }
 .context-sequence > .context-message + .context-message { margin-top: 12px; }
-@media(max-width:700px) { #context-dialog { width: calc(100vw - 16px); padding-inline: 12px; max-height: 94dvh; } .context-branches { grid-template-columns: 1fr !important; } #context-dialog .text { font-size: 17px; } }
+@media(max-width:700px) { #context-dialog { width: calc(100vw - 16px); padding-inline: 12px; max-height: 94dvh; } #context-dialog .text { font-size: 17px; } }
 
 /* Viewer status messages are UI copy, not dialogue in the selected language. */
 .text.missing, #context-dialog .text.missing { font: 15px/1.6 system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif; color: var(--subtle); }
@@ -381,3 +383,8 @@ dialog p { color: var(--muted); font-size: 15px; }
 :root[data-compact="true"] .context-condition { padding: 6px 8px; margin-block: 6px; }
 :root[data-compact="true"] .context-fork-title { margin-block: 6px; }
 :root[data-compact="true"] .context-end { padding: 6px; margin-block: 6px; }
+
+#page-jump { display: flex; align-items: center; gap: 10px; }
+#page-input { width: 6ch; min-width: 48px; padding: 6px; text-align: center; font: 15px var(--mono); color: var(--fg); background: var(--bg); border: 1px solid var(--theme-border, #495d80); border-radius: 0; }
+#page-input:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media(max-width:480px) { #pagination { gap: 8px; } #page-jump { gap: 5px; } }

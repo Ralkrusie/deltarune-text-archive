@@ -86,6 +86,7 @@ class DirectProtocol(QueuedProtocol):
 
 class DirectChoices(QueuedChoices):
     allow_empty_arms = True
+    review_response_assignments = False
 
     def __init__(self, analyzer, name, excluded=()):
         super().__init__(analyzer, name, excluded)

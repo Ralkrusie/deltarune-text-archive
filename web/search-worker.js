@@ -9,14 +9,16 @@ function chapter(ch){
  if(!cache.has(ch))cache.set(ch,json(`data/ch${ch}.json`).then(data=>{indexes.set(ch,new Map());return data;}).catch(e=>{cache.delete(ch);throw e;}));
  return cache.get(ch);
 }
-function indexed(data,id){
+function indexed(data,id,key,field){
  if(id===null)return null;
  const idx=indexes.get(data.chapter);
- if(!idx.has(id)){
-  const raw=data.strings[id],view=T.format(raw,data.chapter);
-  idx.set(id,{raw,source:view.source,plain:view.plain,normalized:view.plain.replace(/\s+/g,' ').trim()});
+ const words=data.artwords?.[key]?.[field];
+ const identity=words?`${key}:${field}`:id;
+ if(!idx.has(identity)){
+  const raw=data.strings[id],view=T.format(raw,data.chapter,words);
+  idx.set(identity,{raw,source:view.source,plain:view.plain,normalized:view.plain.replace(/\s+/g,' ').trim()});
  }
- return idx.get(id);
+ return idx.get(identity);
 }
 self.onmessage=async event=>{
  const {id,state,progress=false}=event.data;newest=id;
@@ -45,7 +47,7 @@ self.onmessage=async event=>{
    for(let index=0;index<data.rows.length;index++){
     const row=data.rows[index];
     let match=state.key?row[0]===state.key:!matcher||matcher.test(row[0]);
-    if(!match&&!state.key&&!keyOnly)match=columns.some(col=>{const text=indexed(data,row[col]);return text&&Object.values(text).some(value=>matcher.test(value));});
+    if(!match&&!state.key&&!keyOnly)match=columns.some((col,n)=>{const text=indexed(data,row[col],row[0],fields[n]);return text&&Object.values(text).some(value=>matcher.test(value));});
     if(match)found.push([data,index]);
     if(++visited%1000===0){await new Promise(resolve=>setTimeout(resolve,0));if(id!==newest)return;}
    }
@@ -73,7 +75,7 @@ self.onmessage=async event=>{
     row.copies=group.map(([d,n])=>({chapter:d.chapter,key:d.rows[n][0]}));
     row.translationDifference=fields.filter(f=>f!=='en').some(f=>new Set(group.map(([d,n])=>{const v=d.rows[n][d.languages.indexOf(f)+1];return v===null?null:d.strings[v];})).size>1);
    }
-   for(const field of fields){const text=indexed(data,data.rows[i][data.languages.indexOf(field)+1]);row.highlights[field]={source:matcher&&text?matcher.ranges(text.source):[],plain:matcher&&text?matcher.ranges(text.plain):[]};}
+   for(const field of fields){const text=indexed(data,data.rows[i][data.languages.indexOf(field)+1],row.key,field);row.highlights[field]={source:matcher&&text?matcher.ranges(text.source):[],plain:matcher&&text?matcher.ranges(text.plain):[]};}
    return row;
   });
   if(id===newest)self.postMessage({id,type:'result',rows,total:groups.length,records:found.length,page,pages,inventory:info.total_rows});

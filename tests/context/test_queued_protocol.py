@@ -61,6 +61,30 @@ def helpers():
     return result
 
 
+def message_helpers():
+    engine=helpers()['gml_GlobalScript_scr_cutscene_commands.gml'][:-1]+'''
+      if(_c=="msgcmd"){
+        if(!v_ex("msgcmd")||!i_ex(msgcmd))msgcmd=instance_create(0,0,obj_cutscene_messagecmd);
+        var _count=msgcmd.count;msgcmd.master_object=master_object;
+        msgcmd.command_actor[_count]=command_actor[i];msgcmd.command_num[_count]=global.msgno;
+        msgcmd.command[_count]=command_arg1[i];
+        msgcmd.command_arg1[_count]=command_arg2[i];msgcmd.command_arg2[_count]=command_arg3[i];
+        msgcmd.command_arg3[_count]=command_arg4[i];msgcmd.command_arg4[_count]=command_arg5[i];msgcmd.count++;
+      }
+      if(_c=="mus"||_c=="music"){audio_sound_gain(song,command_arg2[i],command_arg3[i]);}
+    }'''
+    return {'gml_GlobalScript_scr_cutscene_commands.gml':engine,
+        'gml_GlobalScript_c_msgcmd.gml':'function c_msgcmd(arg0,arg1=0,arg2=0,arg3=0,arg4=0,arg5=0){c_cmd_x("msgcmd",arg0,arg1,arg2,arg3,arg4,arg5);}',
+        'gml_Object_obj_cutscene_messagecmd_Create_0.gml':'''instant=0;command_num[0]=0;command[0]=0;
+            command_arg1[0]=0;command_arg2[0]=0;command_arg3[0]=0;command_arg4[0]=0;command_arg5[0]=0;command_arg6[0]=0;
+            i=0;count=0;_c="none";command_actor[0]=43894389;master_object=4839438;alarm[0]=1;msg_active=false;
+            if(i_ex(obj_cutscene_master))depth=obj_cutscene_master.depth-5;''',
+        'gml_Object_obj_cutscene_messagecmd_Step_0.gml':'''var _msgno=-1;with(obj_cutscene_master){
+            if(i_ex(mydialoguer)){if(mydialoguer.active==1&&i_ex(mydialoguer.writer))_msgno=mydialoguer.writer.msgno;}}
+            if(_msgno<0)exit;while(_msgno==command_num[i]){_c=command[i];scr_cutscene_commands();i++;
+            if(i>=array_length(command)){instance_destroy();break;}}'''}
+
+
 class QueuedProtocolTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):cls.api=backend()
@@ -218,6 +242,153 @@ class QueuedProtocolTests(unittest.TestCase):
             self.assertEqual(q.reason,'queue_termination_before_text')
         q=self.protocol(MESSAGE+'c_wrap_end();',extra)
         self.assertTrue(q.safe(q.a.file(FILE)['nodes']),q.reason)
+
+    def test_deferred_literal_menu_setup_preserves_offsets_and_rejects_other_work(self):
+        body='global.msc=-99;global.choice=-1;global.choicemsg=[stringsetloc("response","'+KEY+'"),stringset("no")];'
+        q=self.protocol('c_customfunc(function(){'+body+'});')
+        outer=q.a.file(FILE)['nodes'][0]
+        nodes=q.menu_setup(outer)
+        self.assertIsNotNone(nodes)
+        self.assertEqual(q.a.within(FILE,nodes[-1]),q.a.file(FILE)['refs'])
+        for text in (body+'opaque();',body.replace('global.choice=-1;','global.choice=0;'),
+                     'if(flag){'+body+'}',body.replace('stringset("no")','unknown()')):
+            q=self.protocol('c_customfunc(function(){'+text+'});')
+            self.assertIsNone(q.menu_setup(q.a.file(FILE)['nodes'][0]))
+
+    def test_deferred_setup_connects_to_response_without_copying_option_refs(self):
+        from tools.context.context_data import references
+        k2='fixture_slash_Test_gml_2_0';k3='fixture_slash_Test_gml_3_0';k4='fixture_slash_Test_gml_4_0'
+        source=('if(con==1){con=2;c_customfunc(function(){global.msc=-99;global.choice=-1;'
+                'global.choicemsg=[stringsetloc("a","'+KEY+'"),stringsetloc("b","'+k2+'")];});'
+                'c_msgset(0,"\\\\C2");c_customfunc(function(){d_make();});c_waitcustom();}'
+                'if(con==2&&customcon==1&&global.choice!=-1){customcon=0;c_waitcustom_end();'
+                'if(global.choice==0)c_msgsetloc(0,"c","'+k3+'");else c_msgsetloc(0,"d","'+k4+'");}')
+        a=Analyzer({**helpers(),FILE:source},5,{k:{'en':v} for k,v in zip((KEY,k2,k3,k4),'abcd')},self.api)
+        scene=a.analyze(FILE)
+        self.assertEqual(a.queue_audit[0]['status'],'connected')
+        self.assertEqual(len(list(references(scene['body']))),4)
+
+    def test_command_aliases_and_wait_after_text(self):
+        engine=helpers()['gml_GlobalScript_scr_cutscene_commands.gml'][:-1]+'if(_c=="mus"||_c=="music"){} }'
+        extra={'gml_GlobalScript_scr_cutscene_commands.gml':engine,
+               'gml_GlobalScript_c_mus2.gml':'function c_mus2(arg0,arg1,arg2){c_cmd("mus",arg0,arg1,arg2,0);}'}
+        q=self.protocol(MESSAGE+'c_mus2("volume",1,30);c_waitcustom();',extra)
+        self.assertTrue(q.safe(q.a.file(FILE)['nodes']),q.reason)
+        q=self.protocol('c_waitcustom();'+MESSAGE,extra)
+        self.assertFalse(q.safe(q.a.file(FILE)['nodes']))
+        self.assertEqual(q.reason,'queue_pause_before_text')
+        extra['gml_GlobalScript_scr_cutscene_commands.gml']=engine.replace('"music"){}','"music"){global.choice=0;}')
+        q=self.protocol('c_mus2("volume",1,30);',extra)
+        self.assertFalse(q.safe(q.a.file(FILE)['nodes']))
+
+    def test_variadic_wrappers_follow_actual_argument_count_and_literal_fields(self):
+        engine=helpers()['gml_GlobalScript_scr_cutscene_commands.gml'][:-1]+'if(_c=="varto"){} }'
+        wrapper='''function c_animate_field(){
+            if(argument_count==3)c_cmd_x("varto",0,argument[0],0,argument[1],argument[2],"0in");
+            if(argument_count==4)c_cmd_x("varto",0,argument[0],0,argument[1],argument[2],string(argument[3])+"in");
+            if(argument_count==5)c_cmd_x("varto",0,argument0,0,argument1,argument2,string(argument3)+argument4);
+        }'''
+        extra={'gml_GlobalScript_scr_cutscene_commands.gml':engine,
+               'gml_GlobalScript_c_animate_field.gml':wrapper}
+        for args in ('"image_index",3,24','"x",10,30,2','"y",20,15,2,"out"'):
+            with self.subTest(args=args):
+                q=self.protocol('c_animate_field('+args+');',extra)
+                self.assertTrue(q.safe(q.a.file(FILE)['nodes']),q.reason)
+        for args in ('"choice",3,24','"argument0",3,24','field,3,24'):
+            q=self.protocol('c_animate_field('+args+');',extra)
+            self.assertFalse(q.safe(q.a.file(FILE)['nodes']),args)
+        # A selected branch cannot read a missing argument or hide answer writes.
+        for before,after in (('argument[2]','argument[9]'),
+                             ('if(argument_count==3)','global.choice=1;if(argument_count==3)')):
+            changed={**extra,'gml_GlobalScript_c_animate_field.gml':wrapper.replace(before,after)}
+            q=self.protocol('c_animate_field("x",10,30);',changed)
+            self.assertFalse(q.safe(q.a.file(FILE)['nodes']))
+        changed={**extra,'gml_GlobalScript_scr_cutscene_commands.gml':engine.replace('if(_c=="var"){}','if(_c=="var"){global.choice=1;}')}
+        q=self.protocol('c_animate_field("x",10,30);',changed)
+        self.assertFalse(q.safe(q.a.file(FILE)['nodes']))
+
+    def test_response_object_assignment_needs_review_not_protocol_proof(self):
+        q=self.protocol('marker=make_marker();marker.visible=false;')
+        self.assertFalse(q.safe(q.a.file(FILE)['nodes']))
+        from tools.context.context_data import references
+        keys=[f'fixture_slash_Test_gml_{i}_0' for i in range(1,5)]
+        staging='marker=make_marker();marker.visible=false;marker.depth=900;'
+        source=('if(con==1){con=2;global.msc=-99;global.choice=-1;'
+                'global.choicemsg=[stringsetloc("a","'+keys[0]+'"),stringsetloc("b","'+keys[1]+'")];'
+                'c_msgset(0,"\\\\C2");c_customfunc(function(){d_make();});c_waitcustom();}'
+                'if(con==2&&customcon==1&&global.choice!=-1){customcon=0;c_waitcustom_end();'
+                'if(global.choice==0){'+staging+'c_msgsetloc(0,"c","'+keys[2]+'");}'
+                'else c_msgsetloc(0,"d","'+keys[3]+'");}')
+        a=Analyzer({**helpers(),FILE:source},5,{k:{'en':v} for k,v in zip(keys,'abcd')},self.api)
+        scene=a.analyze(FILE)
+        self.assertEqual(a.queue_audit[0]['status'],'connected')
+        self.assertEqual(len(a.queue_audit[0]['response_review']),3)
+        self.assertEqual(len(list(references(scene['body']))),4)
+        for unsafe in ('master.con=7;','global.marker=make_marker();','marker=c_customfunc(callback);'):
+            a=Analyzer({**helpers(),FILE:source.replace(staging,unsafe)},5,{k:{'en':v} for k,v in zip(keys,'abcd')},self.api)
+            a.analyze(FILE)
+            self.assertEqual(a.queue_audit[0]['status'],'unconnected',unsafe)
+
+    def test_message_commands_reuse_checks_for_the_actual_dispatched_command(self):
+        extra=message_helpers()
+        for args in ('"mus","volume",0,30','"var",actor,"image_index",3','"addxy",10,20'):
+            q=self.protocol('c_msgcmd('+args+');',extra)
+            self.assertTrue(q.safe(q.a.file(FILE)['nodes']),args)
+        for args in ('"var",actor,"con",3','"var",actor,field,3','command,0,30',
+                     '"customfunc",callback','"terminatekillactors"','"msgcmd","mus","volume",0'):
+            q=self.protocol('c_msgcmd('+args+');',extra)
+            self.assertFalse(q.safe(q.a.file(FILE)['nodes']),args)
+        name='gml_GlobalScript_scr_cutscene_commands.gml'
+        for old,new in [('command_arg1[_count]=command_arg2[i]','command_arg1[_count]=command_arg3[i]'),
+                        ('audio_sound_gain(song,command_arg2[i],command_arg3[i]);','global.choice=0;')]:
+            altered={**extra,name:extra[name].replace(old,new)}
+            q=self.protocol('c_msgcmd("mus","volume",0,30);',altered)
+            self.assertFalse(q.safe(q.a.file(FILE)['nodes']))
+
+    def test_message_dispatch_rejects_new_events_and_changed_execution(self):
+        extra=message_helpers()
+        variants=[{**extra,'gml_Object_obj_cutscene_messagecmd_Alarm_0.gml':'global.choice=0;'}]
+        for name,old,new in [('Step_0','_c=command[i]','_c="customfunc"'),
+                             ('Create_0','command_arg5[0]=0','command_arg5[0]=1')]:
+            path='gml_Object_obj_cutscene_messagecmd_'+name+'.gml'
+            variants.append({**extra,path:extra[path].replace(old,new)})
+        for altered in variants:
+            q=self.protocol('c_msgcmd("mus","volume",0,30);',altered)
+            self.assertFalse(q.safe(q.a.file(FILE)['nodes']))
+
+    def test_literal_staging_callbacks_keep_body_checks_and_review_scope(self):
+        sound='function snd_play(arg0,arg1=1,arg2=1){var _snd=audio_play_sound(arg0,50,0);if(arg1!=1)audio_sound_gain(_snd,arg1,0);if(arg2!=1)audio_sound_pitch(_snd,arg2);return _snd;}'
+        extra={'gml_GlobalScript_snd_play.gml':sound}
+        body='marker.depth=actor.depth;instance_create_depth(x,y,depth,obj_splash);snd_play(snd_splash);with(obj_splash){scale=2;}if(flag){actor.visible=false;}'
+        source='c_customfunc(function(){'+body+'});'
+        q=self.protocol(source,extra)
+        self.assertTrue(q.staging_callback(q.a.file(FILE)['nodes'][0]))
+        # It is a local projection with evidence, not a new strict purity proof.
+        self.assertFalse(q.safe(q.a.file(FILE)['nodes']))
+        for unsafe in ('global.choice=1;','marker.con=5;','customcon=1;','return;',
+                       'opaque();','variable_global_set("choice",1);','while(flag){actor.x=0;}',
+                       'actor.step_func=function(){global.choice=0;};',
+                       'instance_create_depth(x,y,depth,obj_dialoguer);','instance_create_depth(x,y,depth,42);'):
+            q=self.protocol('c_customfunc(function(){'+unsafe+'});',extra)
+            self.assertFalse(q.staging_callback(q.a.file(FILE)['nodes'][0]),unsafe)
+        q=self.protocol(source,{'gml_GlobalScript_snd_play.gml':sound.replace('return _snd;','global.choice=0;return _snd;')})
+        self.assertFalse(q.staging_callback(q.a.file(FILE)['nodes'][0]))
+
+    def test_nested_menu_with_conditional_setup_and_staging_callback(self):
+        from tests.context.test_queued_choices import menu,consumer,message,key,walk
+        extra={**message_helpers(),CREATE:'open_menu=function(arg0=0){var d=d_make();d.side=arg0;};'}
+        child_menu=menu('30',20).replace('c_customfunc(open_menu,0);',
+            'if(global.lang=="ja"){c_msgcmd("addxy",10,0);}c_customfunc(open_menu,0);')
+        source='if(con==20){'+menu()+'}'+consumer('if(global.choice==0){'+message(10)+child_menu+'}else{'+message(11)+'}')
+        source+=consumer('if(global.choice==0){c_customfunc(function(){instance_create_depth(x,y,depth,obj_splash);});'+message(40)+'}else{'+message(41)+'}','30')
+        source=source.replace('k_d(3);','')
+        a=Analyzer({**helpers(),**extra,FILE:source},5,{key(i):{'en':f'text{i}'} for i in range(60)},self.api)
+        scene=a.analyze(FILE)
+        choices=[n for n in walk(scene['body']) if n['type']=='choice']
+        self.assertEqual(len(choices),2)
+        self.assertEqual(sum(r['status']=='connected' for r in a.queue_audit),2)
+        review=next(r['response_review'] for r in a.queue_audit if r.get('state')=='30')
+        self.assertEqual(review[0]['scope'],'local_callback_body')
 
 
 if __name__=='__main__':unittest.main()

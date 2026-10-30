@@ -339,9 +339,11 @@ class Analyzer:
         flat=self.flat(nodes)
         for index,n in enumerate(flat):
             if n.start in self.scoped_consumed:continue
+            routes=self.queued.routes if self.queued else None
+            route=routes and n.start in routes.edges
             prompts=set(self.prompt_choices)|(set(self.queued.plans) if self.queued else set())
             if self.direct:prompts.update(self.direct.plans)
-            if not any(r['occurrence_id'] not in omit for r in self.within(name,n)) and not any(n.start<=p<n.end for p in prompts):continue
+            if not route and not any(r['occurrence_id'] not in omit for r in self.within(name,n)) and not any(n.start<=p<n.end for p in prompts):continue
             if n.start in self.scoped_choices:
                 choice,variable=self.scoped_choices[n.start]
                 children=self.project(name,n.children,set(omit)|choice['omit'])
@@ -385,6 +387,8 @@ class Analyzer:
                     out.extend(self.queued.render(n.start))
                 if self.direct and n.start in self.direct.plans:
                     out.extend(self.direct.render(n.start))
+                if route:
+                    out.extend(routes.render(n.start))
             elif n.kind=='switch':
                 cases=[]
                 plans={};consumed=set()
@@ -701,6 +705,8 @@ class Analyzer:
             # Stage guards are source metadata, not imagined story labels.
             guard=self.root_guard(n) if plain_stage else ''
             blocks.append(dict(type='block',label='L'+str(data['source'].count('\n',0,n.start)+1),guard=guard,raw_guard=n.text if n.kind=='if' else '',children=children))
+            if self.queued.routes and n.start in self.queued.routes.anchors:
+                blocks[-1]['anchor']=self.queued.routes.anchors[n.start]
         # Unsupported/parser-failed references still belong to the complete file.
         present={r['occurrence_id'] for r in references({'type':'blocks','children':blocks})}
         missing=[r for r in data['refs'] if r['occurrence_id'] not in present]

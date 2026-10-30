@@ -1,0 +1,3266 @@
+{
+  "schema": 1,
+  "game_version": "0.0.253",
+  "translation_version": "V261024",
+  "note": "逐图誊写；英中文已于 2026-10-30 对照现存 52+52 份导出重新复核；日文按图片修订，仍待人工复审。按章节/key/语言/槽位绑定，原串摘要变化即停用。仅为文字阅读投影，不证明运行可达性。",
+  "entries": [
+    {
+      "chapter": 3,
+      "key": "obj_ch3_BTB06_slash_Step_0_gml_211_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "4f058b3d74ddf735e3f34c6bdfa3166913cc3a30987591b2fb43928d152e91db",
+          "slots": {
+            "0": "PHYSICAL CHALLENGE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "db2e7e91fa2e801ec41e7eb0061f61060cc754270f1dde7d0f2d07d91752c293",
+          "slots": {
+            "0": "リアル チャレンジ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "80ed7d47dce8af854cb623da095805a72b6f71095cd447f358f7263eb2c1b183",
+          "slots": {
+            "0": "体能大挑战"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "80ed7d47dce8af854cb623da095805a72b6f71095cd447f358f7263eb2c1b183",
+          "slots": {
+            "0": "体能大挑战"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "80ed7d47dce8af854cb623da095805a72b6f71095cd447f358f7263eb2c1b183",
+          "slots": {
+            "0": "体能大挑战"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_BTB06_Step_0.gml:134",
+          "source_sha256": "0f84fcd1424a256dfe551d581bc45b699500e6889755f061b10c308576e5f24d",
+          "sprite": "spr_funnytext_physical_challenge",
+          "ja_sprite": "spr_ja_funnytext_physical_challenge"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA01G_slash_Step_0_gml_93_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "2bc484372556bfb6f331fa6cfdf33283fb8c2e9f95f64a9e209b7df904441211",
+          "slots": {
+            "0": "Lovely"
+          }
+        },
+        "ja": {
+          "raw_sha256": "ffdd33524cb704a977ad31e9e15d5ac66fcc99572e52043290e7bc490171c33e",
+          "slots": {
+            "0": "ラブラブリ～"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "2317c1cbe156d5f35391636162cab4688901054726c22c7b184a18586f1a8e6a",
+          "slots": {
+            "0": "可爱"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "2317c1cbe156d5f35391636162cab4688901054726c22c7b184a18586f1a8e6a",
+          "slots": {
+            "0": "可爱"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "2317c1cbe156d5f35391636162cab4688901054726c22c7b184a18586f1a8e6a",
+          "slots": {
+            "0": "可爱"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_GSA01G_Step_0.gml:48",
+          "source_sha256": "2cc737571f6af880108d46c81a1e1fa4c78678949fdd0e258569d1d96828a275",
+          "sprite": "spr_funnytext_lovely",
+          "ja_sprite": "spr_ja_funnytext_lovely"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA01G_slash_Step_0_gml_98_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "f3df2b13adbf23e2537b2198d3f409d60f3bd2d54d611a378e470acfb8323c0b",
+          "slots": {
+            "1": "STARS"
+          }
+        },
+        "ja": {
+          "raw_sha256": "fd931345008d51a86e501f4de938e50202bd23bc9a5dd1955e6514aa9f6731c9",
+          "slots": {
+            "1": "主役"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "926f5472c84d1ddfe74ac750e7b49fefeb01bb478aa04d2a4a155a7c2e912885",
+          "slots": {
+            "1": "明星"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "926f5472c84d1ddfe74ac750e7b49fefeb01bb478aa04d2a4a155a7c2e912885",
+          "slots": {
+            "1": "明星"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "926f5472c84d1ddfe74ac750e7b49fefeb01bb478aa04d2a4a155a7c2e912885",
+          "slots": {
+            "1": "明星"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_ch3_GSA01G_Step_0.gml:49",
+          "source_sha256": "2cc737571f6af880108d46c81a1e1fa4c78678949fdd0e258569d1d96828a275",
+          "sprite": "spr_funnytext_stars",
+          "ja_sprite": "spr_ja_funnytext_stars"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA01G_slash_Step_0_gml_175_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "08d1cf8b3964b8af93c7b91575598443b6e0907d933f3dac062e04d228970ead",
+          "slots": {
+            "2": "TV TiME!"
+          }
+        },
+        "ja": {
+          "raw_sha256": "4d089db80d87c4ea5c7f08b951a215733a37cf2ad1c17d7354aea4ca71c176b0",
+          "slots": {
+            "2": "IT'S!! TV!! TiME!!!"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "285730583a689a7c95377b4262dbc5218bbcc4c9a6a43dc6a662765b45d5fc37",
+          "slots": {
+            "2": "TV时间！"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "285730583a689a7c95377b4262dbc5218bbcc4c9a6a43dc6a662765b45d5fc37",
+          "slots": {
+            "2": "TV时间！"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "285730583a689a7c95377b4262dbc5218bbcc4c9a6a43dc6a662765b45d5fc37",
+          "slots": {
+            "2": "TV时间！"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "2",
+          "source": "gml_Object_obj_ch3_GSA01G_Step_0.gml:112",
+          "source_sha256": "2cc737571f6af880108d46c81a1e1fa4c78678949fdd0e258569d1d96828a275",
+          "sprite": "spr_funnytext_tv_time",
+          "ja_sprite": "spr_dw_tv_time_funnytext"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA01G_slash_Step_0_gml_241_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "4009946074ca739a196de0f4dcb562b328a7aa1aad83a48ec10488253123c1d6",
+          "slots": {
+            "3": "PHYSICAL CHALLENGES"
+          }
+        },
+        "ja": {
+          "raw_sha256": "252b7d88779a3696fecf6a392d1645b9b094892e283bedf14718dfebcd77cef1",
+          "slots": {
+            "3": "リアル チャレンジ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "7c4fbb37b252094784dc9fb6aeab844b5b64844799ce046b52c19ed52aa5d77a",
+          "slots": {
+            "3": "体能大挑战"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "7c4fbb37b252094784dc9fb6aeab844b5b64844799ce046b52c19ed52aa5d77a",
+          "slots": {
+            "3": "体能大挑战"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "7c4fbb37b252094784dc9fb6aeab844b5b64844799ce046b52c19ed52aa5d77a",
+          "slots": {
+            "3": "体能大挑战"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "3",
+          "source": "gml_Object_obj_ch3_GSA01G_Step_0.gml:164",
+          "source_sha256": "2cc737571f6af880108d46c81a1e1fa4c78678949fdd0e258569d1d96828a275",
+          "sprite": "spr_funnytext_physical_challenges",
+          "ja_sprite": "spr_ja_funnytext_physical_challenge"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA01G_slash_Step_0_gml_252_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "48bd76316390592151cdaefedab56b033da5b4c5812a98e868ad30432817c614",
+          "slots": {
+            "4": "PRIZES"
+          }
+        },
+        "ja": {
+          "raw_sha256": "72e636408813b7811578dd2fe03fc3c99e8a1b43953dd7a97116e0a749388fca",
+          "slots": {
+            "4": "賞品"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "3cabe398d51399a831b1be71fb9bdb1bd334a9d74044bab623b8e865039b452d",
+          "slots": {
+            "4": "大奖"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "3cabe398d51399a831b1be71fb9bdb1bd334a9d74044bab623b8e865039b452d",
+          "slots": {
+            "4": "大奖"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "3cabe398d51399a831b1be71fb9bdb1bd334a9d74044bab623b8e865039b452d",
+          "slots": {
+            "4": "大奖"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "4",
+          "source": "gml_Object_obj_ch3_GSA01G_Step_0.gml:169",
+          "source_sha256": "2cc737571f6af880108d46c81a1e1fa4c78678949fdd0e258569d1d96828a275",
+          "sprite": "spr_funnytext_prizes",
+          "ja_sprite": "spr_ja_funnytext_prizes"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA01G_slash_Step_0_gml_444_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "af606175d2edcdad6c9cdc8b0dc38fb262732d782f49fc26ccf237417efe5a55",
+          "slots": {
+            "5": "GRAND PRIZE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "d83113088097b58d680acd6439134f30a4e95fd9f5ca1b40b93fd22cfe5e414e",
+          "slots": {
+            "5": "優勝賞品"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "817426713467486239b60a8d5aa574e9bc9cb3d07c11f9afdb660623950352de",
+          "slots": {
+            "5": "终极大奖"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "817426713467486239b60a8d5aa574e9bc9cb3d07c11f9afdb660623950352de",
+          "slots": {
+            "5": "终极大奖"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "817426713467486239b60a8d5aa574e9bc9cb3d07c11f9afdb660623950352de",
+          "slots": {
+            "5": "终极大奖"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "5",
+          "source": "gml_Object_obj_ch3_GSA01G_Step_0.gml:313",
+          "source_sha256": "2cc737571f6af880108d46c81a1e1fa4c78678949fdd0e258569d1d96828a275",
+          "sprite": "spr_funnytext_grand_prize",
+          "ja_sprite": "spr_ja_funnytext_grand_prize"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA01G_slash_Step_0_gml_486_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "0c2a555b0744423018a08cbecaa25b319b0cb37deb406dc69d602f726e90aa2b",
+          "slots": {
+            "5": "GRAND PRIZE"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "4c8920a0cb949f83aa59ac0d165bf14a8e0c89f8be5fc9dce69563ca4112eb9d",
+          "slots": {
+            "5": "终极大奖"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "4c8920a0cb949f83aa59ac0d165bf14a8e0c89f8be5fc9dce69563ca4112eb9d",
+          "slots": {
+            "5": "终极大奖"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "4c8920a0cb949f83aa59ac0d165bf14a8e0c89f8be5fc9dce69563ca4112eb9d",
+          "slots": {
+            "5": "终极大奖"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "5",
+          "source": "gml_Object_obj_ch3_GSA01G_Step_0.gml:313",
+          "source_sha256": "2cc737571f6af880108d46c81a1e1fa4c78678949fdd0e258569d1d96828a275",
+          "sprite": "spr_funnytext_grand_prize",
+          "ja_sprite": "spr_ja_funnytext_grand_prize"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA01G_slash_Step_0_gml_644_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "e61b79554b9efe8776af6498f556ef9750e051f803fcafe3a5b7d9763b6c61b4",
+          "slots": {
+            "7": "WIN!"
+          }
+        },
+        "ja": {
+          "raw_sha256": "e61b79554b9efe8776af6498f556ef9750e051f803fcafe3a5b7d9763b6c61b4",
+          "slots": {
+            "7": "優勝してね♡"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "e61b79554b9efe8776af6498f556ef9750e051f803fcafe3a5b7d9763b6c61b4",
+          "slots": {
+            "7": "赢！"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "e61b79554b9efe8776af6498f556ef9750e051f803fcafe3a5b7d9763b6c61b4",
+          "slots": {
+            "7": "赢！"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "e61b79554b9efe8776af6498f556ef9750e051f803fcafe3a5b7d9763b6c61b4",
+          "slots": {
+            "7": "赢！"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "7",
+          "source": "gml_Object_obj_ch3_GSA01G_Step_0.gml:432",
+          "source_sha256": "2cc737571f6af880108d46c81a1e1fa4c78678949fdd0e258569d1d96828a275",
+          "sprite": "spr_funnytext_win_big",
+          "ja_sprite": "spr_ja_funnytext_win_big"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA01G_slash_Step_0_gml_695_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "ee743c8d64da53aa08c7e21a2c14a288c0d584c441412edc3de44e4dc6da1109",
+          "slots": {
+            "8": "FUN-O-METER"
+          }
+        },
+        "ja": {
+          "raw_sha256": "0d45d38089871198e05a86a24600ae32c5746cdadd80a39facd63eaebf787ec0",
+          "slots": {
+            "8": "ハピハピメーター"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "f24bd59fb720a66f05276b0b934b9807788216fc1cef6372121aa9f0bb75c0d5",
+          "slots": {
+            "8": "乐度计"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "f24bd59fb720a66f05276b0b934b9807788216fc1cef6372121aa9f0bb75c0d5",
+          "slots": {
+            "8": "乐度计"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "f24bd59fb720a66f05276b0b934b9807788216fc1cef6372121aa9f0bb75c0d5",
+          "slots": {
+            "8": "乐度计"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "8",
+          "source": "gml_Object_obj_ch3_GSA01G_Step_0.gml:466",
+          "source_sha256": "2cc737571f6af880108d46c81a1e1fa4c78678949fdd0e258569d1d96828a275",
+          "sprite": "spr_funnytext_fun_o_meter",
+          "ja_sprite": "spr_ja_funnytext_fun_o_meter"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA01G_slash_Step_0_gml_983_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "2ce80966c40497d946d6003b84de47d10c551ad9a23a93a9f3e9460c267a561c",
+          "slots": {
+            "0": "(And get me a cup of coffee.)"
+          }
+        },
+        "ja": {
+          "raw_sha256": "07867aee40cc0a3576ab1842c83737b1f893b0793700216744a67a2152f92da1",
+          "slots": {
+            "0": "(ついでに　ワタシに　コーヒーも　いれてネ♡)"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "2ce80966c40497d946d6003b84de47d10c551ad9a23a93a9f3e9460c267a561c",
+          "slots": {
+            "0": "（另外帮我倒杯咖啡。）"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "2ce80966c40497d946d6003b84de47d10c551ad9a23a93a9f3e9460c267a561c",
+          "slots": {
+            "0": "（另外帮我倒杯咖啡。）"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "2ce80966c40497d946d6003b84de47d10c551ad9a23a93a9f3e9460c267a561c",
+          "slots": {
+            "0": "（另外帮我倒杯咖啡。）"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_GSA01G_Step_0.gml:698",
+          "source_sha256": "2cc737571f6af880108d46c81a1e1fa4c78678949fdd0e258569d1d96828a275",
+          "sprite": "spr_funnytext_coffee",
+          "ja_sprite": "spr_ja_funnytext_coffee"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA02_slash_Step_0_gml_96_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "9bde9fd1925d668c81d64dfaf21a71ea516c6be42da47bb8cb22672053c6af94",
+          "slots": {
+            "0": "STAR"
+          }
+        },
+        "ja": {
+          "raw_sha256": "317ccf88a0da4c7b344b3e0392cd1c9861c0c6fb6b9f260c05a5d1d78f4f4167",
+          "slots": {
+            "0": "主役"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "e3da0a7e714949fb005e9bcffd238d62eea946d28fbf5d5587f04e2fd68088ae",
+          "slots": {
+            "0": "明星"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "e3da0a7e714949fb005e9bcffd238d62eea946d28fbf5d5587f04e2fd68088ae",
+          "slots": {
+            "0": "明星"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "e3da0a7e714949fb005e9bcffd238d62eea946d28fbf5d5587f04e2fd68088ae",
+          "slots": {
+            "0": "明星"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_GSA02_Step_0.gml:64",
+          "source_sha256": "f3e1b438a2e96266b77dac2ffdff0d39be9871d2dfbfea9e26d08180316b93b4",
+          "sprite": "spr_funnytext_star",
+          "ja_sprite": "spr_ja_funnytext_stars"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA02_slash_Step_0_gml_152_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "5348a63ba1465d2ff8e35c175de25811d9918914e269b943ce4cf5ff327c8561",
+          "slots": {
+            "1": "NAMES"
+          }
+        },
+        "ja": {
+          "raw_sha256": "040d4ddf24b4f103637cf8b140bc9ea56c4d2a964619c1ed8a235bce6d67ceb3",
+          "slots": {
+            "1": "名前"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "cc664f118bc86de0844b71772a177142c6315f508075acc275d1344a6f22d5a2",
+          "slots": {
+            "1": "名字"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "cc664f118bc86de0844b71772a177142c6315f508075acc275d1344a6f22d5a2",
+          "slots": {
+            "1": "名字"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "cc664f118bc86de0844b71772a177142c6315f508075acc275d1344a6f22d5a2",
+          "slots": {
+            "1": "名字"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_ch3_GSA02_Step_0.gml:107",
+          "source_sha256": "f3e1b438a2e96266b77dac2ffdff0d39be9871d2dfbfea9e26d08180316b93b4",
+          "sprite": "spr_funnytext_names",
+          "ja_sprite": "spr_ja_funnytext_names"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA02_slash_Step_0_gml_227_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "a15cee2b1d44a8df93942dbf30a2e76c65afac1996a485c8669c99fdd4a16201",
+          "slots": {
+            "1": "NAMES"
+          }
+        },
+        "ja": {
+          "raw_sha256": "0905811e91027ed8d7cb8787fdfb1ef9eaba7556e129b91902cc3a6538785ff7",
+          "slots": {
+            "1": "名前"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "f67fda6466f402067b0a8b721cdccdbcd7861da6779ee818ba2279a22636ef65",
+          "slots": {
+            "1": "名字"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "f67fda6466f402067b0a8b721cdccdbcd7861da6779ee818ba2279a22636ef65",
+          "slots": {
+            "1": "名字"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "f67fda6466f402067b0a8b721cdccdbcd7861da6779ee818ba2279a22636ef65",
+          "slots": {
+            "1": "名字"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_ch3_GSA02_Step_0.gml:107",
+          "source_sha256": "f3e1b438a2e96266b77dac2ffdff0d39be9871d2dfbfea9e26d08180316b93b4",
+          "sprite": "spr_funnytext_names",
+          "ja_sprite": "spr_ja_funnytext_names"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA02_slash_Step_0_gml_675_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "46ec5975053d76ef18a46a6cb837c66cd5795fd6fe4de3e74ed43ac77ce6a8fd",
+          "slots": {
+            "2": "BOARD"
+          }
+        },
+        "ja": {
+          "raw_sha256": "6b6cee7be6300920a6894b8cf72cada933feb0127baf5277d27f61df1a21cf31",
+          "slots": {
+            "2": "PARK"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "25e8449afddffa2c5901837fc619f5f92b94a6fca8a0ab80b834488b432da6ad",
+          "slots": {
+            "2": "图版"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "1a068cf1560549d5d9847abba5f514d0c2a953cc2389ebb17b0ee2b1f09cffda",
+          "slots": {
+            "2": "图版"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "25e8449afddffa2c5901837fc619f5f92b94a6fca8a0ab80b834488b432da6ad",
+          "slots": {
+            "2": "图版"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "2",
+          "source": "gml_Object_obj_ch3_GSA02_Step_0.gml:525",
+          "source_sha256": "f3e1b438a2e96266b77dac2ffdff0d39be9871d2dfbfea9e26d08180316b93b4",
+          "sprite": "spr_funnytext_board",
+          "ja_sprite": "spr_ja_funnytext_board"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA02_slash_Step_0_gml_706_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "c9ab8dc17e5d84174cfe3a81a68e1b6fc8f7a57fbfa229a66c713f0d3fdc8257",
+          "slots": {
+            "4": "QUIZZES"
+          }
+        },
+        "ja": {
+          "raw_sha256": "307d105aff4ee4081376b64399b5d0105cb35d02824726a52496414c6dca9a67",
+          "slots": {
+            "4": "クイズ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "d8855c5ebd3a5b6c7fbdfb1a2bb49a6c3fc9b1e44665626c8452cb4d2d0a0575",
+          "slots": {
+            "4": "趣味问答"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "d8855c5ebd3a5b6c7fbdfb1a2bb49a6c3fc9b1e44665626c8452cb4d2d0a0575",
+          "slots": {
+            "4": "趣味问答"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "d8855c5ebd3a5b6c7fbdfb1a2bb49a6c3fc9b1e44665626c8452cb4d2d0a0575",
+          "slots": {
+            "4": "趣味问答"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "4",
+          "source": "gml_Object_obj_ch3_GSA02_Step_0.gml:538",
+          "source_sha256": "f3e1b438a2e96266b77dac2ffdff0d39be9871d2dfbfea9e26d08180316b93b4",
+          "sprite": "spr_funnytext_quizzes",
+          "ja_sprite": "spr_ja_funnytext_quizzes"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA02_slash_Step_0_gml_707_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "faaa7c73cfd424d24fdca5552c8fe534ac90da92691c77c3d38bf872c142ec67",
+          "slots": {
+            "3": "LOVE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "7e59199076821203a10070c3baaf3251bf502b2bc984493ae23e2428024b3bff",
+          "slots": {
+            "3": "愛"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "a1f439094caa6646900aa66d002165645a18ca32ed433fe5bf03a6d47e4e939f",
+          "slots": {
+            "3": "爱"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "a1f439094caa6646900aa66d002165645a18ca32ed433fe5bf03a6d47e4e939f",
+          "slots": {
+            "3": "爱"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "a1f439094caa6646900aa66d002165645a18ca32ed433fe5bf03a6d47e4e939f",
+          "slots": {
+            "3": "爱"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "3",
+          "source": "gml_Object_obj_ch3_GSA02_Step_0.gml:537",
+          "source_sha256": "f3e1b438a2e96266b77dac2ffdff0d39be9871d2dfbfea9e26d08180316b93b4",
+          "sprite": "spr_funnytext_love",
+          "ja_sprite": "spr_ja_funnytext_love"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA04_slash_Step_0_gml_148_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "49db0735c40a21dfbc28dfec6bd1cd4473168e17acfcfe7cd6baca0ecebf0b7e",
+          "slots": {
+            "0": "PHYSICAL CHALLENGE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "537cce94a6296b656db6a973b4b8092a22ced4d9fddf1a01bdf7fbf2d489aff4",
+          "slots": {
+            "0": "リアル チャレンジ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "61f5fd3f3e8e2f0ae4975d087edb565ec9891c0c4cc52eee7aff9c1384902983",
+          "slots": {
+            "0": "体能大挑战"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "61f5fd3f3e8e2f0ae4975d087edb565ec9891c0c4cc52eee7aff9c1384902983",
+          "slots": {
+            "0": "体能大挑战"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "61f5fd3f3e8e2f0ae4975d087edb565ec9891c0c4cc52eee7aff9c1384902983",
+          "slots": {
+            "0": "体能大挑战"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_GSA04_Step_0.gml:86",
+          "source_sha256": "41debd8f26877b58827887ad72b0d6f68a28371554e616db701c87aa7c12fd08",
+          "sprite": "spr_funnytext_physical_challenge",
+          "ja_sprite": "spr_ja_funnytext_physical_challenge"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA04_slash_Step_0_gml_230_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "5a9386b1e9245b156af88047eb9ebbd9d1c6b2beec93dd39f7ac9ac4dff4f46e",
+          "slots": {
+            "1": "LOVE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "aa1aadadb7033176d6b4037b2888d61d72f51a5698ae9d1361aa30919e9af28d",
+          "slots": {
+            "1": "大スキ♡"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "956c4a4c42ad423fa6b654cf5d4350b9101ade9093750dbe3e73f3ab7c3c5859",
+          "slots": {
+            "1": "爱"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "64f0ce9e55f4e271b111bc53f818f413130aec7cbf2f6ba555ba4163f03dfcfa",
+          "slots": {
+            "1": "爱"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "956c4a4c42ad423fa6b654cf5d4350b9101ade9093750dbe3e73f3ab7c3c5859",
+          "slots": {
+            "1": "爱"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_ch3_GSA04_Step_0.gml:137",
+          "source_sha256": "41debd8f26877b58827887ad72b0d6f68a28371554e616db701c87aa7c12fd08",
+          "sprite": "spr_funnytext_love",
+          "ja_sprite": "spr_ja_funnytext_daisuki"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA04_slash_Step_0_gml_261_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "a2df7453ae40ceac9c99f1bc9b36b8d7c8a6dca758163b6400bb9c63402c18b6",
+          "slots": {
+            "2": "BROTHER"
+          }
+        },
+        "ja": {
+          "raw_sha256": "ba2d8ba695aa3fd0bc118c732c0c778d927b7d4554875ba8902e444e32051b3e",
+          "slots": {
+            "2": "お兄ちゃん"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "4d0a4c1afaa9fa10329b8f8f2c75126b56710d97e5cd1deee69935dab1e476e5",
+          "slots": {
+            "2": "哥哥"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "4d0a4c1afaa9fa10329b8f8f2c75126b56710d97e5cd1deee69935dab1e476e5",
+          "slots": {
+            "2": "哥哥"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "4d0a4c1afaa9fa10329b8f8f2c75126b56710d97e5cd1deee69935dab1e476e5",
+          "slots": {
+            "2": "哥哥"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "2",
+          "source": "gml_Object_obj_ch3_GSA04_Step_0.gml:161",
+          "source_sha256": "41debd8f26877b58827887ad72b0d6f68a28371554e616db701c87aa7c12fd08",
+          "sprite": "spr_funnytext_brother",
+          "ja_sprite": "spr_ja_funnytext_brother"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA04_slash_Step_0_gml_293_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "dda9bf80bdf94b87ccf7f504f5519ee2c2bca98ce12c5ff647e41e30fcc39148",
+          "slots": {
+            "3": "FUN"
+          }
+        },
+        "ja": {
+          "raw_sha256": "b69a7329f2bdbe3e58f93bf14f885aa408d2dc67fc546ffca3478389155eb957",
+          "slots": {
+            "3": "AHAHAHA!"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "4048211263cb3121c476aaae1659d7ee4c075860c601807c3171a0e0bc0cdb45",
+          "slots": {
+            "3": "欢乐"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "4048211263cb3121c476aaae1659d7ee4c075860c601807c3171a0e0bc0cdb45",
+          "slots": {
+            "3": "欢乐"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "4048211263cb3121c476aaae1659d7ee4c075860c601807c3171a0e0bc0cdb45",
+          "slots": {
+            "3": "欢乐"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "3",
+          "source": "gml_Object_obj_ch3_GSA04_Step_0.gml:183",
+          "source_sha256": "41debd8f26877b58827887ad72b0d6f68a28371554e616db701c87aa7c12fd08",
+          "sprite": "spr_funnytext_fun_loop",
+          "ja_sprite": "spr_ja_funnytext_fun_loop"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA04_slash_Step_0_gml_374_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "13c9e63b3dfd720b65400459a44a3e746b7953c802d6b9556ef246ee42c0a8b3",
+          "slots": {
+            "0": "CHALLENGE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "24ee32ffceb61c9571306856558334380d14bc9c43abca454bbb63260a83680d",
+          "slots": {
+            "0": "チャレンジ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "cb85bd8db0095e8e0fd5da31255d42c971f5ede9820ee0b6ea8dc8e00cb5cc06",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "cb85bd8db0095e8e0fd5da31255d42c971f5ede9820ee0b6ea8dc8e00cb5cc06",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "cb85bd8db0095e8e0fd5da31255d42c971f5ede9820ee0b6ea8dc8e00cb5cc06",
+          "slots": {
+            "0": "大挑战"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_GSA04_Step_0.gml:215",
+          "source_sha256": "41debd8f26877b58827887ad72b0d6f68a28371554e616db701c87aa7c12fd08",
+          "sprite": "spr_funnytext_challenge",
+          "ja_sprite": "spr_ja_funnytext_challenge"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA04_slash_Step_0_gml_377_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "00dc5306c62720c7aaf496b412d751d08afd503968dafe8086c2d630b400640d",
+          "slots": {
+            "1": "BiG"
+          }
+        },
+        "ja": {
+          "raw_sha256": "52a21e237cd5f562cfe8f922e6c54fbdaa44a91adb43d6c5932c2b81207a9002",
+          "slots": {
+            "1": "BiG"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "cd38a79039c5968cc43ed8819009c633adebcb1f412de9fd7a5bd64fdd747ba8",
+          "slots": {
+            "1": "大"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "cd38a79039c5968cc43ed8819009c633adebcb1f412de9fd7a5bd64fdd747ba8",
+          "slots": {
+            "1": "大"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "cd38a79039c5968cc43ed8819009c633adebcb1f412de9fd7a5bd64fdd747ba8",
+          "slots": {
+            "1": "大"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_ch3_GSA04_Step_0.gml:216",
+          "source_sha256": "41debd8f26877b58827887ad72b0d6f68a28371554e616db701c87aa7c12fd08",
+          "sprite": "spr_funnytext_big",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA04_slash_Step_0_gml_380_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "1c1dcc08ac08c578a552c2465e6ff611a80b56b89cde19128f6c0ced56cee38f",
+          "slots": {
+            "1": "BiG"
+          }
+        },
+        "ja": {
+          "raw_sha256": "93825374ca901f84775bbf6440b7a87da0cb2ad0c0fd0e1f321b272d225923e5",
+          "slots": {
+            "1": "BiG"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "0a317feb1415df948a104b09f25a1821f271cabdf2d9d1e3c49811f3499d9629",
+          "slots": {
+            "1": "大"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "0a317feb1415df948a104b09f25a1821f271cabdf2d9d1e3c49811f3499d9629",
+          "slots": {
+            "1": "大"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "0a317feb1415df948a104b09f25a1821f271cabdf2d9d1e3c49811f3499d9629",
+          "slots": {
+            "1": "大"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_ch3_GSA04_Step_0.gml:216",
+          "source_sha256": "41debd8f26877b58827887ad72b0d6f68a28371554e616db701c87aa7c12fd08",
+          "sprite": "spr_funnytext_big",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA04_slash_Step_0_gml_381_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "d78e116708ec828edb4248dc9f4b747c30de49c160614f63c1fbc4a6bed7ab4c",
+          "slots": {
+            "2": "WIN!"
+          }
+        },
+        "ja": {
+          "raw_sha256": "828ae55e83963ea42361fc6508be70175db4a64ed6686424817c027f53836ceb",
+          "slots": {
+            "2": "CLEAR!"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "cafa7f62c05117e86ab5cf6a4b469977d206fedf6f7679fdfa04ecb0203a9d93",
+          "slots": {
+            "2": "赢！"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "cafa7f62c05117e86ab5cf6a4b469977d206fedf6f7679fdfa04ecb0203a9d93",
+          "slots": {
+            "2": "赢！"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "cafa7f62c05117e86ab5cf6a4b469977d206fedf6f7679fdfa04ecb0203a9d93",
+          "slots": {
+            "2": "赢！"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "2",
+          "source": "gml_Object_obj_ch3_GSA04_Step_0.gml:217",
+          "source_sha256": "41debd8f26877b58827887ad72b0d6f68a28371554e616db701c87aa7c12fd08",
+          "sprite": "spr_funnytext_win",
+          "ja_sprite": "spr_ja_funnytext_win"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA06_slash_Step_0_gml_200_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "f561af8f0a86cb6351e1953bcccc325e96744ce986e9f1ca2e08317c9376ffb8",
+          "slots": {
+            "0": "STOP"
+          }
+        },
+        "ja": {
+          "raw_sha256": "8fa0eaa2a1bef6827dbdf089ebf99927adf15031f79507b025668e354161ded0",
+          "slots": {
+            "0": "STOP"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "633edaab1b0d44b3c898ca0af8d68afa5a447a7099b2553cf3c3dcf0d61bde8a",
+          "slots": {
+            "0": "停"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "633edaab1b0d44b3c898ca0af8d68afa5a447a7099b2553cf3c3dcf0d61bde8a",
+          "slots": {
+            "0": "停"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "633edaab1b0d44b3c898ca0af8d68afa5a447a7099b2553cf3c3dcf0d61bde8a",
+          "slots": {
+            "0": "停"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_GSA06_Step_0.gml:126",
+          "source_sha256": "2a4093141ad1d9d49e63105381bafde0b37525451a6436a7b7ecef15203f2f8d",
+          "sprite": "spr_funnytext_stop",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA06_slash_Step_0_gml_245_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "24a7ed4af1310b82dde103fca16e817e9dadf067d1fde29b3ffc80b78fcf1ec4",
+          "slots": {
+            "1": "FUN-O-METER"
+          }
+        },
+        "ja": {
+          "raw_sha256": "374e3d4619e3e650c6680a0012ddd68e2eeabc7da056019468ac26e5f807a5c9",
+          "slots": {
+            "1": "ハピハピメーター"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "8cf3152d722e9d30148be5ba5dd6fe5d44a4c9f17836ce2abec57bab38fcd8b1",
+          "slots": {
+            "1": "乐度计"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "8cf3152d722e9d30148be5ba5dd6fe5d44a4c9f17836ce2abec57bab38fcd8b1",
+          "slots": {
+            "1": "乐度计"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "8cf3152d722e9d30148be5ba5dd6fe5d44a4c9f17836ce2abec57bab38fcd8b1",
+          "slots": {
+            "1": "乐度计"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_ch3_GSA06_Step_0.gml:157",
+          "source_sha256": "2a4093141ad1d9d49e63105381bafde0b37525451a6436a7b7ecef15203f2f8d",
+          "sprite": "spr_funnytext_fun_o_meter",
+          "ja_sprite": "spr_ja_funnytext_fun_o_meter"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA06_slash_Step_0_gml_283_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "a4856383b03a259bb01225ea65f6d23770da020d4076242cb6a289c103f5123e",
+          "slots": {
+            "2": "ROUND 1!"
+          }
+        },
+        "ja": {
+          "raw_sha256": "15e29548ccd87527409d9094fe15f6adcfc565f79031c1618c299eee1d9d901b",
+          "slots": {
+            "2": "ROUND 1!"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "86a14ea821702484c7b02f7564ad9cac6c0765d6aa5c54d6b22c1764f08a01d5",
+          "slots": {
+            "2": "回合1！"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "86a14ea821702484c7b02f7564ad9cac6c0765d6aa5c54d6b22c1764f08a01d5",
+          "slots": {
+            "2": "回合1！"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "86a14ea821702484c7b02f7564ad9cac6c0765d6aa5c54d6b22c1764f08a01d5",
+          "slots": {
+            "2": "回合1！"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "2",
+          "source": "gml_Object_obj_ch3_GSA06_Step_0.gml:192",
+          "source_sha256": "2a4093141ad1d9d49e63105381bafde0b37525451a6436a7b7ecef15203f2f8d",
+          "sprite": "spr_funnytext_round_1",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA06_slash_Step_0_gml_299_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "8061e218c7ddd9e4794672f4eee39aeef3cacd63d7b1875032e039b2cacf0561",
+          "slots": {
+            "3": "ROUNDS"
+          }
+        },
+        "ja": {
+          "raw_sha256": "86b348e2758db3471297396210cbfcb46e86848425e8c4cb012d3368268ecd82",
+          "slots": {
+            "3": "ROUND"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "c282a39cdc265e88590b9bf4e114f39f820ca0b5ab9410a82fa3981bb0b89df2",
+          "slots": {
+            "3": "回合"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "c282a39cdc265e88590b9bf4e114f39f820ca0b5ab9410a82fa3981bb0b89df2",
+          "slots": {
+            "3": "回合"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "c282a39cdc265e88590b9bf4e114f39f820ca0b5ab9410a82fa3981bb0b89df2",
+          "slots": {
+            "3": "回合"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "3",
+          "source": "gml_Object_obj_ch3_GSA06_Step_0.gml:210",
+          "source_sha256": "2a4093141ad1d9d49e63105381bafde0b37525451a6436a7b7ecef15203f2f8d",
+          "sprite": "spr_funnytext_rounds",
+          "ja_sprite": "spr_funnytext_round"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA06_slash_Step_0_gml_300_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "d14b888b9477a577acaccbb0b25d41f37d740447349b8924feefbb49a8903c4a",
+          "slots": {
+            "4": "ROUND"
+          }
+        },
+        "ja": {
+          "raw_sha256": "b02640f09e8aa6e4a3555dafb425d4760000430cd358169b33b4d72f0943c1a7",
+          "slots": {
+            "4": "ROUND"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "58bdb33e5c01ca7efaf0ba6be50d689fdfe85bd4aec270602b3f9d2cbc336792",
+          "slots": {
+            "4": "回合"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "58bdb33e5c01ca7efaf0ba6be50d689fdfe85bd4aec270602b3f9d2cbc336792",
+          "slots": {
+            "4": "回合"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "58bdb33e5c01ca7efaf0ba6be50d689fdfe85bd4aec270602b3f9d2cbc336792",
+          "slots": {
+            "4": "回合"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "4",
+          "source": "gml_Object_obj_ch3_GSA06_Step_0.gml:211",
+          "source_sha256": "2a4093141ad1d9d49e63105381bafde0b37525451a6436a7b7ecef15203f2f8d",
+          "sprite": "spr_funnytext_round",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA06_slash_Step_0_gml_314_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "31b2c9f3591f463a04361ae89f52e26c3d7b32850b696d28936f691ab149f14f",
+          "slots": {
+            "5": "(And trust me. I know TV.)"
+          }
+        },
+        "ja": {
+          "raw_sha256": "a2faab9596ef13ff0c04dab64cdcc0fc161f61ec12331bc9c0fd9dbe8d0e1852",
+          "slots": {
+            "5": "(テレビ本人が言うんですから　まちがいない！)"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "31b2c9f3591f463a04361ae89f52e26c3d7b32850b696d28936f691ab149f14f",
+          "slots": {
+            "5": "（相信我。我懂电视。）"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "31b2c9f3591f463a04361ae89f52e26c3d7b32850b696d28936f691ab149f14f",
+          "slots": {
+            "5": "（相信我。我懂电视。）"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "31b2c9f3591f463a04361ae89f52e26c3d7b32850b696d28936f691ab149f14f",
+          "slots": {
+            "5": "（相信我。我懂电视。）"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "5",
+          "source": "gml_Object_obj_ch3_GSA06_Step_0.gml:219",
+          "source_sha256": "2a4093141ad1d9d49e63105381bafde0b37525451a6436a7b7ecef15203f2f8d",
+          "sprite": "spr_funnytext_know_tv",
+          "ja_sprite": "spr_ja_funnytext_know_tv"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSA06_slash_Step_0_gml_359_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "8b36f3f8f36e337fbe9363c9b3f4d4b190e27353f9ad528bf05e70bdd3845aea",
+          "slots": {
+            "6": "WORD"
+          }
+        },
+        "ja": {
+          "raw_sha256": "29783c0271a70286839cef977d46809364870818cac0673f630c356df589a1d7",
+          "slots": {
+            "6": "ご覧のスポンサー"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "09ff54d1a6e0a9d4faf052e06f7801926e5aeaeec34bb59bcd8693e03b68a8bc",
+          "slots": {
+            "6": "两句"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "09ff54d1a6e0a9d4faf052e06f7801926e5aeaeec34bb59bcd8693e03b68a8bc",
+          "slots": {
+            "6": "两句"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "09ff54d1a6e0a9d4faf052e06f7801926e5aeaeec34bb59bcd8693e03b68a8bc",
+          "slots": {
+            "6": "两句"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "6",
+          "source": "gml_Object_obj_ch3_GSA06_Step_0.gml:253",
+          "source_sha256": "2a4093141ad1d9d49e63105381bafde0b37525451a6436a7b7ecef15203f2f8d",
+          "sprite": "spr_funnytext_word",
+          "ja_sprite": "spr_ja_funnytext_word"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSB01_slash_Step_0_gml_58_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "d19383b8cf1e87d84e3fd22fc3eacd950210254e5803c521de1c61d06c1af9ef",
+          "slots": {
+            "0": "TV TiME!"
+          }
+        },
+        "ja": {
+          "raw_sha256": "7a92561fee73afdf552b52abb991d7c5435d1162ae59dbff8c740bd8c6b50fd2",
+          "slots": {
+            "0": "TV TiME!"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "a3e762392d49bb6b9a768b5b01a8dff3b8ebc13e25c7476b4e812e88b1be5767",
+          "slots": {
+            "0": "TV时间！"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "a3e762392d49bb6b9a768b5b01a8dff3b8ebc13e25c7476b4e812e88b1be5767",
+          "slots": {
+            "0": "TV时间！"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "a3e762392d49bb6b9a768b5b01a8dff3b8ebc13e25c7476b4e812e88b1be5767",
+          "slots": {
+            "0": "TV时间！"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_GSB01_Step_0.gml:32",
+          "source_sha256": "07c0fa4a5b287d99bdb707f8ac7d987614628cb02468902e48df08082f9cdd09",
+          "sprite": "spr_funnytext_tv_time",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSB01_slash_Step_0_gml_100_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "c7a93c51687ee5b148d29ed82c757c2ae4ec50a23719a3d464466c5ca626bb06",
+          "slots": {
+            "1": "DARK FOUNTAIN"
+          }
+        },
+        "ja": {
+          "raw_sha256": "985c52e5db55655af0b78ac2a0e89e37bd130e5fbba1f76ec382feb68e918334",
+          "slots": {
+            "1": "闇の泉"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "a1717546d387bb144d2462125cd4cf22cd595e67bb75062dbcd71feb57ffd4b0",
+          "slots": {
+            "1": "黑暗喷泉"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "a1717546d387bb144d2462125cd4cf22cd595e67bb75062dbcd71feb57ffd4b0",
+          "slots": {
+            "1": "黑暗喷泉"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "a1717546d387bb144d2462125cd4cf22cd595e67bb75062dbcd71feb57ffd4b0",
+          "slots": {
+            "1": "黑暗喷泉"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_ch3_GSB01_Step_0.gml:58",
+          "source_sha256": "07c0fa4a5b287d99bdb707f8ac7d987614628cb02468902e48df08082f9cdd09",
+          "sprite": "spr_funnytext_dark_fountain",
+          "ja_sprite": "spr_ja_funnytext_dark_fountain"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSB01_slash_Step_0_gml_113_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "0ae8018014929d5dfdd13df8fa1d04298194afac0ea6fdeb0dc605796c5f3ab0",
+          "slots": {
+            "2": "BOARD"
+          }
+        },
+        "ja": {
+          "raw_sha256": "9598c9d9d62526598283a8637f79cc0806a58017d0fb17d353ad4c6b6a9d303b",
+          "slots": {
+            "2": "PARK"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "815aca0e59c6a32802bcd8600fc6749f2cd0d3f27c855326cb083d62862f359b",
+          "slots": {
+            "2": "图版"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "dd2b87bab981ff420ee0337708c639e2685ca4817a7784ab33f85d7da0e075e3",
+          "slots": {
+            "2": "图版"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "815aca0e59c6a32802bcd8600fc6749f2cd0d3f27c855326cb083d62862f359b",
+          "slots": {
+            "2": "图版"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "2",
+          "source": "gml_Object_obj_ch3_GSB01_Step_0.gml:64",
+          "source_sha256": "07c0fa4a5b287d99bdb707f8ac7d987614628cb02468902e48df08082f9cdd09",
+          "sprite": "spr_funnytext_board",
+          "ja_sprite": "spr_ja_funnytext_board"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSB01_slash_Step_0_gml_154_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "7e1d692d8b16504e7ec90b70ce867236f95a9bbc880a1d61bf4af1f4c901a776",
+          "slots": {
+            "3": "(Though I would look good with a tan.)"
+          }
+        },
+        "ja": {
+          "raw_sha256": "7d69727733d9a458518faa51aa9e79863371a5696aeb97642502d04315355b49",
+          "slots": {
+            "3": "(日焼けしたら　さぞ　モテモテでSHOWけど！)"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "7e1d692d8b16504e7ec90b70ce867236f95a9bbc880a1d61bf4af1f4c901a776",
+          "slots": {
+            "3": "（虽然我晒黑会挺好看的。）"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "7e1d692d8b16504e7ec90b70ce867236f95a9bbc880a1d61bf4af1f4c901a776",
+          "slots": {
+            "3": "（虽然我晒黑会挺好看的。）"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "7e1d692d8b16504e7ec90b70ce867236f95a9bbc880a1d61bf4af1f4c901a776",
+          "slots": {
+            "3": "（虽然我晒黑会挺好看的。）"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "3",
+          "source": "gml_Object_obj_ch3_GSB01_Step_0.gml:90",
+          "source_sha256": "07c0fa4a5b287d99bdb707f8ac7d987614628cb02468902e48df08082f9cdd09",
+          "sprite": "spr_funnytext_tan",
+          "ja_sprite": "spr_ja_funnytext_tan"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSB01_slash_Step_0_gml_191_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "378cd9064d08eea38eab561dc55807b9aec68a6978b217a043dd47db245d1205",
+          "slots": {
+            "4": "LOVERS"
+          }
+        },
+        "ja": {
+          "raw_sha256": "fef259fb21fab11a72cc92e17ae525ef47e68f687e4d8b8b249d824c2c0d15ff",
+          "slots": {
+            "4": "恋人たち"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "dd2408d14e9d1d086f6b90f4d5a26ef228f01e5d701810ac4d565bb153a52bf0",
+          "slots": {
+            "4": "爱人"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "dd2408d14e9d1d086f6b90f4d5a26ef228f01e5d701810ac4d565bb153a52bf0",
+          "slots": {
+            "4": "爱人"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "dd2408d14e9d1d086f6b90f4d5a26ef228f01e5d701810ac4d565bb153a52bf0",
+          "slots": {
+            "4": "爱人"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "4",
+          "source": "gml_Object_obj_ch3_GSB01_Step_0.gml:122",
+          "source_sha256": "07c0fa4a5b287d99bdb707f8ac7d987614628cb02468902e48df08082f9cdd09",
+          "sprite": "spr_funnytext_lovers",
+          "ja_sprite": "spr_ja_funnytext_lovers"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSB01_slash_Step_0_gml_197_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "318eadb65aed1b0231086f3fb724eb437305ddb97ccd69ecc4f56776b5f7f58c",
+          "slots": {
+            "5": "(Well, okay, you can touch it. Just be gentle.)"
+          }
+        },
+        "ja": {
+          "raw_sha256": "a5c17a32505b146e9db3f7c5dd143584fcd595eb61c597392599e2d909e5f5e8",
+          "slots": {
+            "5": "(だって　チャンネルちゃんは　そのままで十分　魅力的♡)"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "318eadb65aed1b0231086f3fb724eb437305ddb97ccd69ecc4f56776b5f7f58c",
+          "slots": {
+            "5": "（嗯，你可以碰它。只需要温柔一些。）"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "318eadb65aed1b0231086f3fb724eb437305ddb97ccd69ecc4f56776b5f7f58c",
+          "slots": {
+            "5": "（嗯，你可以碰它。只需要温柔一些。）"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "318eadb65aed1b0231086f3fb724eb437305ddb97ccd69ecc4f56776b5f7f58c",
+          "slots": {
+            "5": "（嗯，你可以碰它。只需要温柔一些。）"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "5",
+          "source": "gml_Object_obj_ch3_GSB01_Step_0.gml:128",
+          "source_sha256": "07c0fa4a5b287d99bdb707f8ac7d987614628cb02468902e48df08082f9cdd09",
+          "sprite": "spr_funnytext_gentle",
+          "ja_sprite": "spr_ja_funnytext_gentle"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSB02_slash_Step_0_gml_221_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "cd9871f40b735930088ba67638a008ada2f6053b8343e529f50a5b83ee176b46",
+          "slots": {
+            "0": "ROCK CONCERT"
+          }
+        },
+        "ja": {
+          "raw_sha256": "12034e578e92e75686c3effbce682a0e367e0d122babe0e7bb82489700ae301c",
+          "slots": {
+            "0": "ROCK ★ LIVE"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "4b25825c92115be8d1eb1f33efd0058cbc255cb1695c8abfa0392c7c8b1fb5e8",
+          "slots": {
+            "0": "摇滚音乐会"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "4b25825c92115be8d1eb1f33efd0058cbc255cb1695c8abfa0392c7c8b1fb5e8",
+          "slots": {
+            "0": "摇滚音乐会"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "4b25825c92115be8d1eb1f33efd0058cbc255cb1695c8abfa0392c7c8b1fb5e8",
+          "slots": {
+            "0": "摇滚音乐会"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_GSB02_Step_0.gml:269",
+          "source_sha256": "b04d54da502ff02fe467250e586639d781bdf49438dba432805303dda4c0e1f6",
+          "sprite": "spr_funnytext_rock_concert",
+          "ja_sprite": "spr_ja_funnytext_rock_concert"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSB02_slash_Step_0_gml_267_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "259e1047ebd658246f6c781c587fdb9f50c9377634b76bb05998e3b8f751d672",
+          "slots": {
+            "1": "(Guess your mother's never been a fan of alligators in bikinis.)"
+          }
+        },
+        "ja": {
+          "raw_sha256": "9ee79fae354de9fd61f73417baffc80b590f154999f20eb0ede01bd80a5d9e7f",
+          "slots": {
+            "1": "(トリエルママは　ビキニのワニが　おキライだったのかな！？)"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "259e1047ebd658246f6c781c587fdb9f50c9377634b76bb05998e3b8f751d672",
+          "slots": {
+            "1": "（看来你妈妈一直都不喜欢穿比基尼泳装的鳄鱼。）"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "259e1047ebd658246f6c781c587fdb9f50c9377634b76bb05998e3b8f751d672",
+          "slots": {
+            "1": "（看来你妈妈一直都不喜欢穿比基尼泳装的鳄鱼。）"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "259e1047ebd658246f6c781c587fdb9f50c9377634b76bb05998e3b8f751d672",
+          "slots": {
+            "1": "（看来你妈妈一直都不喜欢穿比基尼泳装的鳄鱼。）"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_ch3_GSB02_Step_0.gml:314",
+          "source_sha256": "b04d54da502ff02fe467250e586639d781bdf49438dba432805303dda4c0e1f6",
+          "sprite": "spr_funnytext_alligator",
+          "ja_sprite": "spr_ja_funnytext_alligator"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSB03_slash_Step_0_gml_132_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "8afb9869d8a5e6296963d7bf761235cfb8847594ea9da12b5109819f561da67a",
+          "slots": {
+            "0": "BOARD"
+          }
+        },
+        "ja": {
+          "raw_sha256": "ba668a4cbf340d63c937c719feb00129b73cc262050758708eebd858b4924301",
+          "slots": {
+            "0": "PARK"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "b9c0619676193d82493a47568241b7b973078289f11d9544c4fe14c86f3b4d1e",
+          "slots": {
+            "0": "图版"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "b9c0619676193d82493a47568241b7b973078289f11d9544c4fe14c86f3b4d1e",
+          "slots": {
+            "0": "图版"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "b9c0619676193d82493a47568241b7b973078289f11d9544c4fe14c86f3b4d1e",
+          "slots": {
+            "0": "图版"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_GSB03_Step_0.gml:92",
+          "source_sha256": "42964818d3f7e3842921906d6d7d679988e58ddfbbccbf6d67af70255a07e0c6",
+          "sprite": "spr_funnytext_board",
+          "ja_sprite": "spr_ja_funnytext_board"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSB03_slash_Step_0_gml_215_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "fd4e602be49d3d8a6214410ddfcab491a12e034b16e431a73f22969f7bbe37b3",
+          "slots": {
+            "1": "BREAKING NEWS"
+          }
+        },
+        "ja": {
+          "raw_sha256": "ac188f3422bfa1def8702107f4714c03a518cef506462f387040b85c40168b47",
+          "slots": {
+            "1": "BREAKING NEWS"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "a65d0f7c4730bd8cb894412b5be04469199034b22ad5780f7638fe3ff90482e1",
+          "slots": {
+            "1": "重大突发新闻"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "a65d0f7c4730bd8cb894412b5be04469199034b22ad5780f7638fe3ff90482e1",
+          "slots": {
+            "1": "重大突发新闻"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "a65d0f7c4730bd8cb894412b5be04469199034b22ad5780f7638fe3ff90482e1",
+          "slots": {
+            "1": "重大突发新闻"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_ch3_GSB03_Step_0.gml:148",
+          "source_sha256": "42964818d3f7e3842921906d6d7d679988e58ddfbbccbf6d67af70255a07e0c6",
+          "sprite": "spr_funnytext_breaking_news",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSB03_slash_Step_0_gml_271_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "9d83d035756cb486e0a0e63e5bf33cbc6164fe70bec63fe7c22cf0370ad2bfcc",
+          "slots": {
+            "2": "FUN-O-METER"
+          }
+        },
+        "ja": {
+          "raw_sha256": "b341e7b70d93e517fd6ee64ac02a88f712287013fe3f8cf0d98f924f0bcc824f",
+          "slots": {
+            "2": "ハピハピメーター"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "95426c94d041b3f64a90dd9b4bb2b97602c34f84fcdf8debe6ed1a031ebf19a1",
+          "slots": {
+            "2": "乐度计"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "95426c94d041b3f64a90dd9b4bb2b97602c34f84fcdf8debe6ed1a031ebf19a1",
+          "slots": {
+            "2": "乐度计"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "95426c94d041b3f64a90dd9b4bb2b97602c34f84fcdf8debe6ed1a031ebf19a1",
+          "slots": {
+            "2": "乐度计"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "2",
+          "source": "gml_Object_obj_ch3_GSB03_Step_0.gml:178",
+          "source_sha256": "42964818d3f7e3842921906d6d7d679988e58ddfbbccbf6d67af70255a07e0c6",
+          "sprite": "spr_funnytext_fun_o_meter",
+          "ja_sprite": "spr_ja_funnytext_fun_o_meter"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSB03_slash_Step_0_gml_279_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "36d71ca074ffee9b3765d53d0cb7e36f99ba0ea63286a24907a34a481dd038e0",
+          "slots": {
+            "3": "BONUS ROUND"
+          }
+        },
+        "ja": {
+          "raw_sha256": "99ce5bc46173562266f743ad86cd26c8ae66a6830072ce62a48b034935c60499",
+          "slots": {
+            "3": "BONUS ROUND"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "ce1d25ede4a83a4197d9e931740ebb7055c0a4c8055cded3ccbb4679bf1fe4db",
+          "slots": {
+            "3": "奖励关"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "ce1d25ede4a83a4197d9e931740ebb7055c0a4c8055cded3ccbb4679bf1fe4db",
+          "slots": {
+            "3": "奖励关"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "ce1d25ede4a83a4197d9e931740ebb7055c0a4c8055cded3ccbb4679bf1fe4db",
+          "slots": {
+            "3": "奖励关"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "3",
+          "source": "gml_Object_obj_ch3_GSB03_Step_0.gml:186",
+          "source_sha256": "42964818d3f7e3842921906d6d7d679988e58ddfbbccbf6d67af70255a07e0c6",
+          "sprite": "spr_funnytext_bonus_round",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSB05_slash_Step_0_gml_342_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "6304e1e2e55b99d351301bd868df9d8f949d3ad6a69fcacb28880ac478e4713d",
+          "slots": {
+            "0": "TORIEL"
+          }
+        },
+        "ja": {
+          "raw_sha256": "2aaf3a762538b9f7a913691453a5ee69e135be6a9196dedb5039a180a693a404",
+          "slots": {
+            "0": "マイスウィート トリエ～ル"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "ddfd507eb532b69d8c228399b8473f97908d8962168a61fcc2d9ef2661d737fb",
+          "slots": {
+            "0": "TORIEL"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "ddfd507eb532b69d8c228399b8473f97908d8962168a61fcc2d9ef2661d737fb",
+          "slots": {
+            "0": "TORIEL"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "ddfd507eb532b69d8c228399b8473f97908d8962168a61fcc2d9ef2661d737fb",
+          "slots": {
+            "0": "TORIEL"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_GSB05_Step_0.gml:232",
+          "source_sha256": "6055860e507c1ffd4dc210934d15833bf59f25bc989291177c4398da7a306c4e",
+          "sprite": "spr_funnytext_toriel",
+          "ja_sprite": "spr_ja_funnytext_toriel"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSC05_slash_Step_0_gml_119_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "57515f698e9311036b73d0f89172c6c7fa603fe6fa482a52a33682337ee601fd",
+          "slots": {
+            "0": "PHYSICAL CHALLENGE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "3293723c082f3e11878e796a447e448432aff3641768f937fa53949a8c4e77c8",
+          "slots": {
+            "0": "リアル チャレンジ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "f76d894eeedc43972ce3d8d0e758ba4459463da0ff9250417e68a48c86861d38",
+          "slots": {
+            "0": "体能大挑战"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "f76d894eeedc43972ce3d8d0e758ba4459463da0ff9250417e68a48c86861d38",
+          "slots": {
+            "0": "体能大挑战"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "f76d894eeedc43972ce3d8d0e758ba4459463da0ff9250417e68a48c86861d38",
+          "slots": {
+            "0": "体能大挑战"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_GSC05_Step_0.gml:87",
+          "source_sha256": "10f1b98d3aa41fbaf33408daadf23ae24df6dbe67a48baf08899fe581ee8d0f4",
+          "sprite": "spr_funnytext_physical_challenge",
+          "ja_sprite": "spr_ja_funnytext_physical_challenge"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSC05_slash_Step_0_gml_163_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "a747a17e8bcae44da8afda73e73e76031b3bf04ddf7a0af2dff4f0ef3944526b",
+          "slots": {
+            "1": "FLAMES"
+          }
+        },
+        "ja": {
+          "raw_sha256": "0ee61e67a2bcba84b43740898595045d53cf9bd8e683e84407f4839426d821d5",
+          "slots": {
+            "1": "炎"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "cf320a5177b10f052a2f892b700c4d845e5fedae2a5f2d5ec8d75e4d868a59b2",
+          "slots": {
+            "1": "火海"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "cf320a5177b10f052a2f892b700c4d845e5fedae2a5f2d5ec8d75e4d868a59b2",
+          "slots": {
+            "1": "火海"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "cf320a5177b10f052a2f892b700c4d845e5fedae2a5f2d5ec8d75e4d868a59b2",
+          "slots": {
+            "1": "火海"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_ch3_GSC05_Step_0.gml:109",
+          "source_sha256": "10f1b98d3aa41fbaf33408daadf23ae24df6dbe67a48baf08899fe581ee8d0f4",
+          "sprite": "spr_funnytext_flames",
+          "ja_sprite": "spr_ja_funnytext_flames"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSC05_slash_Step_0_gml_215_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "a38ba638dbf61143d32a52a9bbf0bd370f93e1648263e331ffafff0b28743df0",
+          "slots": {
+            "2": "SUSIEZILLA"
+          }
+        },
+        "ja": {
+          "raw_sha256": "c0e1f3ecc8fe737441a1fa1a1db05e36740ebfccc452d947aa9ec8101fa550d4",
+          "slots": {
+            "2": "スー・ジラ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "06f9b59aec48608623da053fc3c53d575cd0537035c8862ef51fe80b7194cea1",
+          "slots": {
+            "2": "哥苏拉"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "06f9b59aec48608623da053fc3c53d575cd0537035c8862ef51fe80b7194cea1",
+          "slots": {
+            "2": "哥苏拉"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "06f9b59aec48608623da053fc3c53d575cd0537035c8862ef51fe80b7194cea1",
+          "slots": {
+            "2": "哥苏拉"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "2",
+          "source": "gml_Object_obj_ch3_GSC05_Step_0.gml:192",
+          "source_sha256": "10f1b98d3aa41fbaf33408daadf23ae24df6dbe67a48baf08899fe581ee8d0f4",
+          "sprite": "spr_funnytext_susiezilla",
+          "ja_sprite": "spr_ja_funnytext_susiezilla"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSC05_slash_Step_0_gml_233_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "66ac50c88d5937a32d480e4454b7f4cb2d87a6f572632a341b30f9afd3f68414",
+          "slots": {
+            "3": "Special"
+          }
+        },
+        "ja": {
+          "raw_sha256": "d67aff62b888a46f493db62047a8dc215cc497ed01e925eb609fecf982b32ebf",
+          "slots": {
+            "3": "Special"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "cdc4aa6aba8d9c41de3cba813c3c2e3f8042994c7a7726fbad846acf3fc51576",
+          "slots": {
+            "3": "特殊"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "19c8bda7eb9fcd047e19e1a2beff862dd6da49cfbab04053438df9fe39202464",
+          "slots": {
+            "3": "特殊"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "cdc4aa6aba8d9c41de3cba813c3c2e3f8042994c7a7726fbad846acf3fc51576",
+          "slots": {
+            "3": "特殊"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "3",
+          "source": "gml_Object_obj_ch3_GSC05_Step_0.gml:203",
+          "source_sha256": "10f1b98d3aa41fbaf33408daadf23ae24df6dbe67a48baf08899fe581ee8d0f4",
+          "sprite": "spr_funnytext_special",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSC05_slash_Step_0_gml_317_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "c7c7ab0fe2f6604772c60a73f85ce9b67f0442263c8de13ce6b8043eb0c6ed65",
+          "slots": {
+            "2": "SUSIEZILLA"
+          }
+        },
+        "ja": {
+          "raw_sha256": "3e1b0f8bd0cccd5242483544eb0890f89ef2dd8d08af8743583a813a2b0b9508",
+          "slots": {
+            "2": "スー・ジラ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "d40222ca973bfb773702300b0dc84ca0dc61547f00cbe26e1ab6e47601cae4c3",
+          "slots": {
+            "2": "哥苏拉"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "d40222ca973bfb773702300b0dc84ca0dc61547f00cbe26e1ab6e47601cae4c3",
+          "slots": {
+            "2": "哥苏拉"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "d40222ca973bfb773702300b0dc84ca0dc61547f00cbe26e1ab6e47601cae4c3",
+          "slots": {
+            "2": "哥苏拉"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "2",
+          "source": "gml_Object_obj_ch3_GSC05_Step_0.gml:192",
+          "source_sha256": "10f1b98d3aa41fbaf33408daadf23ae24df6dbe67a48baf08899fe581ee8d0f4",
+          "sprite": "spr_funnytext_susiezilla",
+          "ja_sprite": "spr_ja_funnytext_susiezilla"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSC07_slash_Step_0_gml_650_0_b",
+      "fields": {
+        "en": {
+          "raw_sha256": "241dd2001110db43e3c07c97fc199f96b158f007ff6fe2d562ff398c5f8ee100",
+          "slots": {
+            "0": "(But don't ask why the cars don't have feet!)"
+          }
+        },
+        "ja": {
+          "raw_sha256": "892f89e77e1a350f27037cb38e1e224bce81bddad1268993be5f9e894f4e1ffd",
+          "slots": {
+            "0": "(クルマに　足がないところは　ツッコミ禁止ですよ～！)"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "023b4c89f1bf2a20882cb4c4fb82a6de340c72811bf578eb47f59ec1e6ab52aa",
+          "slots": {
+            "0": "（但是别问我为什么车子没有腿！）"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "023b4c89f1bf2a20882cb4c4fb82a6de340c72811bf578eb47f59ec1e6ab52aa",
+          "slots": {
+            "0": "（但是别问我为什么车子没有腿！）"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "023b4c89f1bf2a20882cb4c4fb82a6de340c72811bf578eb47f59ec1e6ab52aa",
+          "slots": {
+            "0": "（但是别问我为什么车子没有腿！）"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_GSC07_Step_0.gml:84",
+          "source_sha256": "78ec0f0f945523b855fe1d05de02d97d2379cb40665423ad6054275fcdcc503e",
+          "sprite": "spr_funnytext_city_feet",
+          "ja_sprite": "spr_ja_funnytext_city_feet"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSC07_slash_Step_0_gml_971_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "fcd468634cd7ee626faac1bfccd800dca15778f3fac15fecc8ef83094ec15f6e",
+          "slots": {
+            "1": "GAME OVER!?"
+          }
+        },
+        "ja": {
+          "raw_sha256": "f08c228cb1027aaaaf9b83654705b995b7647f920c15ba6cf33ccda2ad58169a",
+          "slots": {
+            "1": "GAME OVER!?"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "fcd468634cd7ee626faac1bfccd800dca15778f3fac15fecc8ef83094ec15f6e",
+          "slots": {
+            "1": "游戏结束！？"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "fcd468634cd7ee626faac1bfccd800dca15778f3fac15fecc8ef83094ec15f6e",
+          "slots": {
+            "1": "游戏结束！？"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "fcd468634cd7ee626faac1bfccd800dca15778f3fac15fecc8ef83094ec15f6e",
+          "slots": {
+            "1": "游戏结束！？"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_ch3_GSC07_Step_0.gml:204",
+          "source_sha256": "78ec0f0f945523b855fe1d05de02d97d2379cb40665423ad6054275fcdcc503e",
+          "sprite": "spr_funnytext_game_over",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_GSC07_slash_Step_0_gml_972_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "f209be220bcc397337f3fd7650e208b00f31e2ed92d9258059e97399c032047c",
+          "slots": {
+            "2": "GAME",
+            "3": "OVER"
+          }
+        },
+        "ja": {
+          "raw_sha256": "52877c68ecf431c10782760b4c71bc30aa64cfcc2ebfbdfb76c0679e71f395c6",
+          "slots": {
+            "2": "GAME",
+            "3": "OVER"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "0c4b59f8efee39b6a582e79d55ff6dcea42fe8287c59fadb4e702de4dd1c5788",
+          "slots": {
+            "2": "游戏",
+            "3": "结束"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "0c4b59f8efee39b6a582e79d55ff6dcea42fe8287c59fadb4e702de4dd1c5788",
+          "slots": {
+            "2": "游戏",
+            "3": "结束"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "0c4b59f8efee39b6a582e79d55ff6dcea42fe8287c59fadb4e702de4dd1c5788",
+          "slots": {
+            "2": "游戏",
+            "3": "结束"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "2",
+          "source": "gml_Object_obj_ch3_GSC07_Step_0.gml:205",
+          "source_sha256": "78ec0f0f945523b855fe1d05de02d97d2379cb40665423ad6054275fcdcc503e",
+          "sprite": "spr_funnytext_game",
+          "ja_sprite": null
+        },
+        {
+          "slot": "3",
+          "source": "gml_Object_obj_ch3_GSC07_Step_0.gml:206",
+          "source_sha256": "78ec0f0f945523b855fe1d05de02d97d2379cb40665423ad6054275fcdcc503e",
+          "sprite": "spr_funnytext_over_small",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_PGS01F_slash_Step_0_gml_325_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "416e77ae01e4dd621d4f4d6171f28651c0766284dfdeeddc08a5fb51b7f6bbb4",
+          "slots": {
+            "0": "AMAZING"
+          }
+        },
+        "ja": {
+          "raw_sha256": "fc1d2ad268543eab55818f2d605c3389ff83f3d4aa1112d3ac7053401b0a5530",
+          "slots": {
+            "0": "アメ～イジ～ング!"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "1032661b65ea8f97a8b8826b5ee84f9e163b1d1cf05735b51e025335539edee1",
+          "slots": {
+            "0": "精彩绝伦"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "1032661b65ea8f97a8b8826b5ee84f9e163b1d1cf05735b51e025335539edee1",
+          "slots": {
+            "0": "精彩绝伦"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "1032661b65ea8f97a8b8826b5ee84f9e163b1d1cf05735b51e025335539edee1",
+          "slots": {
+            "0": "精彩绝伦"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_PGS01F_Step_0.gml:237",
+          "source_sha256": "9fe99e6c05240c6d8a0fdd04eee7f6a652eb1a18ed589b4402545b95573a2eb2",
+          "sprite": "spr_funnytext_amazing_01",
+          "ja_sprite": "spr_ja_funnytext_amazing_01"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_PGS01F_slash_Step_0_gml_326_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "8f89d0bcb8dbacfa03368ef71d1dc030f6898a2c4a9673b7f2790dcdb38dbdf8",
+          "slots": {
+            "1": "TEARS"
+          }
+        },
+        "ja": {
+          "raw_sha256": "25a182fdbcf59109cfb6603f7424d080e6b23578dbeafe29d2a2eaba9f6c2a33",
+          "slots": {
+            "1": "なみだ",
+            "2": "なみだ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "db384cc3bdfda584df0cbb3725487dcfe23695dfa6e3435830c64fe868242729",
+          "slots": {
+            "1": "眼泪"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "db384cc3bdfda584df0cbb3725487dcfe23695dfa6e3435830c64fe868242729",
+          "slots": {
+            "1": "眼泪"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "db384cc3bdfda584df0cbb3725487dcfe23695dfa6e3435830c64fe868242729",
+          "slots": {
+            "1": "眼泪"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_ch3_PGS01F_Step_0.gml:238",
+          "source_sha256": "9fe99e6c05240c6d8a0fdd04eee7f6a652eb1a18ed589b4402545b95573a2eb2",
+          "sprite": "spr_funnytext_tears",
+          "ja_sprite": "spr_ja_funnytext_tears"
+        },
+        {
+          "slot": "2",
+          "source": "gml_Object_obj_ch3_PGS01F_Step_0.gml:239",
+          "source_sha256": "9fe99e6c05240c6d8a0fdd04eee7f6a652eb1a18ed589b4402545b95573a2eb2",
+          "sprite": "spr_funnytext_tears",
+          "ja_sprite": "spr_ja_funnytext_tears"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_PTB01_slash_Step_0_gml_497_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "89122e6569e21c1adbc3f9a4c21cf1ffc704f56a6e102cd82a83cdd447fac4b8",
+          "slots": {
+            "0": "Hall of Fame"
+          }
+        },
+        "ja": {
+          "raw_sha256": "9d7de46757076424cd76bff954e90ea32cbd6f135c7a25dda5ccfd6e1f24d3a8",
+          "slots": {
+            "0": "『殿堂入り』"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "2d84b1f329a10df79530833aa791108e61a5756e472c065a13853ef262d7fab0",
+          "slots": {
+            "0": "名人堂"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "2d84b1f329a10df79530833aa791108e61a5756e472c065a13853ef262d7fab0",
+          "slots": {
+            "0": "名人堂"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "2d84b1f329a10df79530833aa791108e61a5756e472c065a13853ef262d7fab0",
+          "slots": {
+            "0": "名人堂"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_PTB01_Step_0.gml:326",
+          "source_sha256": "da912ea82d384dd8386a76971206f6432e11ea54828a7a4a402dcae31df73fc0",
+          "sprite": "spr_funnytext_hall_of_fame",
+          "ja_sprite": "spr_ja_funnytext_hall_of_fame"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_ch3_PTB02_slash_Step_0_gml_92_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "c8ec7ce3706157e9303e80dab2150aecbfb05cfcfed7ff57915629bc0e0ba1f9",
+          "slots": {
+            "0": "GRAND PRIZE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "8cde997f6868bc3c137118db3ca965b02e57d481bde6e65e43d8db46c0db1c56",
+          "slots": {
+            "0": "優勝賞品"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "a4d749d5bacd73a294a0e7c96013cbc14b65e1e55f24783fefa3f5f5d0113d91",
+          "slots": {
+            "0": "终极大奖"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "a4d749d5bacd73a294a0e7c96013cbc14b65e1e55f24783fefa3f5f5d0113d91",
+          "slots": {
+            "0": "终极大奖"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "a4d749d5bacd73a294a0e7c96013cbc14b65e1e55f24783fefa3f5f5d0113d91",
+          "slots": {
+            "0": "终极大奖"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch3_PTB02_Step_0.gml:80",
+          "source_sha256": "7c304be6bfc949bae926477acf47b7b4542e4a41ddf6ad48c02afca513a69ef5",
+          "sprite": "spr_funnytext_grand_prize",
+          "ja_sprite": "spr_ja_funnytext_grand_prize"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_gameover_band_slash_Step_0_gml_125_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "c70903b7ce92ec0c9cd4f9d8c6d5b3aac627e2da5d222ad244a35a5bee7316a1",
+          "slots": {
+            "0": "CHALLENGE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "49b612afa9fd08f308984f1c77cc215315733659d37ed90f2c00c0f885fd1453",
+          "slots": {
+            "0": "チャレンジ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "7e026718302185c82a75b46cfe2388fb601090e570844f3a93607faa47c54bcc",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "7e026718302185c82a75b46cfe2388fb601090e570844f3a93607faa47c54bcc",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "7e026718302185c82a75b46cfe2388fb601090e570844f3a93607faa47c54bcc",
+          "slots": {
+            "0": "大挑战"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_gameover_band_Step_0.gml:117",
+          "source_sha256": "65d5aa33ca47d7eda1a355740eacdd5f8c1c1749aed61679a89a071976380a1a",
+          "sprite": "spr_funnytext_challenge",
+          "ja_sprite": "spr_ja_funnytext_challenge"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_gameover_band_slash_Step_0_gml_209_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "fcfcb8f9d1d86ed7a943f48cdcf842d8ea37f2a158837b7b9ccf3c4a57ceea6d",
+          "slots": {
+            "0": "CHALLENGE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "e7e18f930ea34b9c82c26d607069ab86bb219eba83f6310d56bb13eec7682e5a",
+          "slots": {
+            "0": "チャレンジ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "b03802ff7cc16c8c224f84c391da056396cdea4955ddc66085b66e5dbdf2f37c",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "b03802ff7cc16c8c224f84c391da056396cdea4955ddc66085b66e5dbdf2f37c",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "b03802ff7cc16c8c224f84c391da056396cdea4955ddc66085b66e5dbdf2f37c",
+          "slots": {
+            "0": "大挑战"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_gameover_band_Step_0.gml:174",
+          "source_sha256": "65d5aa33ca47d7eda1a355740eacdd5f8c1c1749aed61679a89a071976380a1a",
+          "sprite": "spr_funnytext_challenge",
+          "ja_sprite": "spr_ja_funnytext_challenge"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_gameover_chef_slash_Step_0_gml_84_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "fcfcb8f9d1d86ed7a943f48cdcf842d8ea37f2a158837b7b9ccf3c4a57ceea6d",
+          "slots": {
+            "0": "CHALLENGE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "879c40f8f77579d7976f7ccd275b232da236dcad0de1fd99492dcee161fb6118",
+          "slots": {
+            "0": "チャレンジ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "b03802ff7cc16c8c224f84c391da056396cdea4955ddc66085b66e5dbdf2f37c",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "b03802ff7cc16c8c224f84c391da056396cdea4955ddc66085b66e5dbdf2f37c",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "b03802ff7cc16c8c224f84c391da056396cdea4955ddc66085b66e5dbdf2f37c",
+          "slots": {
+            "0": "大挑战"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_gameover_chef_Step_0.gml:84",
+          "source_sha256": "30dd6ccdce31f9a88eebb6e7602f8e4e342a7cafa95216ca963769b3e02d83c6",
+          "sprite": "spr_funnytext_challenge",
+          "ja_sprite": "spr_ja_funnytext_challenge"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_gameover_chef_slash_Step_0_gml_168_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "fcfcb8f9d1d86ed7a943f48cdcf842d8ea37f2a158837b7b9ccf3c4a57ceea6d",
+          "slots": {
+            "0": "CHALLENGE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "879c40f8f77579d7976f7ccd275b232da236dcad0de1fd99492dcee161fb6118",
+          "slots": {
+            "0": "チャレンジ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "b03802ff7cc16c8c224f84c391da056396cdea4955ddc66085b66e5dbdf2f37c",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "b03802ff7cc16c8c224f84c391da056396cdea4955ddc66085b66e5dbdf2f37c",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "b03802ff7cc16c8c224f84c391da056396cdea4955ddc66085b66e5dbdf2f37c",
+          "slots": {
+            "0": "大挑战"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_gameover_chef_Step_0.gml:149",
+          "source_sha256": "30dd6ccdce31f9a88eebb6e7602f8e4e342a7cafa95216ca963769b3e02d83c6",
+          "sprite": "spr_funnytext_challenge",
+          "ja_sprite": "spr_ja_funnytext_challenge"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_npc_room_slash_Other_10_gml_2151_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "58d96fe59167dd217254dd6994554878f270c34eda1ffcce5a2403dc00b93717",
+          "slots": {
+            "0": "STAR"
+          }
+        },
+        "ja": {
+          "raw_sha256": "a44cafd7ebaf43bc6a92f8c33dba27bd5834f8d5940605dbbf8494b2115b60c0",
+          "slots": {
+            "0": "スタァ"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "e838da9822e82106681fc376de649b8631eda36620a2ec2cf0a61c59b518fa55",
+          "slots": {
+            "0": "明星"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "e838da9822e82106681fc376de649b8631eda36620a2ec2cf0a61c59b518fa55",
+          "slots": {
+            "0": "明星"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "e838da9822e82106681fc376de649b8631eda36620a2ec2cf0a61c59b518fa55",
+          "slots": {
+            "0": "明星"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_npc_room_Other_10.gml:2025",
+          "source_sha256": "16534969c6a01720f2dddfe87066e0d6476668de4917121432c6eaec75749110",
+          "sprite": "spr_funnytext_star",
+          "ja_sprite": "spr_ja_funnytext_star"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_npc_sign_slash_Other_10_gml_30_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "386a3382f556de78aa91074a08a1131ac7aec8e1742424ab98c76af6662b1725",
+          "slots": {
+            "0": "Free!"
+          }
+        },
+        "ja": {
+          "raw_sha256": "4bcbec2270050ecc4cd193549d4eb2e538cafe625acc74e3455b0ee8ac9d5a6f",
+          "slots": {
+            "0": "Free!"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "4212a1a69f8ed1196c09e21aa046b625f40e7b1c5b883e3dcb8654c622335652",
+          "slots": {
+            "0": "Free!"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "4212a1a69f8ed1196c09e21aa046b625f40e7b1c5b883e3dcb8654c622335652",
+          "slots": {
+            "0": "Free!"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "4212a1a69f8ed1196c09e21aa046b625f40e7b1c5b883e3dcb8654c622335652",
+          "slots": {
+            "0": "Free!"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_npc_sign_Other_10.gml:13",
+          "source_sha256": "753ee49d0c1452bc7bb6f3259c08b356b1bd2f283645b93c61e028bd8b26e097",
+          "sprite": "spr_funnytext_free",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_npc_sign_slash_Other_10_gml_31_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "46037cc03b227829e39a4ce914b3f038b6e1015f74cfc2175c5d9a9aae2b33d9",
+          "slots": {
+            "1": "Résumés"
+          }
+        },
+        "ja": {
+          "raw_sha256": "4d13ef237b8a9f2642645012218a4e099e3f8e0fd6bbcf7d0b6023fc0102b765",
+          "slots": {
+            "1": "Résumés"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "f3b39583396e224e938763f10ab06f93afaace4aeb140b79c2ececa1ddf777cd",
+          "slots": {
+            "1": "Résumés"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "f3b39583396e224e938763f10ab06f93afaace4aeb140b79c2ececa1ddf777cd",
+          "slots": {
+            "1": "Résumés"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "f3b39583396e224e938763f10ab06f93afaace4aeb140b79c2ececa1ddf777cd",
+          "slots": {
+            "1": "Résumés"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_npc_sign_Other_10.gml:14",
+          "source_sha256": "753ee49d0c1452bc7bb6f3259c08b356b1bd2f283645b93c61e028bd8b26e097",
+          "sprite": "spr_funnytext_resumes",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_room_green_room_slash_Step_0_gml_493_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "ff98748d033ea650a2e1bafc9c894e35a8274121060055e46ac70dc451b32717",
+          "slots": {
+            "0": "Green Room"
+          }
+        },
+        "ja": {
+          "raw_sha256": "bb230a8303df2d12799acddb195f322e1a6d698b00a7a3ffe1825a655cb7e0ed",
+          "slots": {
+            "0": "楽屋"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "d4aa29b9dd8357e5f3c09427f127cb8583a62921e3592a6128000247d44adefc",
+          "slots": {
+            "0": "休息室"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "d4aa29b9dd8357e5f3c09427f127cb8583a62921e3592a6128000247d44adefc",
+          "slots": {
+            "0": "休息室"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "d4aa29b9dd8357e5f3c09427f127cb8583a62921e3592a6128000247d44adefc",
+          "slots": {
+            "0": "休息室"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_room_green_room_Step_0.gml:198",
+          "source_sha256": "6ef2d79290f15df6aa9ac2481c1b0d08d5940825f3aaab166f688b373c93f7d9",
+          "sprite": "spr_funnytext_green_room",
+          "ja_sprite": "spr_ja_funnytext_green_room"
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "key": "obj_room_green_room_slash_Step_0_gml_494_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "773690968463f33aec3c23c85701af662bd3d8449e3601154b557fa5e50b4d1a",
+          "slots": {
+            "1": "Relax and Enjoy..."
+          }
+        },
+        "ja": {
+          "raw_sha256": "8e3f4963d4417c3871076568af2f28e43254a31179248ae5c1901597e8c54c48",
+          "slots": {
+            "1": "くつろぎのひととき"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "f298f6369c3dbcc7de49f33abcaeeeb591775ad41fbdb77104fe68be556c6125",
+          "slots": {
+            "1": "放松休息一下..."
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "f298f6369c3dbcc7de49f33abcaeeeb591775ad41fbdb77104fe68be556c6125",
+          "slots": {
+            "1": "放松休息一下..."
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "f298f6369c3dbcc7de49f33abcaeeeb591775ad41fbdb77104fe68be556c6125",
+          "slots": {
+            "1": "放松休息一下..."
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "1",
+          "source": "gml_Object_obj_room_green_room_Step_0.gml:199",
+          "source_sha256": "6ef2d79290f15df6aa9ac2481c1b0d08d5940825f3aaab166f688b373c93f7d9",
+          "sprite": "spr_funnytext_relax",
+          "ja_sprite": "spr_ja_funnytext_relax"
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "key": "obj_gameover_band_slash_Step_0_gml_125_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "c70903b7ce92ec0c9cd4f9d8c6d5b3aac627e2da5d222ad244a35a5bee7316a1",
+          "slots": {
+            "0": "CHALLENGE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "49b612afa9fd08f308984f1c77cc215315733659d37ed90f2c00c0f885fd1453",
+          "slots": {
+            "0": "CHALLENGE"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "2cd205130c640c6a8dc153fe172bc490c8c59c910268c82c5e1b5249e2e9a248",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "2cd205130c640c6a8dc153fe172bc490c8c59c910268c82c5e1b5249e2e9a248",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "2cd205130c640c6a8dc153fe172bc490c8c59c910268c82c5e1b5249e2e9a248",
+          "slots": {
+            "0": "大挑战"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_gameover_band_Step_0.gml:117",
+          "source_sha256": "ab6df8bf2b7c86b165a8a52774d5290ae67b05ec9bcaf6a3340587f8a2c8485d",
+          "sprite": "spr_funnytext_challenge",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "key": "obj_gameover_band_slash_Step_0_gml_209_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "fcfcb8f9d1d86ed7a943f48cdcf842d8ea37f2a158837b7b9ccf3c4a57ceea6d",
+          "slots": {
+            "0": "CHALLENGE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "e7e18f930ea34b9c82c26d607069ab86bb219eba83f6310d56bb13eec7682e5a",
+          "slots": {
+            "0": "CHALLENGE"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "dc0f082ebfdc0699ac3ec5b9d8226306053b9cdf7aeb0eb37b28199c9915dae2",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "dc0f082ebfdc0699ac3ec5b9d8226306053b9cdf7aeb0eb37b28199c9915dae2",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "dc0f082ebfdc0699ac3ec5b9d8226306053b9cdf7aeb0eb37b28199c9915dae2",
+          "slots": {
+            "0": "大挑战"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_gameover_band_Step_0.gml:174",
+          "source_sha256": "ab6df8bf2b7c86b165a8a52774d5290ae67b05ec9bcaf6a3340587f8a2c8485d",
+          "sprite": "spr_funnytext_challenge",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "key": "obj_ch5_LW07_slash_Step_0_gml_1214_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "45f5bca5fb3b2f3af8901a40592488a506f2ef7fb50c11aeaffef2d1bb2a593f",
+          "slots": {
+            "0": "DUMP HER ASS!!!"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "30873852d99fa91fd866b6dc6e7114885074077a96d197f1644171d27501b06a",
+          "slots": {
+            "0": "甩了她！！！"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "30873852d99fa91fd866b6dc6e7114885074077a96d197f1644171d27501b06a",
+          "slots": {
+            "0": "甩了她！！！"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "30873852d99fa91fd866b6dc6e7114885074077a96d197f1644171d27501b06a",
+          "slots": {
+            "0": "甩了她！！！"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_ch5_LW07_Step_0.gml:912",
+          "source_sha256": "4f3b04c7f8088f3470fbc138cca4d3a12849a166d254a26fc5d2ae702114c962",
+          "sprite": "spr_funnytext_dump_her",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "key": "obj_gameover_band_slash_Step_0_gml_125_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "c70903b7ce92ec0c9cd4f9d8c6d5b3aac627e2da5d222ad244a35a5bee7316a1",
+          "slots": {
+            "0": "CHALLENGE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "49b612afa9fd08f308984f1c77cc215315733659d37ed90f2c00c0f885fd1453",
+          "slots": {
+            "0": "CHALLENGE"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "7e026718302185c82a75b46cfe2388fb601090e570844f3a93607faa47c54bcc",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "7e026718302185c82a75b46cfe2388fb601090e570844f3a93607faa47c54bcc",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "7e026718302185c82a75b46cfe2388fb601090e570844f3a93607faa47c54bcc",
+          "slots": {
+            "0": "大挑战"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_gameover_band_Step_0.gml:117",
+          "source_sha256": "ba8f76a2e3ca8a80f3c8174898333b9f4337b01a9d982c79abc2b7d2e149fb26",
+          "sprite": "spr_funnytext_challenge",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "key": "obj_gameover_band_slash_Step_0_gml_209_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "fcfcb8f9d1d86ed7a943f48cdcf842d8ea37f2a158837b7b9ccf3c4a57ceea6d",
+          "slots": {
+            "0": "CHALLENGE"
+          }
+        },
+        "ja": {
+          "raw_sha256": "e7e18f930ea34b9c82c26d607069ab86bb219eba83f6310d56bb13eec7682e5a",
+          "slots": {
+            "0": "CHALLENGE"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "b03802ff7cc16c8c224f84c391da056396cdea4955ddc66085b66e5dbdf2f37c",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "b03802ff7cc16c8c224f84c391da056396cdea4955ddc66085b66e5dbdf2f37c",
+          "slots": {
+            "0": "大挑战"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "b03802ff7cc16c8c224f84c391da056396cdea4955ddc66085b66e5dbdf2f37c",
+          "slots": {
+            "0": "大挑战"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_gameover_band_Step_0.gml:174",
+          "source_sha256": "ba8f76a2e3ca8a80f3c8174898333b9f4337b01a9d982c79abc2b7d2e149fb26",
+          "sprite": "spr_funnytext_challenge",
+          "ja_sprite": null
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "key": "obj_room_castle_tv_mike_b_slash_Step_0_gml_927_0",
+      "fields": {
+        "en": {
+          "raw_sha256": "5d1b751a53f5361d53f68f69932882a96ff7c91319fd89007045820e59f24a2a",
+          "slots": {
+            "0": "(The size of Mike's ass, seems really variable lately.)"
+          }
+        },
+        "ja": {
+          "raw_sha256": "efcd27efe6094af4ed5c1d1373c7da98652e658a8990ba2efd3e8eb3d19a175c",
+          "slots": {
+            "0": "(最近、マイクんのおケツ…　デカかったり、ちっこかったり　しない？)"
+          }
+        },
+        "zh_default": {
+          "raw_sha256": "5d1b751a53f5361d53f68f69932882a96ff7c91319fd89007045820e59f24a2a",
+          "slots": {
+            "0": "（Mike屁股的尺寸，近来似乎变化多端。）"
+          }
+        },
+        "zh_names": {
+          "raw_sha256": "5d1b751a53f5361d53f68f69932882a96ff7c91319fd89007045820e59f24a2a",
+          "slots": {
+            "0": "（Mike屁股的尺寸，近来似乎变化多端。）"
+          }
+        },
+        "zh_recruitable": {
+          "raw_sha256": "5d1b751a53f5361d53f68f69932882a96ff7c91319fd89007045820e59f24a2a",
+          "slots": {
+            "0": "（Mike屁股的尺寸，近来似乎变化多端。）"
+          }
+        }
+      },
+      "evidence": [
+        {
+          "slot": "0",
+          "source": "gml_Object_obj_room_castle_tv_mike_b_Step_0.gml:659",
+          "source_sha256": "4b112dedf37e0b86ce724038a02a7d46f607a60d2519e2fe7cb161c0f6f00feb",
+          "sprite": "spr_funnytext_ass",
+          "ja_sprite": "spr_ja_funnytext_ass"
+        }
+      ]
+    }
+  ],
+  "cross_check": {
+    "url": "https://deltarune.wiki/w/Tenna/Word_Art?oldid=187021",
+    "checked": "2026-10-30",
+    "scope": "英文字样的大小写交叉核对；包括日文使用的英文共用贴图。图片字形难以区分大小写时采用 Wiki 的文本约定。",
+    "exceptions": [
+      "know_tv：图片为 me.，保留句号；Wiki 写作逗号。",
+      "win_big：星形装饰不并入文字，保留 WIN!。",
+      "Free! / Résumés 未在该页列出，保留图片核对结果。"
+    ]
+  }
+}
