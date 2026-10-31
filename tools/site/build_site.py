@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 WEB_FILES = (
     'index.html', 'favicon.svg', 'style.css', 'text.js', 'model.js', 'actions.js', 'query.js',
     'soul.js',
-    'app.js', 'context.js', 'search-worker.js',
+    'app.js', 'context.js', 'search-worker.js', 'i18n.js',
     'fonts/JetBrainsMonoNL-Regular.ttf', 'fonts/OFL.txt', 'fonts/SOURCE.json',
 )
 
@@ -41,7 +41,7 @@ def assemble(root=ROOT):
     markup = payload['index.html'].decode('utf-8-sig').replace('__PATCH_VERSION__', html.escape(patch or '版本待核对')).replace('__GAME_VERSION__', html.escape(game or '版本待核对'))
     markup = markup.replace('__GAME_DATE__', html.escape(game_date or '日期待核对'))
     markup = markup.replace('__SITE_VERSION__', version)
-    for script in ('context.js', 'app.js', 'soul.js'):
+    for script in ('context.js', 'app.js', 'soul.js', 'i18n.js'):
         markup = markup.replace(f'src="{script}"', f'src="{script}?v={sha(payload[script])}"')
     markup = markup.replace('href="style.css"', 'href="style.css?v='+sha(payload['style.css'])+'"')
     payload['index.html'] = markup.encode('utf-8')
