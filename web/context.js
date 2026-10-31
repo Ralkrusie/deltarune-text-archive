@@ -22,7 +22,29 @@ function emptySequence(n){
 }
 function displayBranches(n){
  // Only omit empty condition arms. An option or control-flow endpoint is content.
- return n.type==='condition'&&!n.revisit?n.branches.filter(b=>b.option||!emptySequence(b.body)):n.branches;
+ if(n.type!=='condition'||n.revisit)return n.branches;
+ const equality=node=>{
+  if(node.type!=='condition'||node.revisit||node.prefix||node.join_next||node.title||(node.entry_guards||[]).length||node.branches.length!==2||node.branches.some(b=>b.option))return null;
+  const [yes,no]=node.branches;
+  if(no.label!==`!(${yes.label})`)return null;
+  return /^([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*) == (-?\d+)$/.exec(yes.label);
+ };
+ const first=equality(n),branches=[],prior=[],values=new Set();let current=n;
+ if(first){
+  while(true){
+   const match=equality(current);
+   if(!match||match[1]!==first[1]||values.has(Number(match[2])))break;
+   values.add(Number(match[2]));
+   const [yes,no]=current.branches;
+   branches.push({...yes,pathLabel:[...prior,yes.label].join(' && ')});prior.push(no.label);
+   const body=no.body;
+   const next=body.type==='sequence'&&!(body.entry_guards||[]).length&&body.children.length===1?body.children[0]:null;
+   const nextMatch=next&&equality(next);
+   if(nextMatch&&nextMatch[1]===first[1]&&!values.has(Number(nextMatch[2]))){current=next;continue;}
+   branches.push({...no,label:prior.join(' && '),body});break;
+  }
+ }
+ return (branches.length?branches:n.branches).filter(b=>b.option||!emptySequence(b.body));
 }
 function lanes(n){
  if(n.revisit)return Math.max(1,...n.branches.map(b=>lanes(b.body)));
@@ -36,7 +58,14 @@ function flowWidth(n){
  }
  return Math.max(256,...(n.children||[]).map(flowWidth));
 }
-function mount({dialog,content,title,close,start,cell,actionMenu,getState}){
+function sourceOrder(scenes,file){
+ const unique=new Map();
+ for(const scene of scenes)for(const ref of refs(scene.body)){
+  if(ref.source.file===file&&!unique.has(ref.occurrence_id))unique.set(ref.occurrence_id,ref);
+ }
+ return [...unique.values()].sort((a,b)=>a.source.line-b.source.line||(a.offset??0)-(b.offset??0));
+}
+function mount({dialog,content,title,close,start,order,cell,actionMenu,getState}){
  const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
  let serial=0,packPromise,observer;const chapters=new Map(),indexes=new Map(),chunks=new Map();
  async function json(path,options){const r=await fetch(path,options);if(!r.ok)throw Error('上下文数据未能加载');return r.json();}
@@ -88,7 +117,8 @@ function mount({dialog,content,title,close,start,cell,actionMenu,getState}){
    if(!options.length){content.replaceChildren(el('p','context-note',index?'当前章节源码中未找到这条文本的引用，暂时无法定位上下文。':'这个文件尚未生成上下文。'));return;}
    const table=await chapter(row.chapter);if(ticket!==serial)return;
    content.replaceChildren();const state=getState();
-   const fileArea=el('div','context-file-area');
+   const fileArea=el('div','context-file-area');let selected=options[0];
+   if(order)order.onchange=()=>renderFile(selected);
    if(options.length>1){
     const label=el('label','context-file-picker','源码文件 '),select=el('select');select.id='context-file-select';select.setAttribute('aria-label','上下文源码文件');
     options.forEach((option,i)=>{const item=el('option','',(option.related?'关联调用 · ':'')+option.file);item.value=String(i);select.append(item);});
@@ -176,7 +206,7 @@ function mount({dialog,content,title,close,start,cell,actionMenu,getState}){
       const label=el('p','context-branch-label',i?'再次选择':'首次选择');
       label.title=b.label+(i?'（期间未重置该 flag）':`；L${n.revisit.write_line} 写入 ${n.revisit.to}`);
       branch.append(label,el('div','context-note',b.label));
-     }else branch.append(el('p','context-condition',b.label));
+     }else {const label=el('p','context-condition',b.label);if(b.pathLabel)label.title=b.pathLabel;branch.append(label);}
      if(!(b.option&&b.body.type==='sequence'&&!b.body.children.length))branch.append(el('div','context-connector','↓'),node(b.body));
      branches.append(branch);
     }
@@ -186,13 +216,18 @@ function mount({dialog,content,title,close,start,cell,actionMenu,getState}){
    }
    let pending=new WeakMap();
    async function renderFile(option){
+    selected=option;const linear=order?.value==='source';start.textContent=linear?'文件开头':'结构开头';
     const current=++serial;stopObserver();pending=new WeakMap();landings.clear();fileArea.replaceChildren(el('p','context-note','正在加载文件…'));
     try{
      const data=option.scene?{scenes:[option.scene]}:await chunk(option);if(current!==serial)return;
      if(!option.scene&&(data.text_manifest_sha256!==pack.text_manifest_sha256||data.scenes[0].chapter!==row.chapter||data.scenes[0].file!==option.file))throw Error('上下文文件版本或身份不一致');
      observer=typeof IntersectionObserver==='undefined'?null:new IntersectionObserver(entries=>{for(const entry of entries){if(!entry.isIntersecting)continue;pending.get(entry.target)?.();pending.delete(entry.target);observer?.unobserve(entry.target);}},{root:dialog,rootMargin:'800px 0px'});
      fileArea.replaceChildren();
-     for(const scene of data.scenes){
+     if(linear){
+      const area=el('section','context-scene context-source-order');area.append(el('h3','context-scene-title',option.file));
+      for(const ref of sourceOrder(data.scenes,option.file))area.append(message(ref));
+      fileArea.append(area);
+     }else for(const scene of data.scenes){
       const area=el('section','context-scene');area.append(el('h3','context-scene-title',scene.file||scene.title));
       area.style.minWidth=flowWidth(scene.body)+'px';
       area.append(node(scene.body));fileArea.append(area);
@@ -205,5 +240,5 @@ function mount({dialog,content,title,close,start,cell,actionMenu,getState}){
  }
  return {show};
 }
-const api={refs,scenesFor,fileOptions,lanes,flowWidth,mount};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.DialogueContext=api;
+const api={refs,scenesFor,fileOptions,lanes,flowWidth,displayBranches,sourceOrder,mount};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.DialogueContext=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

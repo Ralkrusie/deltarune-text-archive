@@ -206,7 +206,7 @@ function actionMenu(...items){
  return menu;
 }
 addEventListener('click',e=>{for(const menu of document.querySelectorAll('.compact-actions[open]'))if(!menu.contains(e.target))menu.open=false;});
-const contextView=window.DialogueContext.mount({dialog:$('context-dialog'),content:$('context-content'),title:$('context-title'),close:$('close-context'),start:$('context-start'),cell,actionMenu,getState:()=>({...state,compact})});
+const contextView=window.DialogueContext.mount({dialog:$('context-dialog'),content:$('context-content'),title:$('context-title'),close:$('close-context'),start:$('context-start'),order:$('context-order'),cell,actionMenu,getState:()=>({...state,compact})});
 function chapterLabel(row){
  const chapters=[...new Set(row.chapters||[row.chapter])].sort((a,b)=>a-b),ranges=[];
  for(const ch of chapters){const last=ranges.at(-1);if(last&&ch===last[1]+1)last[1]=ch;else ranges.push([ch,ch]);}

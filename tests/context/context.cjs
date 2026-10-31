@@ -23,6 +23,26 @@ const prefixedChoice={type:'choice',prefix:{type:'sequence',children:[message('p
 assert.deepEqual(refs({type:'sequence',children:[prefixedChoice,message('tail')]}).map(r=>r.occurrence_id),
  ['option0','option1','prefix','answer0','answer1','tail']);
 assert.equal(lanes({...prefixedChoice,prefix:{type:'condition',branches:[1,2,3].map(i=>({body:message(i)}))}}),3);
+// Flatten only equality ladders in the else arm; retain every occurrence and path.
+const {displayBranches}=require('../../web/context.js');
+const seq=(...children)=>({type:'sequence',children});
+const cond=(label,yes,no)=>({type:'condition',title:'',branches:[{label,body:yes},{label:`!(${label})`,body:no}]});
+const ladder=cond('balloonorder == 0',seq(message('zero')),seq(cond('balloonorder == 1',seq(message('one')),seq(cond('balloonorder == 2',seq(message('two')),seq(message('fallback')))))));
+const saved=JSON.stringify(ladder),flat=displayBranches(ladder);
+assert.deepEqual(flat.map(b=>b.label),['balloonorder == 0','balloonorder == 1','balloonorder == 2','!(balloonorder == 0) && !(balloonorder == 1) && !(balloonorder == 2)']);
+assert.equal(flat[2].pathLabel,'!(balloonorder == 0) && !(balloonorder == 1) && balloonorder == 2');
+assert.deepEqual(flat.flatMap(b=>refs(b.body)),refs(ladder));
+assert.equal(JSON.stringify(ladder),saved);
+for(const tail of [
+ seq(message('between'),cond('balloonorder == 1',seq(message('one')),seq())),
+ seq(cond('other == 1',seq(message('one')),seq())),
+ seq(cond('balloonorder > 1',seq(message('one')),seq())),
+ seq(cond('balloonorder == 0',seq(message('one')),seq())),
+ {...seq(cond('balloonorder == 1',seq(message('one')),seq())),entry_guards:[{visible:true,condition:'guard'}]},
+ seq({...cond('balloonorder == 1',seq(message('one')),seq()),revisit:{flag:1}})
+])assert.equal(displayBranches(cond('balloonorder == 0',seq(message('zero')),tail)).length,2);
+const nestedYes=cond('balloonorder == 0',seq(cond('balloonorder == 1',seq(message('one')),seq())),seq(message('else')));
+assert.equal(displayBranches(nestedYes)[0].body,nestedYes.branches[0].body);
 console.log('Context lookup: chapter isolation, options, repeated uses and missing coverage passed');
 const index={files:[{file:'native.gml'},{file:'caller.gml'},{file:'other.gml'}],by_key:{same:[0,2]},related_by_key:{same:[1,0]}};
 assert.deepEqual(fileOptions(index,'same').map(x=>[x.file,x.related]),[['native.gml',false],['other.gml',false],['caller.gml',true]]);
@@ -106,3 +126,8 @@ async function renderSharedPrefix(){
  }finally{for(const [key,value] of Object.entries(original)){if(value===undefined)delete global[key];else global[key]=value;}}
 }
 renderSharedPrefix().catch(error=>{console.error(error);process.exitCode=1;});
+
+const {sourceOrder}=require('../../web/context.js');
+const orderedRef=(id,line,offset,file='test.gml')=>({...message(id),source:{file,line},offset});
+const later=orderedRef('later',20,200),early=orderedRef('early',10,100),sameLine=orderedRef('sameLine',10,110),external=orderedRef('external',1,0,'other.gml');
+assert.deepEqual(sourceOrder([{body:{type:'sequence',children:[later,sameLine,external,early,later]}}],'test.gml').map(r=>r.occurrence_id),['early','sameLine','later']);
