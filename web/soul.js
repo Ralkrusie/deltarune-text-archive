@@ -407,6 +407,20 @@
  }
  // Keep rotation continuous across the -pi/pi boundary; an exact half-turn uses clockwise.
  function shortestRotation(from,to){const tau=2*Math.PI;let delta=((to-from)%tau+tau)%tau;if(delta>Math.PI)delta-=tau;return from+delta;}
+ // Sound-only throttle: never delay rotation or replay suppressed turns later.
+ function greenTurnSound(){
+  let previous=null,lastSound=-Infinity;
+  return {
+   reset(){previous=null;lastSound=-Infinity;},
+   update(dx,dy,now){
+    if(!dx&&!dy)return false;
+    const next=Math.atan2(dy,dx),changed=previous===null||Math.abs(shortestRotation(previous,next)-previous)>1e-6;
+    previous=next;
+    if(!changed||now-lastSound<100)return false;
+    lastSound=now;return true;
+   }
+  };
+ }
  function greenDelay(){let direction='',held=0;return {reset(){direction='';held=0;},advance(dx,dy,dt){const d=dx+','+dy;if(d!==direction){direction=d;held=0;}const before=held;held+=dt;return dx||dy?Math.max(0,held-1)-Math.max(0,before-1):0;}};}
  function project(r,x,y){return r.axis==='y'?{x:r.x,y:clamp(y,r.top,r.bottom)}:{x:clamp(x,r.left,r.right),y:r.y};}
  function nearest(rails,x,y){return rails.reduce((best,r)=>{const p=project(r,x,y),distance=Math.hypot(x-p.x,y-p.y);return !best||distance<best.distance?{...r,distance}:best;},null);}
@@ -461,8 +475,8 @@
   const images={};for(const [key,path] of Object.entries({orange:'spr_orangeheart2_0.png',purple:'spr_purpleheart_0.png',particle:'spr_yheart_charge_0.png',outline:'spr_orangeheart_outline_0.png',white:'spr_orangeheart_outline_1.png',inner:'spr_orangeheart_white_0.png',...Object.fromEntries(Array.from({length:5},(_,i)=>['dust'+i,'spr_pinkdust_'+i+'.png']))})){const img=new Image();img.src='assets/soul/sprites/'+path;images[key]=img;}
   const tinted={};
   function tint(key,fill){const id=key+fill;if(tinted[id])return tinted[id];const img=images[key];if(!img.complete||!img.naturalWidth)return null;const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;const g=c.getContext('2d');g.drawImage(img,0,0);g.globalCompositeOperation='source-in';g.fillStyle=fill;g.fillRect(0,0,c.width,c.height);return tinted[id]=c;}
-  const sounds=soundBank(),delay=greenDelay();
-  let angle=-Math.PI/2,lastDir='',trails=[],dust=[],trailClock=0,rail=null,jump=null,dirty=false,bump=0,repeat=0,command='',newDirection=false;
+  const sounds=soundBank(),delay=greenDelay(),turnSound=greenTurnSound();
+  let angle=-Math.PI/2,trails=[],dust=[],trailClock=0,rail=null,jump=null,dirty=false,bump=0,repeat=0,command='',newDirection=false;
   const orange=orangeModel((kind,value)=>{if(kind==='charge')sounds.charge();if(kind==='pitch')sounds.pitch(value);if(kind==='dash'){sounds.stopLoop();sounds.effect('dash',0.5,2);}if(kind==='stop')sounds.stopLoop();});
   const color=()=>getColor();
   function rails(){
@@ -599,13 +613,13 @@
   return {
    step,paint,cancel,depart(){rail=null;},
    get active(){return ['green','orange','purple'].includes(color())&&(orange.active||!!jump||dirty||!!bump||trails.length>0||dust.length>0);},
-   direction(dx,dy){if(color()!=='green')return;const dir=shortestRotation(angle,Math.atan2(dy,dx));axe.style.transform='translate(-50%,-50%) rotate('+dir+'rad)';const label=dx+','+dy;if(label!==lastDir){sounds.effect('wing',0.8);lastDir=label;}angle=dir;},
+   direction(dx,dy){if(color()!=='green'||(!dx&&!dy))return;const dir=shortestRotation(angle,Math.atan2(dy,dx));axe.style.transform='translate(-50%,-50%) rotate('+dir+'rad)';if(turnSound.update(dx,dy,performance.now()))sounds.effect('wing',0.8);angle=dir;},
    key(key,down){if(!down)delay.reset();if(down){sounds.unlock();newDirection=true;}},
    drop(){if(color()==='purple'){rail=null;dirty=true;motion.wake();}},
-   sync(){cancel();rail=null;lastDir='';angle=-Math.PI/2;axe.hidden=color()!=='green';axe.style.transform='translate(-50%,-50%) rotate('+angle+'rad)';if(color()==='purple'&&motion.roaming())schedule();}
+   sync(){cancel();rail=null;turnSound.reset();angle=-Math.PI/2;axe.hidden=color()!=='green';axe.style.transform='translate(-50%,-50%) rotate('+angle+'rad)';if(color()==='purple'&&motion.roaming())schedule();}
   };
  }
- const api={mount,orangeModel,greenDelay,shortestRotation,nearest,neighbor,project,emitsTrail,dustRotation,visibleContentRail,toolbarExit,createSoundBank:soundBank};
+ const api={mount,orangeModel,greenDelay,greenTurnSound,shortestRotation,nearest,neighbor,project,emitsTrail,dustRotation,visibleContentRail,toolbarExit,createSoundBank:soundBank};
  return api;
  })();
 

@@ -1,8 +1,25 @@
 'use strict';
 const assert=require('node:assert/strict');
-const {orangeModel,greenDelay,shortestRotation,nearest,neighbor,project,emitsTrail}=require('../../web/soul.js').variants;
+const {orangeModel,greenDelay,greenTurnSound,shortestRotation,nearest,neighbor,project,emitsTrail}=require('../../web/soul.js').variants;
 const {advance}=require('../../web/soul.js').movement;
 const close=(a,b)=>assert(Math.abs(a-b)<1e-8,`${a} != ${b}`);
+const turnSound=greenTurnSound();
+assert.equal(turnSound.update(0,0,0),false);
+assert.equal(turnSound.update(1,2,0),true);
+assert.equal(turnSound.update(5,10,150),false,'drag speed is not a direction change');
+assert.equal(turnSound.update(-1,0,160),true);
+assert.equal(turnSound.update(0,-1,180),false,'rapid turn is silent');
+assert.equal(turnSound.update(0,-1,300),false,'suppressed turn is not queued for later');
+assert.equal(turnSound.update(1,0,301),true);
+assert.equal(turnSound.update(0,1,400),false);
+assert.equal(turnSound.update(-1,0,401),true,'100ms sound interval');
+turnSound.reset();
+assert.equal(turnSound.update(-1,0,402),true,'new activation resets sound state');
+for(const fps of [30,60,144]){
+ const gate=greenTurnSound();let count=0;
+ for(let i=0;i<fps;i++)if(gate.update(i%2?1:-1,0,i*1000/fps))count++;
+ assert(count<=10,'rapid turns cannot exceed ten sounds per second');
+}
 // Left/up must cross the angle boundary by 90 degrees, not take a 270-degree detour.
 close(shortestRotation(Math.PI,-Math.PI/2),3*Math.PI/2);
 close(shortestRotation(-Math.PI/2,Math.PI),-Math.PI);
