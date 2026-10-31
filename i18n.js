@@ -4,6 +4,9 @@
 const languages={'zh-CN':'简体中文','zh-TW':'繁體中文',en:'English',ja:'日本語',ko:'한국어',es:'Español',fr:'Français',de:'Deutsch',pt:'Português',wingdings:'Wingdings'};
 const properNames=new Set(['好人汉化组','DELTARUNE','GitHub','JetBrains Mono NL','Wingdings']);
 const rows=[
+['结构','Structure','結構','構造','구조','Estructura','Structure','Struktur','Estrutura'],
+['源码顺序','Source order','原始碼順序','ソース順','소스 순서','Orden del código','Ordre du code','Quelltextreihenfolge','Ordem do código'],
+['文件开头','Start of file','檔案開頭','ファイルの先頭','파일 시작','Inicio del archivo','Début du fichier','Dateianfang','Início do arquivo'],
 ['支持','Support','支持','支援','후원','Apoyar','Soutenir','Unterstützen','Apoiar'],
 ['关于','About','關於','概要','소개','Acerca de','À propos','Über','Sobre'],
 ['设置','Settings','設定','設定','설정','Ajustes','Paramètres','Einstellungen','Configurações'],
