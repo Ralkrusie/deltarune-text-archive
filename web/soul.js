@@ -405,6 +405,8 @@
    get state(){return state;},get charge(){return charge;},get glow(){return glow;},get boost(){return boost;},get angle(){return angle;},get active(){return state!=='idle'||cooldown>0;}
   };
  }
+ // Keep rotation continuous across the -pi/pi boundary; an exact half-turn uses clockwise.
+ function shortestRotation(from,to){const tau=2*Math.PI;let delta=((to-from)%tau+tau)%tau;if(delta>Math.PI)delta-=tau;return from+delta;}
  function greenDelay(){let direction='',held=0;return {reset(){direction='';held=0;},advance(dx,dy,dt){const d=dx+','+dy;if(d!==direction){direction=d;held=0;}const before=held;held+=dt;return dx||dy?Math.max(0,held-1)-Math.max(0,before-1):0;}};}
  function project(r,x,y){return r.axis==='y'?{x:r.x,y:clamp(y,r.top,r.bottom)}:{x:clamp(x,r.left,r.right),y:r.y};}
  function nearest(rails,x,y){return rails.reduce((best,r)=>{const p=project(r,x,y),distance=Math.hypot(x-p.x,y-p.y);return !best||distance<best.distance?{...r,distance}:best;},null);}
@@ -597,13 +599,13 @@
   return {
    step,paint,cancel,depart(){rail=null;},
    get active(){return ['green','orange','purple'].includes(color())&&(orange.active||!!jump||dirty||!!bump||trails.length>0||dust.length>0);},
-   direction(dx,dy){if(color()!=='green')return;const dir=Math.atan2(dy,dx);axe.style.transform='translate(-50%,-50%) rotate('+dir+'rad)';const label=dx+','+dy;if(label!==lastDir){sounds.effect('wing',0.8);lastDir=label;}angle=dir;},
+   direction(dx,dy){if(color()!=='green')return;const dir=shortestRotation(angle,Math.atan2(dy,dx));axe.style.transform='translate(-50%,-50%) rotate('+dir+'rad)';const label=dx+','+dy;if(label!==lastDir){sounds.effect('wing',0.8);lastDir=label;}angle=dir;},
    key(key,down){if(!down)delay.reset();if(down){sounds.unlock();newDirection=true;}},
    drop(){if(color()==='purple'){rail=null;dirty=true;motion.wake();}},
    sync(){cancel();rail=null;lastDir='';angle=-Math.PI/2;axe.hidden=color()!=='green';axe.style.transform='translate(-50%,-50%) rotate('+angle+'rad)';if(color()==='purple'&&motion.roaming())schedule();}
   };
  }
- const api={mount,orangeModel,greenDelay,nearest,neighbor,project,emitsTrail,dustRotation,visibleContentRail,toolbarExit,createSoundBank:soundBank};
+ const api={mount,orangeModel,greenDelay,shortestRotation,nearest,neighbor,project,emitsTrail,dustRotation,visibleContentRail,toolbarExit,createSoundBank:soundBank};
  return api;
  })();
 

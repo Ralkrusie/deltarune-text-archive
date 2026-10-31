@@ -1,8 +1,19 @@
 'use strict';
 const assert=require('node:assert/strict');
-const {orangeModel,greenDelay,nearest,neighbor,project,emitsTrail}=require('../../web/soul.js').variants;
+const {orangeModel,greenDelay,shortestRotation,nearest,neighbor,project,emitsTrail}=require('../../web/soul.js').variants;
 const {advance}=require('../../web/soul.js').movement;
 const close=(a,b)=>assert(Math.abs(a-b)<1e-8,`${a} != ${b}`);
+// Left/up must cross the angle boundary by 90 degrees, not take a 270-degree detour.
+close(shortestRotation(Math.PI,-Math.PI/2),3*Math.PI/2);
+close(shortestRotation(-Math.PI/2,Math.PI),-Math.PI);
+for(const from of [0,Math.PI/2,Math.PI,-Math.PI/2,8*Math.PI]){
+ for(const to of [0,Math.PI/4,Math.PI/2,Math.PI,-Math.PI/2]){
+  const result=shortestRotation(from,to);
+  assert(Math.abs(result-from)<=Math.PI+1e-8);
+  close(Math.cos(result),Math.cos(to));close(Math.sin(result),Math.sin(to));
+ }
+}
+close(shortestRotation(0,Math.PI),Math.PI);
 for(const fps of [30,60,144]){
  const delay=greenDelay();let moved=0;
  for(let i=0;i<fps*2;i++){moved+=delay.advance(1,0,1/fps);if(i<fps-1)close(moved,0);}
