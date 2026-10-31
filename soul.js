@@ -618,7 +618,9 @@
  ];
  const storageKey='dialogue-soul-preferences';
  let saved;try{saved=JSON.parse(localStorage.getItem(storageKey)||'null');}catch{}
- let enabled=saved?.enabled!==false;
+ let preferredEnabled=saved?.enabled!==false;
+ const wingdings=()=>document.documentElement.dataset.uiLanguage==='wingdings';
+ let enabled=preferredEnabled&&!wingdings();
  let index=Math.max(0,souls.findIndex(s=>s.id===saved?.color));
  const button=document.getElementById('soul-button');
  const sprite=document.getElementById('soul-sprite');
@@ -694,9 +696,10 @@
   const label=enabled?`${soul.name}灵魂：点击切换为${souls[(index+1)%souls.length].name}`:'红色灵魂：交互已关闭';
   button.setAttribute('aria-label',label);
   toggle.checked=enabled;
+  toggle.disabled=wingdings();
   if(announce)status.textContent=enabled?`已切换为${soul.name}灵魂与主题`:'灵魂交互已关闭，已恢复蓝色主题';
  }
- function save(){try{localStorage.setItem(storageKey,JSON.stringify({enabled,color:souls[index].id}));}catch{}}
+ function save(){try{localStorage.setItem(storageKey,JSON.stringify({enabled:preferredEnabled,color:souls[index].id}));}catch{}}
  function nextSoul(){if(!enabled)return;index=(index+1)%souls.length;apply(true);save();switchSound.play();playFlash();}
  button.addEventListener('click',nextSoul);
  // A bare Shift release only: do not consume the browser's modifier key or its shortcuts.
@@ -720,7 +723,10 @@
  document.addEventListener('focusin',cancelShift);
  window.addEventListener('blur',()=>{cancelShift();heldKeys.clear();});
  document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelShift();heldKeys.clear();}});
- toggle.addEventListener('change',()=>{enabled=toggle.checked;switchSound.stop();apply(true);save();});
+ toggle.addEventListener('change',()=>{if(wingdings()){apply();return;}preferredEnabled=toggle.checked;enabled=preferredEnabled;switchSound.stop();apply(true);save();});
+ window.addEventListener('dialogue-ui-language-change',()=>{
+  enabled=preferredEnabled&&!wingdings();heldKeys.clear();cancelShift();switchSound.stop();apply();
+ });
  window.addEventListener('pagehide',()=>switchSound.stop());
  document.getElementById('settings').addEventListener('click',()=>dialog.showModal());
  document.getElementById('close-settings').addEventListener('click',()=>dialog.close());
